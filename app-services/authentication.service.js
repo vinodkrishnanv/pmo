@@ -20,7 +20,7 @@
             /* Dummy authentication for testing, uses $timeout to simulate api call
              ----------------------------------------------*/
             $timeout(function () {
-                var response;
+               var response;
                 UserService.GetByUsername(username)
                     .then(function (user) {
                         if (user !== null && user.password === password) {
@@ -30,6 +30,11 @@
                         }
                         callback(response);
                     });
+					 /*var response = { success: username === 'test' && password === 'test' };
+                if(!response.success) {
+                    response.message = 'Username or password is incorrect';
+                }
+                callback(response);*/
             }, 1000);
 
             /* Use this for real authentication

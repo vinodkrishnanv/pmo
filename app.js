@@ -5,6 +5,7 @@
         .module('app', ['ngRoute', 'ngCookies'])
         .config(config)
         .run(run);
+		//var scotchApp = angular.module('app', ['ngRoute', 'ngCookies']);
 
     config.$inject = ['$routeProvider', '$locationProvider'];
     function config($routeProvider, $locationProvider) {
@@ -27,9 +28,29 @@
                 controllerAs: 'vm'
             })
 
+            // route for the about page
+            .when('/about', {
+                templateUrl : 'pages/about.html',
+                controller  : 'AboutController'
+            })
+
+            // route for the contact page
+            .when('/contact', {
+                templateUrl : 'pages/contact.html',
+                controller  : 'ContactController'
+            })
+
             .otherwise({ redirectTo: '/login' });
     }
+	
 
+    /*scotchApp.controller('aboutController', function($scope) {
+        $scope.message = 'Look! I am an about page.';
+    });
+
+    scotchApp.controller('contactController', function($scope) {
+        $scope.message = 'Contact us! JK. This is just a demo.';
+    });*/
     run.$inject = ['$rootScope', '$location', '$cookieStore', '$http'];
     function run($rootScope, $location, $cookieStore, $http) {
         // keep user logged in after page refresh
