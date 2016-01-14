@@ -3,20 +3,218 @@
 
     angular
         .module('app')
-        .controller('AccountController', AccountController);
-	AccountController.$inject = ['$scope','$log','$http','UserService', '$location', 'FlashService'];
-	function AccountController($scope,$log,$http,UserService, $location,FlashService) {
-		var vm = this;
+        .constant('PersonSchema', {
 
+  type: 'object',
+
+  properties: {
+
+    accountName: { type: 'string', title: 'Account Name' },
+
+    organisationalUnit: { type: 'string', title: 'Organisational Unit' },
+
+    noOfResources: { type: 'string', title: 'No Of Resources' },
+
+    manager: { type: 'string', title: 'Manager' },
+
+    status: { type: 'string', title: 'Status' }
+
+  }
+
+})
+ .controller('AccountController', AccountController)
+
+.controller('RowEditCtrl', RowEditCtrl)
+
+.service('RowEditor', RowEditor);
+	AccountController.$inject = ['$rootScope','$scope','$log','$http','UserService', '$location', 'FlashService','RowEditor'];
+	function AccountController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor) {
+		var vm = this;
+        vm.editRow = RowEditor.editRow;
         vm.saveaccount = saveaccount;
-        vm.getValue = getValue;
-        vm.save = save;
+        //vm.getValue = getValue;
+        //vm.save = save;
         var rowIndexTemp = 0;
   var colKeyTemp = '';
+  var availOrgan ='';
+  var availableStatus = "";
+  var availableManagers = "";  
+  $scope.clickHandler = RowEditor.editRow;
+  vm.gridOptions = {
+
+    columnDefs: [
+    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ng-click="grid.appScope.clickHandler(grid,row)"><i class="fa fa-edit"></i></button></div>', width: 60 },
+    { name: 'accountName' },
+      { name: 'organisationalUnit' },
+      { name: 'noOfResources' },
+      { name: 'manager' },
+      { name: 'status' },
+    ]
+
+  };
   
-  $scope.cellValue ='';
+    /*$http.get('jsonFiles/data.json')
+
+    .success(function (data) {
+
+      vm.gridOptions.data = data;
+
+    });*/
+     vm.gridOptions.data = UserService.getAccounts();
+    //console.log(vm.gridOptions);
+    $scope.cellValue ='';
+    function saveaccount() {
+            vm.dataLoading = true;
+            UserService.saveAccount(vm.account)
+                .then(function (response) {
+                    if (response.success) {
+                        FlashService.Success('Save successful', true);
+                        vm.dataLoading = false;
+
+                    } else {
+                        FlashService.Error(response.message);
+                        vm.dataLoading = false;
+                    }
+                });
+        }
+
+    $scope.IsVisible = false;
+            $scope.ShowHide = function () {
+                //If DIV is visible it will be hidden and vice versa.
+                $scope.IsVisible = $scope.IsVisible ? false : true;
+            }
+    $rootScope.availOrgan = [
+      {id: 'OMC', name: 'OMC'},
+      {id: 'Sales force', name: 'Sales force'},
+      {id: 'P M D', name: 'P M D'}
+    ],
+    $rootScope.availableStatus =  [
+      {id: 'Confirmed', name: 'Confirmed'},
+      {id: 'Tentative', name: 'Tentative'}
+    ],
+    $rootScope.availableManagers = [
+      {id: 'Varun', name: 'Varun'},
+      {id: 'Prince', name: 'Prince'},
+      {id: 'Raj', name: 'Raj'}
+    ];
+    $scope.data = {
+    repeatSelect: null,
+    statusSelect: null,
+    managerSelect: null,
+    availableOptions: $rootScope.availOrgan,
+    availableStatusOptions: $rootScope.availableStatus,
+    availableManagerOptions: $rootScope.availableManagers,
+   };
+        $scope.message = 'Look! I am an Account page.';
+
+}
+
+RowEditor.$inject = ['$rootScope', '$modal'];
+
+function RowEditor($rootScope, $modal) {
+
+  var service = {};
+
+  service.editRow = editRow;
+
   
-  function getValue( cellValue, colKey, rowIndex ){
+
+  function editRow(grid, row) {
+    console.log(grid);
+    console.log(row);
+    $modal.open({
+
+      templateUrl: 'pages/edit-modal.html',
+
+      controller: ['$modalInstance', '$rootScope','PersonSchema', 'grid', 'row', RowEditCtrl],
+
+      controllerAs: 'vm',
+
+      resolve: {
+
+        grid: function () { return grid; },
+
+        row: function () { return row; }
+
+      }
+
+    });
+
+  }
+
+  
+
+  return service;
+
+}
+function RowEditCtrl($modalInstance, $rootScope,PersonSchema, grid, row) {
+
+  var vm = this;
+
+  
+
+  vm.schema = PersonSchema;
+
+  vm.entity = angular.copy(row.entity);
+
+  vm.form = [ 
+
+    'accountName',
+
+    {
+
+      'key': 'organisationalUnit',
+    "type": 'select',
+    "titleMap": $rootScope.availOrgan,
+      'title': 'Organisational Unit'
+
+    },
+
+    'noOfResources',
+    
+    {
+
+      'key': 'manager',
+    "type": 'select',
+   "titleMap": $rootScope.availableManagers,
+
+      'title': 'Manager'
+
+    },
+
+    {
+
+      'key': 'status',
+    "type": 'select',
+   "titleMap": $rootScope.availableStatus,
+
+      'title': 'Status'
+
+    },
+
+  ];
+
+  
+
+  vm.save = save;
+
+  
+
+  function save() {
+
+    // Copy row values over
+
+    row.entity = angular.extend(row.entity, vm.entity);
+
+    $modalInstance.close(row.entity);
+
+  }
+
+}
+
+  
+  
+  /*function getValue( cellValue, colKey, rowIndex ){
     	$('#cellModal').modal('show');
     	$scope.cellValue = cellValue; 
     	colKeyTemp= colKey;
@@ -24,9 +222,9 @@
   };
   function save(){
      $scope.myData[rowIndexTemp][colKeyTemp] = $scope.cellValue;
-  }
+  }*/
   
-  $scope.myData = UserService.getAccounts();
+  //$scope.myData = UserService.getAccounts();
   /*$scope.myData = [
     {accountName: "food", repeatSelect: 'Bolgogi' ,managerSelect: 'Bosdlgogi'},
     {accountName: "foasdod", repeatSelect: 'Boaslgogi' ,managerSelect: 'Bosdlgogi'},
@@ -42,12 +240,16 @@
     {famous: "athlete1", name: 'Yuna Kim'},
     {famous: "athlete2", name: 'Hide On Bush'}
   ];*/
-  $scope.gridOptions = {
+  /*$scope.gridOptions = {
     data: 'myData',
-    enableCellSelection : true,
-		enableCellEditOnFocus : true,
-		enableRowSelection : false,
-		enableColumnResize : true,
+    rowTemplate:'<div style="height: 100%" ng-class="{green: row.getProperty(\'age\') < 30}"><div ng-style="{ \'cursor\': row.cursor }" ng-repeat="col in renderedColumns" ng-class="col.colIndex()" class="ngCell ">' +
+                           '<div class="ngVerticalBar" ng-style="{height: rowHeight}" ng-class="{ ngVerticalBarVisible: !$last }"> </div>' +
+                           '<div ng-cell></div>' +
+                     '</div></div>',
+   /* enableCellSelection : true,
+		enableCellEditOnFocus : true,*/
+		//enableRowSelection : true,
+		/*enableColumnResize : true,
 		multiSelect: false,
     columnDefs: [
         {
@@ -68,48 +270,9 @@
   
         }
 
-    ]
-  };
-        function saveaccount() {
-            vm.dataLoading = true;
-            UserService.saveAccount(vm.account)
-                .then(function (response) {
-                    if (response.success) {
-                        FlashService.Success('Save successful', true);
-                        vm.dataLoading = false;
-
-                    } else {
-                        FlashService.Error(response.message);
-                        vm.dataLoading = false;
-                    }
-                });
-        }
-
-		$scope.IsVisible = false;
-            $scope.ShowHide = function () {
-                //If DIV is visible it will be hidden and vice versa.
-                $scope.IsVisible = $scope.IsVisible ? false : true;
-            }
-    $scope.data = {
-    repeatSelect: null,
-    statusSelect: null,
-    managerSelect: null,
-    availableOptions: [
-      {id: '1', name: 'OMC'},
-      {id: '2', name: 'Salesforce'},
-      {id: '3', name: 'PMD'}
-    ],
-    availableStatusOptions: [
-      {id: '1', name: 'Confirmed'},
-      {id: '2', name: 'Tentative'}
-    ],
-    availableManagerOptions: [
-      {id: '1', name: 'Varun'},
-      {id: '2', name: 'Prince'},
-      {id: '3', name: 'Raj'}
-    ],
-   };
-        $scope.message = 'Look! I am an Account page.';
+    ]*/
+  
+        
        // $scope.myData = UserService.getAccounts();
         /*$scope.myData = [{name: "Moroni", age: 50},
                  {name: "Tiancum", age: 43},
@@ -175,7 +338,6 @@
         pagingOptions: $scope.pagingOptions,
         filterOptions: $scope.filterOptions
     };*/
+    //}
     }
-    
-
-})();
+)();

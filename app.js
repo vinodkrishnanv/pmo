@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app', ['ngRoute', 'ngCookies','ngGrid'])
+        .module('app', ['ngRoute', 'ngCookies','ngGrid','ui.grid', 'ui.grid.edit', 'ui.bootstrap', 'schemaForm'])
         .config(config)
         .run(run);
 		//var scotchApp = angular.module('app', ['ngRoute', 'ngCookies']);
