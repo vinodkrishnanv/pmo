@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app', ['ngRoute', 'ngCookies'])
+        .module('app', ['ngRoute', 'ngCookies','ngGrid'])
         .config(config)
         .run(run);
 		//var scotchApp = angular.module('app', ['ngRoute', 'ngCookies']);
@@ -29,15 +29,16 @@
             })
 
             // route for the about page
-            .when('/about', {
-                templateUrl : 'pages/about.html',
-                controller  : 'AboutController'
+            .when('/account', {
+                templateUrl : 'pages/account.html',
+                controller  : 'AccountController',
+				controllerAs: 'vm'
             })
 
             // route for the contact page
-            .when('/contact', {
-                templateUrl : 'pages/contact.html',
-                controller  : 'ContactController'
+            .when('/resources', {
+                templateUrl : 'pages/resources.html',
+                controller  : 'ResourcesController'
             })
 
             .otherwise({ redirectTo: '/login' });

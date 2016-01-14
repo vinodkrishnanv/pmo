@@ -17,3 +17,10 @@
 
 .menuBardemoBasicUsage .page p {
   line-height: 1.6rem; }
+
+.gridStyle {
+    border: 1px solid rgb(212,212,212);
+    width: 800px; 
+    height: 300px;
+    margin-top: 500px;
+}

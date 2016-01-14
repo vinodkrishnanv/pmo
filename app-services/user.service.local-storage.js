@@ -13,6 +13,9 @@
         service.GetAll = GetAll;
         service.GetById = GetById;
         service.GetByUsername = GetByUsername;
+        service.GetByAccountname = GetByAccountname;
+        service.saveAccount = saveAccount;
+        service.getAccounts = getAccounts;
         service.Create = Create;
         service.Update = Update;
         service.Delete = Delete;
@@ -67,6 +70,50 @@
             }, 1000);
 
             return deferred.promise;
+        }
+        function GetByAccountname(accountname) {
+            var deferred = $q.defer();
+            var filtered = $filter('filter')(getAccounts(), { accountName: accountname });
+            var user = filtered.length ? filtered[0] : null;
+            deferred.resolve(user);
+            return deferred.promise;
+        }
+        function getAccounts() {
+            if(!localStorage.accounts){
+                localStorage.accounts = JSON.stringify([]);
+            }
+
+            return JSON.parse(localStorage.accounts);
+        }
+
+        function saveAccount(account) {
+            var deferred = $q.defer();
+            // simulate api call with $timeout
+            $timeout(function () {
+                GetByAccountname(account.accountName)
+                    .then(function (duplicateUser) {
+                        if (duplicateUser !== null) {
+                            deferred.resolve({ success: false, message: 'Accountname "' + account.accountName + '" is already present' });
+                        } else {
+                            var accounts = getAccounts();
+
+                            // assign id
+                            var lastUser = accounts[accounts.length - 1] || { id: 0 };
+                            account.id = lastUser.id + 1;
+
+                            // save to local storage
+                            accounts.push(account);
+                            setAccounts(accounts);
+
+                            deferred.resolve({ success: true });
+                        }
+                    });
+            }, 1000);
+
+            return deferred.promise;
+        }
+        function setAccounts(accounts) {
+            localStorage.accounts = JSON.stringify(accounts);
         }
 
         function Update(user) {
