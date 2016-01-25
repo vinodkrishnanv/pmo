@@ -1,0 +1,83 @@
+<div ng-include="'pages/navigation.html'"></div>
+<div class="jumbotron text-center">
+        <div ng-dropdown-multiselect="" events="accountEvents" options="accountdata" selected-model="accountmodel" extra-settings="accountsettings"></div>
+        <div style='display:inline-block; vertical-align:top'>
+<div ng-show="calmodel" >
+    <h3>Account Date Range Select</h3>
+    <br />
+
+        <table>
+        <tr>
+            <td>
+                <uib-datepicker ng-model='accountrange' multi-select='accountrangeDates' select-range='true' ng-click="reload()"></uib-datepicker>
+            </td>
+        </tr>
+    </table>
+</div>
+  </div>
+        <div ng-dropdown-multiselect="" options="example13data" selected-model="example13model" extra-settings="example13settings"></div>
+        <!--<select name="resource" id="resource" ng-model="resource" >
+            <option ng-repeat="option in example13model" ng-click="clear()" value="{{option.employeeName}}">{{option.employeeName}}</option>
+        </select>-->
+        <div ng-dropdown-multiselect=""  events="yourEvents" options="example13model" selected-model="resmodel" extra-settings="ressettings"></div>
+        <div ng-show="resource" >
+          <div style='display:inline-block; vertical-align:top'>
+
+    <h3>Selection Type:</h3>
+
+    <div class='btn-group'>
+
+      <button class='btn btn-primary' ng-model='type' btn-radio='"individual"'>Individual</button>
+
+      <button class='btn btn-primary' ng-model='type' btn-radio='"range"'>Range</button>
+
+    </div>
+
+  
+
+  <br />
+
+        <table>
+        <tr>
+            <td>
+                <uib-datepicker ng-model='activeDate' multi-select='selectedDates' select-range='{{type=="range"}}' date-disabled='disabled(date)' ></uib-datepicker>
+            </td>
+        </tr>
+    </table>
+    </div>
+  </div>
+  <!--<div ng-show="resource" >
+        <table>
+        <tr>
+            <td>
+                <datepicker ng-model='activeDates' multi-select='selectedDatess'></datepicker>
+            </td>
+        </tr>
+    </table>
+  </div>-->
+  <button ng-click="add(resource,selectedDates)">Add</button>
+  <button ng-click="adds(accountrangeDates)">Add</button>
+    <p> {{items}}</p>
+    <p> {{selectedDates}} </p>
+    <p> {{accountrangeDates}}</p>
+    <p> {{min}}</p>
+    <p> {{max}}</p>
+
+</div>
+
+<!--<div class="dropdown dropdown-scroll">
+      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">Select <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+          <li role="presentation">
+              <div class="input-group input-group-sm search-control"> 
+              	<span class="input-group-addon">
+                      <span class="glyphicon glyphicon-search"></span>
+  				</span>
+                <input type="text" class="form-control" placeholder="Query" ng-model="query"></input>
+              </div>
+          </li>
+          <li role="presentation" ng-repeat='item in items | filter:query' ng-click="eventDetails(item.name)"> <a > {{item.name}} </a>
+          </li>
+      </ul>
+  </div>-->

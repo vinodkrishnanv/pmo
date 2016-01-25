@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app', ['ngRoute', 'ngCookies','ngGrid','ui.grid', 'ui.grid.edit', 'ui.bootstrap', 'schemaForm'])
+        .module('app', ['ngRoute', 'ngCookies','ngGrid','ui.grid', 'ui.grid.edit', 'ui.bootstrap', 'schemaForm','angularjs-dropdown-multiselect','gm.datepickerMultiSelect'])
         .config(config)
         .run(run);
 		//var scotchApp = angular.module('app', ['ngRoute', 'ngCookies']);
@@ -38,7 +38,13 @@
             // route for the contact page
             .when('/resources', {
                 templateUrl : 'pages/resources.html',
-                controller  : 'ResourcesController'
+                controller  : 'ResourcesController',
+                controllerAs: 'vm'
+            })
+            .when('/project', {
+                templateUrl : 'pages/project.html',
+                controller  : 'ProjectController',
+                controllerAs: 'vm'
             })
 
             .otherwise({ redirectTo: '/login' });

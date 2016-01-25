@@ -13,12 +13,17 @@
         service.GetAll = GetAll;
         service.GetById = GetById;
         service.GetByUsername = GetByUsername;
-        service.GetByAccountname = GetByAccountname;
+        service.GetByAccountname = GetByAccountname; 
+        service.EditByAccountname = EditByAccountname;
         service.saveAccount = saveAccount;
         service.getAccounts = getAccounts;
+        service.editAccount = editAccount;
         service.Create = Create;
         service.Update = Update;
         service.Delete = Delete;
+        service.GetByResourceName = GetByResourceName; 
+        service.saveResource = saveResource;
+        service.getResources = getResources;
 
         return service;
 
@@ -71,6 +76,14 @@
 
             return deferred.promise;
         }
+        
+        function GetByResourceName(resourcename) {
+            var deferred = $q.defer();
+            var filtered = $filter('filter')(getResources(), { employeeName: resourcename });
+            var user = filtered.length ? filtered[0] : null;
+            deferred.resolve(user);
+            return deferred.promise;
+        }
         function GetByAccountname(accountname) {
             var deferred = $q.defer();
             var filtered = $filter('filter')(getAccounts(), { accountName: accountname });
@@ -78,12 +91,24 @@
             deferred.resolve(user);
             return deferred.promise;
         }
+        function EditByAccountname(accountname) {
+            var filtered = $filter('filter')(getAccounts(), { accountName: accountname });
+            var user = filtered.length ? filtered[0] : null;
+            return user;
+        }
         function getAccounts() {
             if(!localStorage.accounts){
                 localStorage.accounts = JSON.stringify([]);
             }
 
             return JSON.parse(localStorage.accounts);
+        }
+        function getResources() {
+            if(!localStorage.resources){
+                localStorage.resources = JSON.stringify([]);
+            }
+
+            return JSON.parse(localStorage.resources);
         }
 
         function saveAccount(account) {
@@ -112,8 +137,70 @@
 
             return deferred.promise;
         }
+        function saveResource(resource) {
+            var deferred = $q.defer();
+            // simulate api call with $timeout
+            $timeout(function () {
+                GetByResourceName(resource.employeeName)
+                    .then(function (duplicateUser) {
+                        if (duplicateUser !== null) {
+                            deferred.resolve({ success: false, message: 'Resource "' + resource.employeeName + '" is already present' });
+                        } else {
+                            var resources = getResources();
+
+                            // assign id
+                            var lastUser = resources[resources.length - 1] || { id: 0 };
+                            resource.id = lastUser.id + 1;
+
+                            // save to local storage
+                            resources.push(resource);
+                            setResources(resources);
+
+                            deferred.resolve({ success: true });
+                        }
+                    });
+            }, 1000);
+
+            return deferred.promise;
+        }
+        
+
+        function editAccount(account) {
+            var deferred = $q.defer();
+            // simulate api call with $timeout
+            $timeout(function () {
+                GetByAccountname(account.accountName)
+                    .then(function (duplicateUser) {
+                        var accounts = getAccounts();
+                        if (duplicateUser !== null) {
+                            deferred.resolve({ success: false, message: 'Accountname "' + account.accountName + '" is already present' });
+
+
+                        } else {
+                            
+
+                            // assign id
+                            var lastUser = accounts[accounts.length - 1] || { id: 0 };
+                            account.id = lastUser.id + 1;
+
+                            // save to local storage
+                            accounts.push(account);
+                            setAccounts(accounts);
+
+                            deferred.resolve({ success: true });
+                        }
+                    });
+            }, 1000);
+
+            return deferred.promise;
+        }
+
+
         function setAccounts(accounts) {
             localStorage.accounts = JSON.stringify(accounts);
+        }
+        function setResources(resources) {
+            localStorage.resources = JSON.stringify(resources);
         }
 
         function Update(user) {

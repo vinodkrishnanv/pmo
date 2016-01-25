@@ -32,8 +32,6 @@
 		var vm = this;
         vm.editRow = RowEditor.editRow;
         vm.saveaccount = saveaccount;
-        //vm.getValue = getValue;
-        //vm.save = save;
         var rowIndexTemp = 0;
   var colKeyTemp = '';
   var availOrgan ='';
@@ -70,7 +68,7 @@
                     if (response.success) {
                         FlashService.Success('Save successful', true);
                         vm.dataLoading = false;
-
+                        vm.gridOptions.data = UserService.getAccounts();
                     } else {
                         FlashService.Error(response.message);
                         vm.dataLoading = false;
@@ -109,9 +107,9 @@
 
 }
 
-RowEditor.$inject = ['$rootScope', '$modal'];
+RowEditor.$inject = ['$rootScope', '$modal','UserService'];
 
-function RowEditor($rootScope, $modal) {
+function RowEditor($rootScope, $modal,UserService) {
 
   var service = {};
 
@@ -126,7 +124,7 @@ function RowEditor($rootScope, $modal) {
 
       templateUrl: 'pages/edit-modal.html',
 
-      controller: ['$modalInstance', '$rootScope','PersonSchema', 'grid', 'row', RowEditCtrl],
+      controller: ['$modalInstance', '$rootScope','PersonSchema', 'grid', 'row','UserService', RowEditCtrl],
 
       controllerAs: 'vm',
 
@@ -147,32 +145,36 @@ function RowEditor($rootScope, $modal) {
   return service;
 
 }
-function RowEditCtrl($modalInstance, $rootScope,PersonSchema, grid, row) {
+function RowEditCtrl($modalInstance, $rootScope,PersonSchema, grid, row ,UserService) {
 
   var vm = this;
-
-  
-
   vm.schema = PersonSchema;
-
   vm.entity = angular.copy(row.entity);
+  vm.items = $rootScope.availOrgan;
+  vm.statusitems = $rootScope.availableStatus;
+  vm.manitems = $rootScope.availableManagers;
+  //editAccount=UserService.editAccount;
+ // vm.orvalue = "Sales force";
 
   vm.form = [ 
 
     'accountName',
+    'organisationalUnit',
 
-    {
+    /*{
 
       'key': 'organisationalUnit',
     "type": 'select',
     "titleMap": $rootScope.availOrgan,
       'title': 'Organisational Unit'
 
-    },
+    },*/
 
     'noOfResources',
+    'manager',
+    'status',
     
-    {
+   /* {
 
       'key': 'manager',
     "type": 'select',
@@ -190,7 +192,7 @@ function RowEditCtrl($modalInstance, $rootScope,PersonSchema, grid, row) {
 
       'title': 'Status'
 
-    },
+    },*/
 
   ];
 
@@ -205,8 +207,8 @@ function RowEditCtrl($modalInstance, $rootScope,PersonSchema, grid, row) {
     // Copy row values over
 
     row.entity = angular.extend(row.entity, vm.entity);
-
     $modalInstance.close(row.entity);
+    UserService.editAccount(row.entity);
 
   }
 
