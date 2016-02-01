@@ -3,7 +3,9 @@
 
     angular
         .module('app')
-        .controller('ProjectController', ProjectController);
+        .controller('ProjectController', ProjectController)
+        .directive('myCustomer',ProjectDirective);
+        ProjectDirective.$inject = ['$q'];
 	ProjectController.$inject = ['$rootScope','$scope','$log','$http','UserService', '$location', 'FlashService','RowEditor','$filter','$q'];
 	function ProjectController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor,$filter,$q) {
 
@@ -11,8 +13,6 @@
         $scope.type = "individual";
         $scope.start = new Date('11/20/13');
       $scope.end = new Date();
-        $scope.minEndDate = $scope.start; //init value
-        $scope.maxEndDate = $scope.end; 
      $scope.example13model = [];
      $scope.resource ;// = "";
 $scope.example13data = UserService.getResources();
@@ -100,10 +100,14 @@ $scope.accountsettings = {
       alert("here");
         $scope.selectedDates.length = 0;
     };*/
-    
+
 
     $scope.removeFromSelected = function (dt) {
         $scope.selectedDates.splice($scope.selectedDates.indexOf(dt), 1);
+    }
+     $scope.reload = function () {
+        $scope.minEndDate=Math.min.apply(Math, $scope.accountrangeDates);
+        $scope.maxEndDate=Math.max.apply(Math, $scope.accountrangeDates);
     }
 
     $scope.add = function(resource,date) {
@@ -131,6 +135,43 @@ $scope.accountsettings = {
       }
   }
     }
+    
+
+    function ProjectDirective($q) {
+      var templateUrl ="";
+     return {
+   restrict: 'E',
+   scope: {
+     minEndDate: '='
+   },
+   link: function($scope) {
+     $scope.$watch('minEndDate', function() {
+       templateUrl = '<uib-datepicker ng-model="activeDate" multi-select="selectedDates" select-range="{{type=="range"}}" date-disabled="disabled(date)"></uib-datepicker>'
+        // all the code here...
+     });
+   },
+   template: templateUrl
+  };
+      /*return {
+    restrict: 'A',
+    link: function (scope, element, attr) {
+        $timeout(function (){
+           function reload(){
+            alert("asdas");
+          }
+        });
+    }
+  }*/
+                //<uib-datepicker ng-model="activeDate" multi-select="selectedDates" select-range="{{type=="range"}}" date-disabled="disabled(date)"></uib-datepicker>
+
+  /*return {
+    template: 'Student:<table><tr><td><uib-datepicker ng-model="activeDate" multi-select="selectedDates"  date-disabled="disabled(date)"></uib-datepicker></td></tr></table>'
+  }*/
+
+
+    }
+
+
 })();
 
 

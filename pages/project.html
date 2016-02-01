@@ -9,7 +9,7 @@
         <table>
         <tr>
             <td>
-                <uib-datepicker ng-model='accountrange' multi-select='accountrangeDates' select-range='true' ng-click="reload()"></uib-datepicker>
+                <uib-datepicker class="result_text" ng-model='accountrange' multi-select='accountrangeDates' select-range='true' ng-click="reload()"></uib-datepicker>
             </td>
         </tr>
     </table>
@@ -36,7 +36,7 @@
   
 
   <br />
-
+      <my-customer></my-customer>
         <table>
         <tr>
             <td>
@@ -60,7 +60,7 @@
     <p> {{items}}</p>
     <p> {{selectedDates}} </p>
     <p> {{accountrangeDates}}</p>
-    <p> {{min}}</p>
+    <p> {{minEndDate}}</p>
     <p> {{max}}</p>
 
 </div>
