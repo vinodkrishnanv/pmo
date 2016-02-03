@@ -13,13 +13,14 @@
 
         function register() {
             vm.dataLoading = true;
-            UserService.Create(vm.user)
+            UserService.Create(JSON.stringify(vm.userdetails))
                 .then(function (response) {
-                    if (response.success) {
+                    console.log(response.data);
+                    if (response.data.success) {
                         FlashService.Success('Registration successful', true);
                         $location.path('/login');
                     } else {
-                        FlashService.Error(response.message);
+                        FlashService.Error('Username '+response.data.error.username[0]);
                         vm.dataLoading = false;
                     }
                 });

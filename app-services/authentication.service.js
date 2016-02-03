@@ -19,7 +19,7 @@
 
             /* Dummy authentication for testing, uses $timeout to simulate api call
              ----------------------------------------------*/
-            $timeout(function () {
+            /*$timeout(function () {
                var response;
                 UserService.GetByUsername(username)
                     .then(function (user) {
@@ -34,15 +34,24 @@
                 if(!response.success) {
                     response.message = 'Username or password is incorrect';
                 }
-                callback(response);*/
-            }, 1000);
+                callback(response);
+            }, 1000);*/
 
             /* Use this for real authentication
              ----------------------------------------------*/
-            //$http.post('/api/authenticate', { username: username, password: password })
-            //    .success(function (response) {
-            //        callback(response);
-            //    });
+          //   var req = {
+          //      method: 'POST',
+            //    url: 'http://localhost:3000/user/search.json',
+           //     headers : { 'Content-Type': 'application/json' } ,
+           //     data:  user
+           // }
+            //var test = $http(req).then(function(response){return response;},function(response){return response;});
+            //console.log(test);
+            //return test;
+            $http.post('http://localhost:3000/user/search.json', { username: username, password: password })
+                .success(function (response) {
+                  callback(response);
+                });
 
         }
 

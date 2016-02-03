@@ -46,6 +46,11 @@
                 controller  : 'ProjectController',
                 controllerAs: 'vm'
             })
+            .when('/units', {
+                templateUrl : 'ounit/unit.html',
+                controller  : 'UnitController',
+                controllerAs: 'vm'
+            })
 
             .otherwise({ redirectTo: '/login' });
     }

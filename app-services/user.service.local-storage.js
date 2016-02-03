@@ -5,8 +5,8 @@
         .module('app')
         .factory('UserService', UserService);
 
-    UserService.$inject = ['$timeout', '$filter', '$q'];
-    function UserService($timeout, $filter, $q) {
+    UserService.$inject = ['$http','$timeout', '$filter', '$q'];
+    function UserService($http,$timeout, $filter, $q) {
 
         var service = {};
 
@@ -16,7 +16,9 @@
         service.GetByAccountname = GetByAccountname; 
         service.EditByAccountname = EditByAccountname;
         service.saveAccount = saveAccount;
+        service.saveUnit = saveUnit;
         service.getAccounts = getAccounts;
+        service.getUnits = getUnits;
         service.editAccount = editAccount;
         service.Create = Create;
         service.Update = Update;
@@ -26,6 +28,20 @@
         service.getResources = getResources;
 
         return service;
+
+        function handleSuccess(res) {
+            console.log(res);
+            return function () {
+                return { success: true ,message: res};
+            };
+        }
+
+        function handleError(error) {
+            console.log(error);
+            return function () {
+                return { success: false, message: error };
+            };
+        }
 
         function GetAll() {
             var deferred = $q.defer();
@@ -41,42 +57,42 @@
             return deferred.promise;
         }
 
-        function GetByUsername(username) {
+        /*function GetByUsername(username) {
             var deferred = $q.defer();
             var filtered = $filter('filter')(getUsers(), { username: username });
             var user = filtered.length ? filtered[0] : null;
             deferred.resolve(user);
             return deferred.promise;
+        }*/
+        function GetByUsername(username) {
+            
+            var user={"username":username};
+            var req = {
+                method: 'POST',
+                url: 'http://localhost:3000/user/search.json',
+                headers : { 'Content-Type': 'application/json' } ,
+                data:  user
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
         }
-
         function Create(user) {
-            var deferred = $q.defer();
-
-            // simulate api call with $timeout
-            $timeout(function () {
-                GetByUsername(user.username)
-                    .then(function (duplicateUser) {
-                        if (duplicateUser !== null) {
-                            deferred.resolve({ success: false, message: 'Username "' + user.username + '" is already taken' });
-                        } else {
-                            var users = getUsers();
-
-                            // assign id
-                            var lastUser = users[users.length - 1] || { id: 0 };
-                            user.id = lastUser.id + 1;
-
-                            // save to local storage
-                            users.push(user);
-                            setUsers(users);
-
-                            deferred.resolve({ success: true });
-                        }
-                    });
-            }, 1000);
-
-            return deferred.promise;
+            var req = {
+                method: 'POST',
+                url: 'http://localhost:3000/users.json',
+                headers : { 'Content-Type': 'application/json' } ,
+                data:  user
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
         }
-        
+        function saveUnit(unit) {
+            var req = {
+                method: 'POST',
+                url: 'http://localhost:3000/organisational_units.json',
+                headers : { 'Content-Type': 'application/json' } ,
+                data:  unit
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
         function GetByResourceName(resourcename) {
             var deferred = $q.defer();
             var filtered = $filter('filter')(getResources(), { employeeName: resourcename });
@@ -95,6 +111,16 @@
             var filtered = $filter('filter')(getAccounts(), { accountName: accountname });
             var user = filtered.length ? filtered[0] : null;
             return user;
+        }
+        function getUnits() {
+            var req = {
+                method: 'GET',
+                url: 'http://localhost:3000/organisational_units.json',
+                headers : { 'Content-Type': 'application/json' } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+
+            //return JSON.parse(localStorage.accounts);
         }
         function getAccounts() {
             if(!localStorage.accounts){

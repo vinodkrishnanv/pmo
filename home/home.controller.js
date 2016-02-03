@@ -21,10 +21,11 @@
         }
 
         function loadCurrentUser() {
-            UserService.GetByUsername($rootScope.globals.currentUser.username)
+            vm.username=$rootScope.globals.currentUser.username;
+            /*UserService.GetByUsername($rootScope.globals.currentUser.username)
                 .then(function (user) {
                     vm.user = user;
-                });
+                });*/
         }
 
         function loadAllUsers() {
