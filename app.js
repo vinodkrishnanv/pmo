@@ -37,7 +37,7 @@
 
             // route for the contact page
             .when('/resources', {
-                templateUrl : 'pages/resources.html',
+                templateUrl : 'resources/resources.html',
                 controller  : 'ResourcesController',
                 controllerAs: 'vm'
             })
@@ -49,6 +49,11 @@
             .when('/units', {
                 templateUrl : 'ounit/unit.html',
                 controller  : 'UnitController',
+                controllerAs: 'vm'
+            })
+            .when('/heirarchy', {
+                templateUrl : 'heirarchy/heirarchy.html',
+                controller  : 'HeirarchyController',
                 controllerAs: 'vm'
             })
 

@@ -17,8 +17,11 @@
         service.EditByAccountname = EditByAccountname;
         service.saveAccount = saveAccount;
         service.saveUnit = saveUnit;
+        service.editUnit = editUnit;
         service.getAccounts = getAccounts;
         service.getUnits = getUnits;
+        service.getHeirarchies = getHeirarchies;
+        service.saveHeirarchies = saveHeirarchies;
         service.editAccount = editAccount;
         service.Create = Create;
         service.Update = Update;
@@ -93,6 +96,25 @@
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
+        function editUnit(unit) {
+            var req = {
+                method: 'PUT',
+                url: unit.url,
+                headers : { 'Content-Type': 'application/json' } ,
+                data:  unit
+                //{"id":unit.id,"unit_name":unit.unit_name}
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        function saveHeirarchies(unit) {
+            var req = {
+                method: 'POST',
+                url: 'http://localhost:3000/heirarchies.json',
+                headers : { 'Content-Type': 'application/json' } ,
+                data:  unit
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
         function GetByResourceName(resourcename) {
             var deferred = $q.defer();
             var filtered = $filter('filter')(getResources(), { employeeName: resourcename });
@@ -119,8 +141,14 @@
                 headers : { 'Content-Type': 'application/json' } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
-
-            //return JSON.parse(localStorage.accounts);
+        }
+        function getHeirarchies() {
+            var req = {
+                method: 'GET',
+                url: 'http://localhost:3000/heirarchies.json',
+                headers : { 'Content-Type': 'application/json' } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
         }
         function getAccounts() {
             if(!localStorage.accounts){

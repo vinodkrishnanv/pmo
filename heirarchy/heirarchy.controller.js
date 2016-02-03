@@ -22,27 +22,24 @@
   }
 
 })
- .controller('UnitController', UnitController)
+ .controller('HeirarchyController', HeirarchyController)
 
 .controller('RowEditCtrl', RowEditCtrl)
 
 .service('RowEditor', RowEditor);
-	UnitController.$inject = ['$rootScope','$scope','$log','$http','UserService', '$location', 'FlashService','RowEditor'];
-	function UnitController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor) {
+	HeirarchyController.$inject = ['$rootScope','$scope','$log','$http','UserService', '$location', 'FlashService','RowEditor'];
+	function HeirarchyController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor) {
 		var vm = this;
         vm.editRow = RowEditor.editRow;
-        vm.saveunit = saveunit;
+        vm.saveheirarchy = saveheirarchy;
         var rowIndexTemp = 0;
   var colKeyTemp = '';
-  var availOrgan ='';
-  var availableStatus = "";
-  var availableManagers = "";  
   $scope.clickHandler = RowEditor.editRow;
   vm.gridOptions = {
 
     columnDefs: [
     { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ng-click="grid.appScope.clickHandler(grid,row)"><i class="fa fa-edit"></i></button></div>', width: 60 },
-    { name: 'unit_name' },
+    { name: 'heirarchy_name' },
     ]
 
   };
@@ -54,26 +51,26 @@
       vm.gridOptions.data = data;
 
     });*/
-      UserService.getUnits()
+      UserService.getHeirarchies()
      .then(function (response) {
       vm.gridOptions.data = response.data;
      });
      console.log(vm.gridOptions);
     $scope.cellValue ='';
-    function saveunit() {
+    function saveheirarchy() {
             vm.dataLoading = true;
-            var unit={"unit_name" : vm.unit}
-            UserService.saveUnit(unit)
+            var unit={"heirarchy_name" : vm.heirarchy}
+            UserService.saveHeirarchies(unit)
                 .then(function (response) {
                     if (response.data.success) {
                         FlashService.Success('Save successful', true);
                         vm.dataLoading = false;
-                        UserService.getUnits()
+                        UserService.getHeirarchies()
                          .then(function (response) {
                           vm.gridOptions.data = response.data;
                          });
                     } else {
-                        FlashService.Error('Organisational Unit Name ' + response.data.error.unit_name[0]);
+                        FlashService.Error('Heirarchy Name ' + response.data.error.unit_name[0]);
                         vm.dataLoading = false;
                     }
                 });
@@ -100,7 +97,7 @@ function RowEditor($rootScope, $modal,UserService) {
     console.log(row);
     $modal.open({
 
-      templateUrl: 'ounit/edit-unit-modal.html',
+      templateUrl: 'heirarchy/edit-heirarchy-modal.html',
 
       controller: ['$modalInstance', '$rootScope','PersonSchema', 'grid', 'row','UserService', RowEditCtrl],
 

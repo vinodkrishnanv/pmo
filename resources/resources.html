@@ -10,22 +10,22 @@
         <div ng-show = "IsVisible">
 
          <form name="form" ng-submit="vm.saveresource()" role="form">
-        <div class="form-group" ng-class="{ 'has-error': form.employeeName.$dirty && form.employeeName.$error.required }">
+        <div class="form-group" ng-class="{ 'has-error': form.employee_name.$dirty && form.employee_name.$error.required }">
         	<div class="col-md-6">
             <label for="username">Employee name</label>
             </div>
         	<div class="col-md-6">
-            <input type="text" name="employeeName" id="employeeName" class="form-control" ng-model="vm.resource.employeeName" required />
-            <span ng-show="form.employeeName.$dirty && form.employeeName.$error.required" class="help-block">Employee name is required</span>
+            <input type="text" name="employee_name" id="employee_name" class="form-control" ng-model="vm.resource.employee_name" required />
+            <span ng-show="form.employee_name.$dirty && form.employee_name.$error.required" class="help-block">Employee name is required</span>
             </div>
         </div>
-        <div class="form-group" ng-class="{ 'has-error': form.employeeId.$dirty && form.employeeId.$error.required }">
+        <div class="form-group" ng-class="{ 'has-error': form.employee_id.$dirty && form.employee_id.$error.required }">
         	<div class="col-md-6">
             <label for="username">Employee ID</label>
         </div>
         <div class="col-md-6">
-            <input type="text" name="employeeId" id="employeeId" class="form-control" ng-model="vm.resource.employeeId" required />
-            <span ng-show="form.employeeId.$dirty && form.employeeId.$error.required" class="help-block">Employee Id is required</span>
+            <input type="text" name="employee_id" id="employee_id" class="form-control" ng-model="vm.resource.employee_id" required />
+            <span ng-show="form.employee_id.$dirty && form.employee_id.$error.required" class="help-block">Employee Id is required</span>
             </div>
         </div>
         <div class="form-group" ng-class="{ 'has-error': form.role.$dirty && form.role.$error.required }">
@@ -39,16 +39,16 @@
         </div>
         </div>
         </div>
-        <div class="form-group" ng-class="{ 'has-error': form.heirarchy.$dirty && form.heirarchy.$error.required }">
+        <div class="form-group" ng-class="{ 'has-error': form.heirarchy_id.$dirty && form.heirarchy_id.$error.required }">
         <div class="col-md-12">	    
             <div class="col-md-6">
-            <label for="heirarchy">Hierarchy</label>
+            <label for="heirarchy_id">Hierarchy</label>
         </div>
         <div class="col-md-6">
-            <select name="heirarchy" id="heirarchy" ng-model="vm.resource.heirarchy">
-      			<option ng-repeat="option in data.availableHeirarchyOptions" value="{{option.id}}">{{option.name}}</option>
+            <select name="heirarchy_id" id="heirarchy_id" ng-model="vm.resource.heirarchy_id">
+      			<option ng-repeat="option in data.availableHeirarchyOptions" value="{{option.id}}">{{option.heirarchy_name}}</option>
     		</select>
-            <span ng-show="form.heirarchy.$dirty && form.heirarchy.$error.required" class="help-block">Add a Hierarchy</span>
+            <span ng-show="form.heirarchy_id.$dirty && form.heirarchy_id.$error.required" class="help-block">Add a Hierarchy</span>
         </div>
         </div>
         </div>

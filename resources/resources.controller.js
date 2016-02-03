@@ -10,14 +10,16 @@
 	function ResourcesController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor) {
 
         var vm = this;
+        var jsonstring="";
         vm.saveresource = saveresource;
         var rowIndexTemp = 0;
-        $rootScope.availableHeirarchyOptions = [
-      {id: 'Manager', name: 'Manager'},
-      {id: 'Developer', name: 'Developer'},
-      {id: 'Team Lead', name: 'Team Lead'}
-    ];
+        UserService.getHeirarchies()
+                         .then(function (response) {
+                          console.log(JSON.stringify(response.data));
+                          jsonstring = JSON.stringify(response.data);
+                         });
     $scope.clickHandler = RowEditor.editRow;
+    console.log(jsonstring);
     $scope.data = {
     repeatSelect: null,
     statusSelect: null,
@@ -67,6 +69,7 @@
     }, {
         'name': 'Item 20'
     }, ];
+    console.log(jsonstring);
     $scope.ShowHide = function () {
                 //If DIV is visible it will be hidden and vice versa.
                 $scope.IsVisible = $scope.IsVisible ? false : true;
@@ -136,7 +139,7 @@ function RowEditor($rootScope, $modal,UserService) {
   function editRow(grid, row) {
     $modal.open({
 
-      templateUrl: 'pages/edit-resource-modal.html',
+      templateUrl: 'resources/edit-resource-modal.html',
 
       controller: ['$modalInstance', '$rootScope', 'grid', 'row','UserService', RowEditCtrl],
 
