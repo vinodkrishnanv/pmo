@@ -7,7 +7,7 @@
         <button class="btn btn-primary" ng-show = "IsVisible" ng-click="!ShowHide()">-</button>
         <br />
         <br />
-        <div ng-show = "IsVisible">
+        <div  class="hid" ng-show = "IsVisible">
 
          <form name="form" ng-submit="vm.saveskill()" role="form">
         <div class="form-group" ng-class="{ 'has-error': form.skill_name.$dirty && form.skill_name.$error.required }">
@@ -48,7 +48,7 @@
         </div>
     </form>
     </div>
-<div class="grid" ui-grid="vm.gridOptions" ui-grid-edit></div>
+<div class="skill-grid" ui-grid="vm.gridOptions" ui-grid-edit></div>
 
 </div>
 

@@ -7,8 +7,8 @@
         <button class="btn btn-primary" ng-show = "IsVisible" ng-click="!ShowHide()">-</button>
         <br />
         <br />
-        <div ng-show = "IsVisible">
-    <div class="col-md-8 col-md-offset-3">
+        <div class="hid" ng-show = "IsVisible">
+    <div class="">
     
     <form name="form" ng-submit="vm.saveaccount()" role="form">
         <div class="form-group" ng-class="{ 'has-error': form.accountName.$dirty && form.accountName.$error.required }">
@@ -16,7 +16,7 @@
             <label for="username">Account name</label>
             </div>
         	<div class="col-md-6">
-            <input type="text" name="accountName" id="accountName" class="form-control" ng-model="vm.account.accountName" required />
+            <input type="text" name="accountName" id="accountName" class="form-control" ng-model="vm.account.account_name" required />
             <span ng-show="form.accountName.$dirty && form.accountName.$error.required" class="help-block">First name is required</span>
             </div>
         </div>
@@ -25,8 +25,8 @@
             <label for="username">Organisational Unit</label>
         </div>
         <div class="col-md-6">
-            <select name="organisationalUnit" id="organisationalUnit" ng-model="vm.account.organisationalUnit">
-      			<option ng-repeat="option in data.availableOptions" value="{{option.id}}">{{option.name}}</option>
+            <select name="organisationalUnit" id="organisationalUnit" ng-model="vm.account.organisational_unit_id">
+      			<option ng-repeat="option in data.availableOptions" value="{{option.id}}">{{option.unit_name}}</option>
     		</select>
             <span ng-show="form.organisationalUnit.$dirty && form.organisationalUnit.$error.required" class="help-block">Organisational Unit</span>
         </div>
@@ -37,7 +37,7 @@
             <label for="username">No of resources</label>
         </div>
         <div class="col-md-6">
-            <input type="text" name="noOfResources" id="noOfResources" class="form-control" ng-model="vm.account.noOfResources" required />
+            <input type="text" name="noOfResources" id="noOfResources" class="form-control" ng-model="vm.account.resource_needed" required />
             <span ng-show="form.noOfResources.$dirty && form.noOfResources.$error.required" class="help-block">Please enter an integer</span>
         </div>
         </div>
@@ -47,8 +47,8 @@
             <label for="password">Manager</label>
         </div>
         <div class="col-md-6">
-            <select name="manager" id="manager" ng-model="vm.account.manager">
-      			<option ng-repeat="option in data.availableManagerOptions" value="{{option.id}}">{{option.name}}</option>
+            <select name="manager" id="manager" ng-model="vm.account.resource_id">
+      			<option ng-repeat="option in data.availableManagerOptions" value="{{option.id}}">{{option.employee_name}}</option>
     		</select>
             <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Manager is required</span>
         </div>
@@ -75,7 +75,10 @@
 	</div>
 	</div>
     <!--<div class="gridStyle" ng-grid="gridOptions"></div>-->
-    <div class="grid" ui-grid="vm.gridOptions" ui-grid-edit></div>
+    <div class="grid" ui-grid="vm.gridOptions"  ui-grid-edit><div class="watermark" ng-show="!vm.gridOptions.data.length">No data available</div>
+    </div>
+    
+
     <!--<div id="cellModal" class="modal fade"  role="dialog"  >
         <div class="modal-dialog modal-md">
       		<div class="modal-content">

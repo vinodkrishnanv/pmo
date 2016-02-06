@@ -2,6 +2,14 @@
   background-color: #f1f1f1;
   padding: 32px; }
 
+  .watermark {
+    opacity: 0.25;
+    font-size: 3em;
+    width: 100%;
+    text-align: center;
+    z-index: 1000;
+}
+
 .menuBardemoBasicUsage .page {
   margin: 0 auto;
   background-color: white;
@@ -24,7 +32,15 @@
     height: 300px;
     margin-top: 500px;
 }
-
+.hid{
+  padding-bottom: 10px;
+}
+.unit-grid{
+  height: 450px;
+  margin-top:200px;
+  width:400px;
+  margin: 0 auto;
+}
 
 .green {
     background-color: green;
@@ -41,8 +57,19 @@ body {
 
   height: 450px;
   margin-top:200px;
-  width: 100%;
 
+}
+.skill-grid{
+  height: 450px;
+  margin-top:200px;
+  width:400px;
+  margin: 0 auto;
+}
+.heirarchy-grid {
+  height: 450px;
+  margin-top:200px;
+  width:400px;
+  margin: 0 auto;
 }
 
 .dropdown.dropdown-scroll .dropdown-menu {

@@ -97,14 +97,15 @@ $scope.example13settings = {
 };
 
 vm.gridOptions = {
-
+   enableColumnResizing: true,
+   enableCellEdit: false,
     columnDefs: [
-    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ng-click="grid.appScope.clickResourceHandler(grid,row)"><i class="fa fa-edit"></i></button></div>', width: 60 },
-    { name: 'employee_name' },
-      { name: 'employee_id' },
-      { name: 'role' },
-      { name: 'heirarchy_id' },
-      { name: 'skill' },
+    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ng-click="grid.appScope.clickResourceHandler(grid,row)"><i class="fa fa-edit"></i></button></div>', width: 60 ,enableCellEdit: true},
+    { name: 'employee_name', width: 180 },
+      { name: 'employee_id' , width: 130},
+      { name: 'role' , width: 120},
+      { name: 'heirarchy_id' , width: 140},
+      { name: 'skill', enableColumnResizing: true },
       //{ name: 'skill_id' },
     ]
 
@@ -133,7 +134,7 @@ function RowResourceEditor($rootScope, $modal,UserService) {
 
       templateUrl: 'resources/edit-resource-modal.html',
 
-      controller: ['$modalInstance', '$rootScope', 'grid', 'row','UserService','$timeout', RowEditCtrl],
+      controller: ['$modalInstance', '$rootScope', 'grid', 'row','UserService', '$timeout', '$location', RowEditCtrl],
 
       controllerAs: 'vm',
 
@@ -154,7 +155,7 @@ function RowResourceEditor($rootScope, $modal,UserService) {
   return service;
 
 }
-function RowEditCtrl($modalInstance, $rootScope, grid, row ,UserService, $timeout ) {
+function RowEditCtrl($modalInstance, $rootScope, grid, row ,UserService, $timeout, $location ) {
   //getSkilldata=ResourcesController.getSkilldata;
   var vm = this;
   vm.entity = angular.copy(row.entity);
@@ -189,8 +190,10 @@ function RowEditCtrl($modalInstance, $rootScope, grid, row ,UserService, $timeou
     resource.heirarchy_id=vm.entity.heirarchy_id;
     resource.resmodel=vm.entity.skill_id;
     resource.role=vm.entity.role;
-    UserService.editResource(resource);
-
+    UserService.editResource(resource).then(function (response) {
+       row.entity = angular.extend(row.entity, response.data.success);
+        $modalInstance.close(row.entity);
+     });
   }
 
 }

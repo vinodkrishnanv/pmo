@@ -71,21 +71,12 @@
 
     <div class="jumbotron">
         <div class="container">
-            <div class="col-sm-8 col-sm-offset-2">
+            <div class="">
                 <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
                 <div ng-view></div>
             </div>
         </div>
     </div>
-    <div class="credits text-center">
-        <p>
-            <a href="http://jasonwatmore.com/post/2015/03/10/AngularJS-User-Registration-and-Login-Example.aspx">AngularJS User Registration and Login Example</a>
-        </p>
-        <p>
-            <a href="http://jasonwatmore.com">JasonWatmore.com</a>
-        </p>
-    </div>
-
     <!--<script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
     <script src="//code.angularjs.org/1.2.20/angular.js"></script>-->
     <script src="//code.angularjs.org/1.2.20/angular-route.js"></script>
@@ -105,7 +96,7 @@
     <script src="home/home.controller.js"></script>
     <script src="login/login.controller.js"></script>
     <script src="register/register.controller.js"></script>
-	<script src="pages/account.controller.js"></script>
+	<script src="accounts/account.controller.js"></script>
 	<script src="resources/resources.controller.js"></script>
     <script src="pages/project.controller.js"></script>
     <script src="ounit/unit.controller.js"></script>

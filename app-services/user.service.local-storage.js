@@ -10,11 +10,6 @@
 
         var service = {};
 
-        service.GetAll = GetAll;
-        service.GetById = GetById;
-        service.GetByUsername = GetByUsername;
-        service.GetByAccountname = GetByAccountname; 
-        service.EditByAccountname = EditByAccountname;
         service.saveAccount = saveAccount;
         service.saveUnit = saveUnit;
         service.editUnit = editUnit;
@@ -27,12 +22,12 @@
         service.Create = Create;
         service.Update = Update;
         service.Delete = Delete;
-        service.GetByResourceName = GetByResourceName; 
         service.saveResource = saveResource;
         service.getResources = getResources;
         service.getResource = getResource;
         service.saveSkill = saveSkill;
         service.getSkills = getSkills;
+        service.getManagers = getManagers;
 
         return service;
 
@@ -50,27 +45,7 @@
             };
         }
 
-        function GetAll() {
-            var deferred = $q.defer();
-            deferred.resolve(getUsers());
-            return deferred.promise;
-        }
 
-        function GetById(id) {
-            var deferred = $q.defer();
-            var filtered = $filter('filter')(getUsers(), { id: id });
-            var user = filtered.length ? filtered[0] : null;
-            deferred.resolve(user);
-            return deferred.promise;
-        }
-
-        /*function GetByUsername(username) {
-            var deferred = $q.defer();
-            var filtered = $filter('filter')(getUsers(), { username: username });
-            var user = filtered.length ? filtered[0] : null;
-            deferred.resolve(user);
-            return deferred.promise;
-        }*/
         function GetByUsername(username) {
             
             var user={"username":username};
@@ -130,29 +105,18 @@
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
-        function GetByResourceName(resourcename) {
-            var deferred = $q.defer();
-            var filtered = $filter('filter')(getResources(), { employeeName: resourcename });
-            var user = filtered.length ? filtered[0] : null;
-            deferred.resolve(user);
-            return deferred.promise;
-        }
-        function GetByAccountname(accountname) {
-            var deferred = $q.defer();
-            var filtered = $filter('filter')(getAccounts(), { accountName: accountname });
-            var user = filtered.length ? filtered[0] : null;
-            deferred.resolve(user);
-            return deferred.promise;
-        }
-        function EditByAccountname(accountname) {
-            var filtered = $filter('filter')(getAccounts(), { accountName: accountname });
-            var user = filtered.length ? filtered[0] : null;
-            return user;
-        }
         function getUnits() {
             var req = {
                 method: 'GET',
                 url: 'http://localhost:3000/organisational_units.json',
+                headers : { 'Content-Type': 'application/json' } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        function getManagers() {
+            var req = {
+                method: 'GET',
+                url: 'http://localhost:3000/managers.json',
                 headers : { 'Content-Type': 'application/json' } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -166,11 +130,12 @@
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
         function getAccounts() {
-            if(!localStorage.accounts){
-                localStorage.accounts = JSON.stringify([]);
+            var req = {
+                method: 'GET',
+                url: 'http://localhost:3000/accounts.json',
+                headers : { 'Content-Type': 'application/json' } ,
             }
-
-            return JSON.parse(localStorage.accounts);
+            return $http(req).then(function(response){return response;},function(response){return response;});
         }
         function getResources() {
             var req = {
@@ -190,30 +155,13 @@
         }
 
         function saveAccount(account) {
-            var deferred = $q.defer();
-            // simulate api call with $timeout
-            $timeout(function () {
-                GetByAccountname(account.accountName)
-                    .then(function (duplicateUser) {
-                        if (duplicateUser !== null) {
-                            deferred.resolve({ success: false, message: 'Accountname "' + account.accountName + '" is already present' });
-                        } else {
-                            var accounts = getAccounts();
-
-                            // assign id
-                            var lastUser = accounts[accounts.length - 1] || { id: 0 };
-                            account.id = lastUser.id + 1;
-
-                            // save to local storage
-                            accounts.push(account);
-                            setAccounts(accounts);
-
-                            deferred.resolve({ success: true });
-                        }
-                    });
-            }, 1000);
-
-            return deferred.promise;
+            var req = {
+                method: 'POST',
+                url: 'http://localhost:3000/accounts.json',
+                headers : { 'Content-Type': 'application/json' } ,
+                data:  account
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
         }
         function saveResource(resource) {
             var req = {

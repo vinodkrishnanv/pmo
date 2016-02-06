@@ -45,12 +45,12 @@
             <label for="username">Skills</label>
         </div>
         <div ng-dropdown-multiselect="" events="resEvents" options="resdata" selected-model="resmodel" extra-settings="ressettings"></div>
-        <div class="col-md-6">
+        <!--<div class="col-md-6">
           <select name="skill" id="skill" ng-model="vm.resource.skill">
             <option ng-repeat="point in data.availableSkillOptions" value="{{point.id}}">{{point.skill_name}}</option>
         </select>
             <span ng-show="form.skill.$dirty && form.skill.$error.required" class="help-block">Skills</span>
-        </div>
+        </div>-->
         </div>
         </div>
         <div class="form-group" ng-class="{ 'has-error': form.heirarchy_id.$dirty && form.heirarchy_id.$error.required }">
@@ -73,7 +73,9 @@
         </div>
     </form>
     </div>
-<div class="grid" ui-grid="vm.gridOptions" ui-grid-edit></div>
+<div class="grid" ui-grid="vm.gridOptions" ui-grid-edit ui-grid-resize-columns>
+  <div class="watermark" ng-show="!vm.gridOptions.data.length">No data available</div>
+</div>
 <div>{{resmodel}}</div>
 
 </div>

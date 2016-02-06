@@ -27,8 +27,8 @@
 .controller('RowEditCtrl', RowEditCtrl)
 
 .service('RowEditor', RowEditor);
-	AccountController.$inject = ['$rootScope','$scope','$log','$http','UserService', '$location', 'FlashService','RowEditor'];
-	function AccountController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor) {
+	AccountController.$inject = ['$rootScope','$scope','$log','$http','UserService', '$location', 'FlashService', 'RowEditor', '$timeout'];
+	function AccountController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor,$timeout) {
 		var vm = this;
         vm.editRow = RowEditor.editRow;
         vm.saveaccount = saveaccount;
@@ -38,18 +38,39 @@
   var availableStatus = "";
   var availableManagers = "";  
   $scope.clickHandler = RowEditor.editRow;
+  $rootScope.availableStatus =  [
+      {id: 'Confirmed', name: 'Confirmed'},
+      {id: 'Tentative', name: 'Tentative'}
+    ];
   vm.gridOptions = {
 
     columnDefs: [
     { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ng-click="grid.appScope.clickHandler(grid,row)"><i class="fa fa-edit"></i></button></div>', width: 60 },
-    { name: 'accountName' },
-      { name: 'organisationalUnit' },
-      { name: 'noOfResources' },
-      { name: 'manager' },
+    { name: 'account_name' },
+      { name: 'organisational_unit_id' },
+      {  name: 'resource_needed' },
+      { name: 'resource_id' },
       { name: 'status' },
     ]
 
   };
+  $timeout(function () {
+        UserService.getUnits()
+                         .then(function (response) {
+                          console.log(response.data)
+                          $rootScope.availOrgan = response.data;
+                         $scope.data.availableOptions= $rootScope.availOrgan;
+                         });
+                       },3000);
+  $timeout(function () {
+        UserService.getManagers()
+                         .then(function (response) {
+                          $rootScope.availableManagers = response.data.success;
+                          $scope.data.availableManagerOptions = $rootScope.availableManagers;
+                          console.log($scope.data.availableManagerOptions);
+                          //$scope.resdata = response.data;
+                         });
+                       },3000);
   
     /*$http.get('jsonFiles/data.json')
 
@@ -58,7 +79,10 @@
       vm.gridOptions.data = data;
 
     });*/
-     vm.gridOptions.data = UserService.getAccounts();
+    UserService.getAccounts()
+                          .then(function (response) {
+                             vm.gridOptions.data = response.data;
+                           });
     //console.log(vm.gridOptions);
     $scope.cellValue ='';
     function saveaccount() {
@@ -68,7 +92,10 @@
                     if (response.success) {
                         FlashService.Success('Save successful', true);
                         vm.dataLoading = false;
-                        vm.gridOptions.data = UserService.getAccounts();
+                        UserService.getAccounts()
+                          .then(function (response) {
+                             vm.gridOptions.data = response.data;
+                           });
                     } else {
                         FlashService.Error(response.message);
                         vm.dataLoading = false;
@@ -86,10 +113,7 @@
       {id: 'Sales force', name: 'Sales force'},
       {id: 'P M D', name: 'P M D'}
     ],
-    $rootScope.availableStatus =  [
-      {id: 'Confirmed', name: 'Confirmed'},
-      {id: 'Tentative', name: 'Tentative'}
-    ],
+    
     $rootScope.availableManagers = [
       {id: 'Varun', name: 'Varun'},
       {id: 'Prince', name: 'Prince'},
@@ -122,7 +146,7 @@ function RowEditor($rootScope, $modal,UserService) {
     console.log(row);
     $modal.open({
 
-      templateUrl: 'pages/edit-modal.html',
+      templateUrl: 'accounts/edit-modal.html',
 
       controller: ['$modalInstance', '$rootScope','PersonSchema', 'grid', 'row','UserService', RowEditCtrl],
 
@@ -158,8 +182,8 @@ function RowEditCtrl($modalInstance, $rootScope,PersonSchema, grid, row ,UserSer
 
   vm.form = [ 
 
-    'accountName',
-    'organisationalUnit',
+    'account_name',
+    'organisational_unit_id',
 
     /*{
 
@@ -170,8 +194,8 @@ function RowEditCtrl($modalInstance, $rootScope,PersonSchema, grid, row ,UserSer
 
     },*/
 
-    'noOfResources',
-    'manager',
+    'resource_needed',
+    'resource_id',
     'status',
     
    /* {

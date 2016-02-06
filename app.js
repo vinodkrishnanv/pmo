@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app', ['ngRoute', 'ngCookies','ngGrid','ui.grid', 'ui.grid.edit', 'ui.bootstrap', 'schemaForm','angularjs-dropdown-multiselect','gm.datepickerMultiSelect'])
+        .module('app', ['ngRoute', 'ngCookies','ngGrid','ui.grid', 'ui.grid.edit','ui.grid.resizeColumns','ui.bootstrap', 'schemaForm','angularjs-dropdown-multiselect','gm.datepickerMultiSelect'])
         .config(config)
         .run(run);
 		//var scotchApp = angular.module('app', ['ngRoute', 'ngCookies']);
@@ -30,7 +30,7 @@
 
             // route for the about page
             .when('/account', {
-                templateUrl : 'pages/account.html',
+                templateUrl : 'accounts/account.html',
                 controller  : 'AccountController',
 				controllerAs: 'vm'
             })
