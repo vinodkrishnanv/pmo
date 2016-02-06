@@ -18,6 +18,7 @@
         service.saveAccount = saveAccount;
         service.saveUnit = saveUnit;
         service.editUnit = editUnit;
+        service.editResource = editResource;
         service.getAccounts = getAccounts;
         service.getUnits = getUnits;
         service.getHeirarchies = getHeirarchies;
@@ -29,6 +30,9 @@
         service.GetByResourceName = GetByResourceName; 
         service.saveResource = saveResource;
         service.getResources = getResources;
+        service.getResource = getResource;
+        service.saveSkill = saveSkill;
+        service.getSkills = getSkills;
 
         return service;
 
@@ -106,6 +110,17 @@
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
+        function editResource(resource) {
+            console.log(resource);
+            var req = {
+                method: 'PUT',
+                url: 'http://localhost:3000/resources/' + resource.id + '.json',
+                headers : { 'Content-Type': 'application/json' } ,
+                data:  resource
+                //{"id":unit.id,"unit_name":unit.unit_name}
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
         function saveHeirarchies(unit) {
             var req = {
                 method: 'POST',
@@ -158,11 +173,20 @@
             return JSON.parse(localStorage.accounts);
         }
         function getResources() {
-            if(!localStorage.resources){
-                localStorage.resources = JSON.stringify([]);
+            var req = {
+                method: 'GET',
+                url: 'http://localhost:3000/resources.json',
+                headers : { 'Content-Type': 'application/json' } ,
             }
-
-            return JSON.parse(localStorage.resources);
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        function getSkills() {
+            var req = {
+                method: 'GET',
+                url: 'http://localhost:3000/skills.json',
+                headers : { 'Content-Type': 'application/json' } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
         }
 
         function saveAccount(account) {
@@ -192,30 +216,33 @@
             return deferred.promise;
         }
         function saveResource(resource) {
-            var deferred = $q.defer();
-            // simulate api call with $timeout
-            $timeout(function () {
-                GetByResourceName(resource.employeeName)
-                    .then(function (duplicateUser) {
-                        if (duplicateUser !== null) {
-                            deferred.resolve({ success: false, message: 'Resource "' + resource.employeeName + '" is already present' });
-                        } else {
-                            var resources = getResources();
-
-                            // assign id
-                            var lastUser = resources[resources.length - 1] || { id: 0 };
-                            resource.id = lastUser.id + 1;
-
-                            // save to local storage
-                            resources.push(resource);
-                            setResources(resources);
-
-                            deferred.resolve({ success: true });
-                        }
-                    });
-            }, 1000);
-
-            return deferred.promise;
+            var req = {
+                method: 'POST',
+                url: 'http://localhost:3000/resources.json',
+                headers : { 'Content-Type': 'application/json' } ,
+                data:  resource
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+            
+        }
+        function getResource(id) {
+            var req = {
+                method: 'GET',
+                url: 'http://localhost:3000/resources/'+id+'.json',
+                headers : { 'Content-Type': 'application/json' } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+            
+        }
+        function saveSkill(skill) {
+            var req = {
+                method: 'POST',
+                url: 'http://localhost:3000/skills.json',
+                headers : { 'Content-Type': 'application/json' } ,
+                data:  skill
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+            
         }
         
 

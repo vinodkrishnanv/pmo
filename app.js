@@ -56,6 +56,11 @@
                 controller  : 'HeirarchyController',
                 controllerAs: 'vm'
             })
+            .when('/skill', {
+                templateUrl : 'skills/skills.html',
+                controller  : 'SkillController',
+                controllerAs: 'vm'
+            })
 
             .otherwise({ redirectTo: '/login' });
     }
