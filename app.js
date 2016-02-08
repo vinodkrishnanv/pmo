@@ -42,7 +42,7 @@
                 controllerAs: 'vm'
             })
             .when('/project', {
-                templateUrl : 'pages/project.html',
+                templateUrl : 'project/project.html',
                 controller  : 'ProjectController',
                 controllerAs: 'vm'
             })

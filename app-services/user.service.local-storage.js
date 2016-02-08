@@ -28,7 +28,9 @@
         service.saveSkill = saveSkill;
         service.getSkills = getSkills;
         service.getManagers = getManagers;
-
+        service.getServices = getServices;
+        service.getFilteredResources = getFilteredResources;
+        service.saveAccountDetails = saveAccountDetails;
         return service;
 
         function handleSuccess(res) {
@@ -113,6 +115,14 @@
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
+        function getServices(id) {
+            var req = {
+                method: 'GET',
+                url: 'http://localhost:3000/service_units/'+id+'.json',
+                headers : { 'Content-Type': 'application/json' } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
         function getManagers() {
             var req = {
                 method: 'GET',
@@ -145,11 +155,29 @@
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
+        function getFilteredResources(id) {
+            var req = {
+                method: 'GET',
+                url: 'http://localhost:3000/filtered-resources/'+id+'.json',
+                headers : { 'Content-Type': 'application/json' } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
         function getSkills() {
             var req = {
                 method: 'GET',
                 url: 'http://localhost:3000/skills.json',
                 headers : { 'Content-Type': 'application/json' } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+
+        function saveAccountDetails(account) {
+            var req = {
+                method: 'POST',
+                url: 'http://localhost:3000/account-details.json',
+                headers : { 'Content-Type': 'application/json' } ,
+                data:  account
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }

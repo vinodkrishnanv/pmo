@@ -1,0 +1,63 @@
+  <div ng-include="'pages/navigation.html'"></div>
+  <div class="jumbotron text-center">
+    <div>
+      <div class="col-md-6">
+        <label for="username">Account name</label>
+      </div>
+      <div class="col-md-6">
+        <div ng-dropdown-multiselect="" events="accountEvents" options="accountdata" selected-model="accountmodel" extra-settings="accountsettings"></div>
+      </div>
+    </div>
+
+    <div>
+      <div ng-show="calmodel" >
+        <div class="col-md-6">
+          <label for="username">Account Date Range Select</label>
+        </div>
+        <div class="col-md-6">
+          <table>
+            <tr>
+              <td>
+                <uib-datepicker class="result_text" ng-model='accountrange' multi-select='accountrangeDates' select-range='true' ng-click="reload()"></uib-datepicker>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="col-md-6">
+          <label for="username">Select the Resources</label>
+        </div>
+        <div class="col-md-6">
+          <div ng-dropdown-multiselect="" events="resourceEvents" options="example13data" selected-model="example13model" extra-settings="example13settings"></div>
+        </div>
+    </div>
+    
+            <div ng-dropdown-multiselect=""  events="yourEvents" options="example13model" selected-model="resmodel" extra-settings="ressettings"></div>
+            <div ng-show="resource" >
+              <div style='display:inline-block; vertical-align:top'>
+
+                <h3>Selection Type:</h3>
+
+                <div class='btn-group'>
+
+                  <button class='btn btn-primary' ng-model='type' btn-radio='"individual"'>Individual</button>
+
+                  <button class='btn btn-primary' ng-model='type' btn-radio='"range"'>Range</button>
+
+                </div>
+                <br />
+                <my-customer></my-customer>
+                <table>
+                  <tr>
+                    <td>
+                      <uib-datepicker ng-model='activeDate' multi-select='selectedDates' select-range='{{type=="range"}}' date-disabled='disabled(date)' ></uib-datepicker>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+    <button ng-click="add(resource,selectedDates)">Add</button>
+    <button ng-click="saveproject()">Save</button>
+    </div>
