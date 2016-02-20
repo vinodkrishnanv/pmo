@@ -51,8 +51,19 @@ SOFTWARE.
 					attrs.$observe('selectRange', function (newVal) {
 						scope.selectRange = !!newVal && newVal !== "false";
 					});
-
+					var datepickerCtrl = ctrls[0];
 					var ngModelCtrl = ctrls[1];
+
+					 if (ngModelCtrl) {
+					 	scope.$on('refreshDatepickers', function () {
+                                    datepickerCtrl.refreshView();
+                                    return ;
+                                });
+
+
+
+                    }
+
 
 					ngModelCtrl.$viewChangeListeners.push(function() {
 						var newVal = scope.$parent.$eval(attrs.ngModel);

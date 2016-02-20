@@ -91,4 +91,98 @@ body {
 .ui-timepicker-rtl{ direction: rtl; }
 .ui-timepicker-rtl dl { text-align: right; }
 .ui-timepicker-rtl dl dd { margin: 0 65px 10px 10px; }
+.calres {
+    border: 2px solid #4493b0;
+    height: 350px;
+    margin-top: 58px;
+    padding-top: 28px;
+    width: 100%;
+}
+.adr {
+    height: 80%;
+}
+.reshere {
+    border: 2px solid #436f5a;
+    margin-top: 100px;
+    padding-top: 41px;
+     height: 368px;
+}
+.section {
+  clear: both;
+  padding: 0px;
+  margin: 0px;
+}
+
+/*  COLUMN SETUP  */
+
+
+body { 
+  font-size: 20px;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+
+.wrapper {
+  margin: 0 auto; /* This centers the grid. Remove this line to place the grid on the left of the page. */
+  text-align: left;
+  width: 630px;
+}
+
+.inner-wrapper {
+  background: url(gridinator.png) repeat-y 0 0; /* The file gridinator.png is a grid background; delete this line to remove it. If you did not generate a background image, you can still do so by going to http://gridinator.com/ and entering the details found at the top of this CSS file. You will then be given a grid image to match your original grid.  */
+  clear: both;
+  display: inline;/* IE double margin fix. Feel free to move this to your IE specific stylesheets. */
+  float: left;
+  padding: 0 10px 0 10px;
+  position: relative;
+  width: 610px;
+  background: white;
+  border: 2px solid grey;
+}
+
+.marleft {
+    margin-left: 200px;
+}
+
+
+
+.one-col, .two-col {
+  clear: none;
+  display: inline;/* IE double margin fix. Feel free to move this to your IE specific stylesheets. */
+  float: left;
+  margin: 0 7px 0 0;
+  padding: 0;
+  position: relative;
+  background: #ffffff;
+  padding: 3px; /* Delete this line to remove the blue colour on columns. */
+}
+.one-col {
+  width: 300px;
+  font-size: 27px;
+}
+
+.two-col {
+    float: right;
+    margin-right: 0;
+    width: 280px;
+    font-size: 27px;
+    border-left: 2px solid gray;
+}
+
+.prefix-one {
+  margin-left: 310px;
+}
+
+.suffix-one {
+  margin-right: 320px;
+}
+
+.clear { /* Useful generic clearing class. */
+  clear: both;
+}
+.last-col {
+  margin-right: 0;
+}
             
