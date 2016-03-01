@@ -4,8 +4,8 @@
       angular
           .module('app')
           .controller('ProjectController', ProjectController)
-          .directive('myCustomer',ProjectDirective);
-          ProjectDirective.$inject = ['$q'];
+          .directive('overlay',ProjectDirective);
+          //ProjectDirective.$inject = ['ngAnimate'];
   	ProjectController.$inject = ['$rootScope','$scope','$log','$http','UserService', '$location', 'FlashService','RowEditor','$filter','$q'];
   	function ProjectController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor,$filter,$q) {
 
@@ -179,20 +179,11 @@
       }
       
 
-      function ProjectDirective($q) {
-        var templateUrl ="";
-       return {
-     restrict: 'E',
-     scope: {
-       minEndDate: '='
-     },
-     link: function($scope) {
-       $scope.$watch('minEndDate', function() {
-         templateUrl = '<uib-datepicker ng-model="activeDate" multi-select="selectedDates" select-range="{{type=="range"}}" date-disabled="disabled(date)"></uib-datepicker>'
-       });
-     },
-     template: templateUrl
-    };
+      function ProjectDirective() {
+      return {
+        replace: true,
+        templateUrl: "overlay.html"
+      };
       }
 
 
