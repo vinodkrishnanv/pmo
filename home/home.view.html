@@ -1,6 +1,28 @@
 ﻿<div ng-include="'pages/navigation.html'"></div>
-<h1>Hi  {{vm.username}}</h1>
-<p>You're logged in!!</p>
+<div>
+                  <button class='btn btn-primary margin-5' ng-model='type' btn-radio='"account"'>Account</button>
+
+                  <button class='btn btn-primary margin-5' ng-model='type' btn-radio='"resource"'>People</button>
+
+                  <button class='btn btn-primary margin-5' ng-model='type' btn-radio='"skill"'>Skill</button>
+
+</div>
+
+<div class="margin-5">
+        <div ng-show='type=="account"' ng-dropdown-multiselect="" events="accountEvents" options="accountdata" date-selected='dselect(date)' selected-model="accountmodel" extra-settings="accountsettings"></div>
+        <div ng-show='type=="resource"' ng-dropdown-multiselect="" events="resourceEvents" options="resourcedata" selected-model="resourcemodel" extra-settings="resourcesettings"></div>
+        <button ng-show='type=="resource"' type="button" class="btn btn-primary" ng-click="getRes()">Get Results
+                          </button>
+        <div ng-show='type=="skill"' ng-dropdown-multiselect="" events="skillEvents" options="skilldata" selected-model="skillmodel" extra-settings="skillsettings"></div>
+
+      </div>
+      <!--<calendar selected="day"></calendar>-->
+
+      <div id="mycalendar" ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources" calendar="calendar"></div>
+      <!--<button type="button" class="btn btn-primary" ng-click="addEvent()">
+                            Add Event
+                          </button>
+                          <div>{{resourcemodel}}</div>-->
 <!--<h3>All registered users:</h3>
 <ul>
     <li ng-repeat="user in vm.allUsers">

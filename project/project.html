@@ -17,7 +17,7 @@
     </div>
     
 <div class="" ng-show="calmodel" >
-  <button class="btn btn-primary" ng-show = "!IsVisible" ng-click="ShowHide()">+</button>
+  <!--<button class="btn btn-primary" ng-show = "!IsVisible" ng-click="ShowHide()">+</button>
       <button class="btn btn-primary" ng-show = "IsVisible" ng-click="!ShowHide()">-</button>
       <div class="" ng-show="IsVisible" >
      
@@ -29,14 +29,14 @@
           <table>
             <tr>
               <td>
-                <uib-datepicker class="result_text" ng-model='accountrange' multi-select='accountrangeDates' select-range='true' ng-click="reload()"></uib-datepicker>
+                <uib-datepicker class="result_text"  ng-model='accountrange' multi-select='accountrangeDates' select-range='true' ng-click="reload()"></uib-datepicker>
               </td>
             </tr>
           </table>
         </div>
       </div>
       <button ng-click="addAccountDates()">Add Dates</button>
-    </div>
+    </div>-->
     </div>
     <div ng-show="calmodel">
       <div class="col-md-6">
@@ -44,6 +44,16 @@
         </div>
         <div class="col-md-6">
           <div ng-dropdown-multiselect="" events="resourceEvents" options="example13data" selected-model="example13model" extra-settings="example13settings"></div>
+          <!--<ui-select multiple ng-model="multipleDemo.selectedPeople" theme="select2" ng-disabled="disabled" style="width: 800px;">
+    <ui-select-match placeholder="Select person...">{{$item.name}} &lt;{{$item.email}}&gt;</ui-select-match>
+    <ui-select-choices repeat="person in people | propsFilter: {name: $select.search, age: $select.search}">
+      <div ng-bind-html="person.name | highlight: $select.search"></div>
+      <small>
+        email: {{person.email}}
+        age: <span ng-bind-html="''+person.age | highlight: $select.search"></span>
+      </small>
+    </ui-select-choices>
+  </ui-select>-->
         </div>
     </div>
     <div class="reshere" ng-show="showreshere">
@@ -79,8 +89,9 @@
     <button ng-click="add(resource,singleres,selectedDates)">Add</button>
     <button ng-click="saveproject()">Save</button>
   </div>
-  {{accountrangeDates}}
+ <!-- {{myselectedDates}}
   {{resmodel}}
+  {{items}}-->
 <div class="marleft" ng-show="showreshere">
   <div class="col-md-4"><h3>     Names </h3>  </div>
     <div class="col-md-5"><h3>       Selected Dates   </h3></div>

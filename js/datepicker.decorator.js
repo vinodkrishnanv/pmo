@@ -10,11 +10,10 @@ angular.module('ui.bootstrap.datepicker')
         $provide.decorator('uibDatepickerDirective', function($delegate) {
             var directive = $delegate[0];
             var link = directive.link;
-            console.log("here");
             directive.compile = function() {
                 return function(scope, element, attrs, ctrls) {
                     link.apply(this, arguments);
-
+                    ctrls.$formatters.shift();
                     var datepickerCtrl = ctrls[0];
                     var ngModelCtrl = ctrls[1];
 

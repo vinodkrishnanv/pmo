@@ -2,67 +2,118 @@
     'use strict';
 
     angular
-        .module('app', ['ngRoute', 'ngCookies','ngGrid','ui.grid', 'ui.grid.edit','ui.grid.resizeColumns','ui.bootstrap', 'schemaForm','angularjs-dropdown-multiselect','gm.datepickerMultiSelect'])
+        .module('app', ['ngRoute', 'ngCookies','ngGrid','ngSanitize','ui.grid', 'ui.grid.edit','ui.grid.resizeColumns','ui.bootstrap', 'schemaForm','angularjs-dropdown-multiselect','gm.datepickerMultiSelect','demo-calendar','ui.router','ui.calendar','ui.select'])
         .config(config)
-        .run(run);
+        .run(run)
+        ;
 		//var scotchApp = angular.module('app', ['ngRoute', 'ngCookies']);
 
-    config.$inject = ['$routeProvider', '$locationProvider'];
-    function config($routeProvider, $locationProvider) {
-        $routeProvider
-            .when('/', {
-                controller: 'HomeController',
-                templateUrl: 'home/home.view.html',
-                controllerAs: 'vm'
-            })
+    config.$inject = ['$urlRouterProvider', '$locationProvider', '$stateProvider'];
+    
+    function config($urlRouterProvider, $locationProvider,$stateProvider) {
+       $stateProvider
+            .state('login', {
+            url: "/login",
+            templateUrl: 'login/login.view.html',
+            controller: 'LoginController',
+            controllerAs: 'vm'
 
-            .when('/login', {
-                controller: 'LoginController',
-                templateUrl: 'login/login.view.html',
-                controllerAs: 'vm'
             })
+            .state('home', {
+                    url: "/",
+                    controller: 'HomeController',
+                    templateUrl: 'home/home.view.html',
+                    controllerAs: 'vm'
+                })
 
-            .when('/register', {
+            .state('register', {
+                url: "/register",
                 controller: 'RegisterController',
                 templateUrl: 'register/register.view.html',
                 controllerAs: 'vm'
             })
 
             // route for the about page
-            .when('/account', {
+            .state('account', {
+                url: "/account",
                 templateUrl : 'accounts/account.html',
                 controller  : 'AccountController',
-				controllerAs: 'vm'
+				controllerAs: 'vm',
+                onEnter: ["$state", function($state) {
+     /* $(document).on("keyup", function(e) {
+        if(e.keyCode == 27) {
+          $(document).off("keyup");
+          $state.go("account");
+        }
+      });*/
+
+      $(document).on("click", ".btn-danger", function() {
+        $state.go("account");
+      });
+
+      
+    }],
             })
+    //.state('parent', {url: '/act', abstract: true, template: '<ui-view/>'} )
+            .state('account.add', {
+                url: '/add',
+                views:{
+                      "modal": {
+                        templateUrl: "accounts/account.add.html"
+                      }
+                    },
+                controller  : 'AccountController',
+                controllerAs: 'vm'
+                })
+            .state('account.edit', {
+                url: '/edit/:id',
+                views:{
+                      "modal": {
+                        templateUrl: "accounts/account.add.html",
+                        controller  : 'AccountEditController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
+                    
+                // controller  : 'AccountController',
+                })
+            
 
             // route for the contact page
-            .when('/resources', {
+            .state('resources', {
+                url: "/resources",
                 templateUrl : 'resources/resources.html',
                 controller  : 'ResourcesController',
                 controllerAs: 'vm'
             })
-            .when('/project', {
+            .state('project', {
+                url: "/project",
                 templateUrl : 'project/project.html',
                 controller  : 'ProjectController',
                 controllerAs: 'vm'
             })
-            .when('/units', {
+            .state('units', {
+                url: "/units",
                 templateUrl : 'ounit/unit.html',
                 controller  : 'UnitController',
                 controllerAs: 'vm'
             })
-            .when('/heirarchy', {
+            .state('heirarchy', {
+                url: "/heirarchy",
                 templateUrl : 'heirarchy/heirarchy.html',
                 controller  : 'HeirarchyController',
                 controllerAs: 'vm'
             })
-            .when('/skill', {
+            .state('skill', {
+                url: "/skill",
                 templateUrl : 'skills/skills.html',
                 controller  : 'SkillController',
                 controllerAs: 'vm'
-            })
+            }); 
+            $urlRouterProvider.otherwise('/login');
 
-            .otherwise({ redirectTo: '/login' });
+           
     }
 	
 
@@ -73,6 +124,34 @@
     scotchApp.controller('contactController', function($scope) {
         $scope.message = 'Contact us! JK. This is just a demo.';
     });*/
+/*provider.$inject = ['$stateProvider'];
+function provider($stateProvider) {
+    "use strict";
+    var provider = this;
+    this.$get = function() {
+      return provider;
+    };
+    this.state = function(stateName, options) {
+      var modalInstance;
+      $stateProvider.state(stateName, {
+        url: options.url,
+        onEnter: function($modal, $state) {
+          modalInstance = $modal.open(options);
+          modalInstance.result["finally"](function() {
+            modalInstance = null;
+            if ($state.$current.name === stateName) {
+              $state.go("^");
+            }
+          });
+        },
+        onExit: function() {
+          if (modalInstance) {
+            modalInstance.close();
+          }
+        }
+      });
+    };
+  }*/
     run.$inject = ['$rootScope', '$location', '$cookieStore', '$http'];
     function run($rootScope, $location, $cookieStore, $http) {
         // keep user logged in after page refresh
@@ -90,5 +169,13 @@
             }
         });
     }
+   /* modalStateProvider.state("menu", {
+        template: "I am a Dialog!",
+        controller: function ($scope) {
+          $scope.dismiss = function () {
+            $scope.$dismiss();
+          };
+        }
+  });*/
 
 })();

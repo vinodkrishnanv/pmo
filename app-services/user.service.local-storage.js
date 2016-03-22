@@ -15,6 +15,7 @@
         service.editUnit = editUnit;
         service.editResource = editResource;
         service.getAccounts = getAccounts;
+        service.getAccount=getAccount;
         service.getUnits = getUnits;
         service.getHeirarchies = getHeirarchies;
         service.saveHeirarchies = saveHeirarchies;
@@ -31,6 +32,10 @@
         service.getServices = getServices;
         service.getFilteredResources = getFilteredResources;
         service.saveAccountDetails = saveAccountDetails;
+        service.getAccountResource = getAccountResource;
+        service.getResourceDates = getResourceDates;
+        service.getFreeResourceDates = getFreeResourceDates;
+        service.hostName='localhost';
         return service;
 
         function handleSuccess(res) {
@@ -53,7 +58,7 @@
             var user={"username":username};
             var req = {
                 method: 'POST',
-                url: 'http://localhost:3000/user/search.json',
+                url: 'http://'+service.hostName+':3000/user/search.json',
                 headers : { 'Content-Type': 'application/json' } ,
                 data:  user
             }
@@ -62,7 +67,7 @@
         function Create(user) {
             var req = {
                 method: 'POST',
-                url: 'http://localhost:3000/users.json',
+                url: 'http://'+service.hostName+':3000/users.json',
                 headers : { 'Content-Type': 'application/json' } ,
                 data:  user
             }
@@ -71,7 +76,7 @@
         function saveUnit(unit) {
             var req = {
                 method: 'POST',
-                url: 'http://localhost:3000/organisational_units.json',
+                url: 'http://'+service.hostName+':3000/organisational_units.json',
                 headers : { 'Content-Type': 'application/json' } ,
                 data:  unit
             }
@@ -91,7 +96,7 @@
             console.log(resource);
             var req = {
                 method: 'PUT',
-                url: 'http://localhost:3000/resources/' + resource.id + '.json',
+                url: 'http://'+service.hostName+':3000/resources/' + resource.id + '.json',
                 headers : { 'Content-Type': 'application/json' } ,
                 data:  resource
                 //{"id":unit.id,"unit_name":unit.unit_name}
@@ -101,16 +106,25 @@
         function saveHeirarchies(unit) {
             var req = {
                 method: 'POST',
-                url: 'http://localhost:3000/heirarchies.json',
+                url: 'http://'+service.hostName+':3000/heirarchies.json',
                 headers : { 'Content-Type': 'application/json' } ,
                 data:  unit
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        function getFreeResourceDates(date) {
+            var req = {
+                method: 'POST',
+                url: 'http://'+service.hostName+':3000/freeresources.json',
+                headers : { 'Content-Type': 'application/json' } ,
+                data:  date
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
         function getUnits() {
             var req = {
                 method: 'GET',
-                url: 'http://localhost:3000/organisational_units.json',
+                url: 'http://'+service.hostName+':3000/organisational_units.json',
                 headers : { 'Content-Type': 'application/json' } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -118,7 +132,7 @@
         function getServices(id) {
             var req = {
                 method: 'GET',
-                url: 'http://localhost:3000/service_units/'+id+'.json',
+                url: 'http://'+service.hostName+':3000/service_units/'+id+'.json',
                 headers : { 'Content-Type': 'application/json' } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -126,7 +140,7 @@
         function getManagers() {
             var req = {
                 method: 'GET',
-                url: 'http://localhost:3000/managers.json',
+                url: 'http://'+service.hostName+':3000/managers.json',
                 headers : { 'Content-Type': 'application/json' } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -134,7 +148,7 @@
         function getHeirarchies() {
             var req = {
                 method: 'GET',
-                url: 'http://localhost:3000/heirarchies.json',
+                url: 'http://'+service.hostName+':3000/heirarchies.json',
                 headers : { 'Content-Type': 'application/json' } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -142,7 +156,15 @@
         function getAccounts() {
             var req = {
                 method: 'GET',
-                url: 'http://localhost:3000/accounts.json',
+                url: 'http://'+service.hostName+':3000/accounts.json',
+                headers : { 'Content-Type': 'application/json' } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        function getAccount(id) {
+            var req = {
+                method: 'GET',
+                url: 'http://'+service.hostName+':3000/accounts/'+id+'.json',
                 headers : { 'Content-Type': 'application/json' } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -150,7 +172,7 @@
         function getResources() {
             var req = {
                 method: 'GET',
-                url: 'http://localhost:3000/resources.json',
+                url: 'http://'+service.hostName+':3000/resources.json',
                 headers : { 'Content-Type': 'application/json' } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -158,7 +180,7 @@
         function getFilteredResources(id) {
             var req = {
                 method: 'GET',
-                url: 'http://localhost:3000/filtered-resources/'+id+'.json',
+                url: 'http://'+service.hostName+':3000/filtered-resources/'+id+'.json',
                 headers : { 'Content-Type': 'application/json' } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -166,7 +188,7 @@
         function getSkills() {
             var req = {
                 method: 'GET',
-                url: 'http://localhost:3000/skills.json',
+                url: 'http://'+service.hostName+':3000/skills.json',
                 headers : { 'Content-Type': 'application/json' } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -175,7 +197,7 @@
         function saveAccountDetails(account) {
             var req = {
                 method: 'POST',
-                url: 'http://localhost:3000/account-details.json',
+                url: 'http://'+service.hostName+':3000/account-details.json',
                 headers : { 'Content-Type': 'application/json' } ,
                 data:  account
             }
@@ -183,9 +205,10 @@
         }
 
         function saveAccount(account) {
+            //console.log(account);
             var req = {
                 method: 'POST',
-                url: 'http://localhost:3000/accounts.json',
+                url: 'http://'+service.hostName+':3000/accounts.json',
                 headers : { 'Content-Type': 'application/json' } ,
                 data:  account
             }
@@ -194,9 +217,19 @@
         function saveResource(resource) {
             var req = {
                 method: 'POST',
-                url: 'http://localhost:3000/resources.json',
+                url: 'http://'+service.hostName+':3000/resources.json',
                 headers : { 'Content-Type': 'application/json' } ,
                 data:  resource
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+            
+        }
+        function getResourceDates(resource) {
+            var req = {
+                method: 'POST',
+                url: 'http://'+service.hostName+':3000/resources-dates.json',
+                headers : { 'Content-Type': 'application/json' } ,
+                data:  {'resources': resource}
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
             
@@ -204,7 +237,16 @@
         function getResource(id) {
             var req = {
                 method: 'GET',
-                url: 'http://localhost:3000/resources/'+id+'.json',
+                url: 'http://'+service.hostName+':3000/resources/'+id+'.json',
+                headers : { 'Content-Type': 'application/json' } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+            
+        }
+        function getAccountResource(id) {
+            var req = {
+                method: 'GET',
+                url: 'http://'+service.hostName+':3000/account-resources/'+id+'.json',
                 headers : { 'Content-Type': 'application/json' } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -213,7 +255,7 @@
         function saveSkill(skill) {
             var req = {
                 method: 'POST',
-                url: 'http://localhost:3000/skills.json',
+                url: 'http://'+service.hostName+':3000/skills.json',
                 headers : { 'Content-Type': 'application/json' } ,
                 data:  skill
             }

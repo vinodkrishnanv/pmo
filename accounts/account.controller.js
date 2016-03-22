@@ -3,7 +3,7 @@
 
       angular
           .module('app')
-          .constant('PersonSchema', {
+          /*.constant('PersonSchema', {
 
     type: 'object',
 
@@ -21,17 +21,19 @@
 
     }
 
-  })
+  })*/
    .controller('AccountController', AccountController)
+   .controller('AccountEditController', AccountEditController)
 
-  .controller('RowEditCtrl', RowEditCtrl)
+  .controller('RowAccountEditCtrl', RowAccountEditCtrl)
 
-  .service('RowEditor', RowEditor);
-  	AccountController.$inject = ['$rootScope','$scope','$log','$http','UserService', '$location', 'FlashService', 'RowEditor', '$timeout'];
-  	function AccountController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor,$timeout) {
+  .service('RowAccountEditor', RowAccountEditor);
+  	AccountController.$inject = ['$rootScope','$scope','$log','$http','UserService', '$location', 'FlashService', 'RowEditor', '$timeout','$routeParams'];
+  	function AccountController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor,$timeout,$routeParams) {
   		var vm = this;
-          vm.editRow = RowEditor.editRow;
+          vm.clickHandlers = RowAccountEditor.editAccountRow;
           vm.saveaccount = saveaccount;
+          vm.getaccount = getaccount;
           vm.getServices = getServices;
           
           var rowIndexTemp = 0;
@@ -39,15 +41,67 @@
     var availOrgan ='';
     var availableStatus = "";
     var availableManagers = "";  
-    $scope.clickHandler = RowEditor.editRow;
+    //clickHandlers = RowAccountEditor.editAccountRow;
     $rootScope.availableStatus =  [
         {id: 'Confirmed', name: 'Confirmed'},
         {id: 'Tentative', name: 'Tentative'}
       ];
+      $scope.datepickerPopupConfig = {
+  datepickerPopup: "MMM d, yyyy",
+  closeOnDateSelection: true,
+  appendToBody: false,
+  showButtonBar: false
+}
+$scope.open = function() {
+    $scope.opened = true;
+  };
+
+$scope.datepickerConfig = {
+  formatDay: 'dd',
+  formatMonth: 'MMMM',
+  formatYear: 'yyyy',
+  formatDayHeader: 'EEE',
+  formatDayTitle: 'MMMM yyyy',
+  formatMonthTitle: 'yyyy',
+  datepickerMode: 'day',
+  minMode: 'day',
+  maxMode: 'year',
+  showWeeks: false,
+  startingDay: 0,
+  yearRange: 20,
+  minDate: null,
+  maxDate: null
+}
+    $rootScope.availableReqTypes =  [
+        {id: 'IMPLEMENTATION', name: 'IMPLEMENTATION'},
+        {id: 'CAMPAIGN SERVICES', name: 'CAMPAIGN SERVICES'},
+        {id: 'ADD-ONS', name: 'ADD-ONS'}
+      ];
+    $rootScope.availableRegionTypes =  [
+        {id: 'APAC', name: 'APAC'},
+        {id: 'EMEA', name: 'EMEA'},
+        {id: 'US', name: 'US'},
+      ];
+      $rootScope.availableContactType =  [
+        {id: 'Client', name: 'Client'},
+        {id: 'IBM', name: 'IBM'},
+        {id: 'Oracle', name: 'Oracle'},
+      ];
+      $rootScope.availableSowStatus =  [
+        {id: 'Lead', name: 'Lead'},
+        {id: 'SOW Signed', name: 'SOW Signed'},
+        {id: 'SOW Not Signed', name: 'SOW Not Signed'},
+      ];
+      $rootScope.availableAnticipatedValueCurrency =  [
+        {id: 'INR', name: 'INR'},
+        {id: 'USD', name: 'USD'},
+      ];
+      
+      
     vm.gridOptions = {
 
       columnDefs: [
-      { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ng-click="grid.appScope.clickHandler(grid,row)"><i class="fa fa-edit"></i></button></div>', width: 60 },
+      { name: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ui-sref="account.edit({id:{{row.entity.id}}})" ng-click="vm.getaccount({{row.entity.id}})"><i class="fa fa-edit"></i></button></div>', width: 60 },
       { name: 'account_name' },
         { name: 'organisational_unit_name' },
         { name: 'services' },
@@ -80,6 +134,13 @@
                              });
       $scope.sermodel=[];
       $scope.cellValue ='';
+      $scope.accountrangeDates = [];
+      $scope.accountrange;
+      $scope.reload = function () {
+          $scope.selectRange = 1;
+          $scope.minEndDate=Math.min.apply(Math, $scope.accountrangeDates);
+          $scope.maxEndDate=Math.max.apply(Math, $scope.accountrangeDates);
+      }
       $rootScope.sersettings  = $scope.sersettings  = {
     scrollableHeight: '200px',
       scrollable: true,
@@ -100,6 +161,9 @@
       function saveaccount() {
               vm.dataLoading = true;
               vm.account.sermodel=$scope.sermodel;
+              vm.account.start_date=$scope.minEndDate;
+              vm.account.end_date=$scope.maxEndDate;
+              vm.account.anticipated_value = vm.account.anticipated_value.concat(" ").concat(vm.account.anticipated_value_currency);
               UserService.saveAccount(vm.account)
                   .then(function (response) {
                       if (response.data) {
@@ -115,6 +179,13 @@
                       }
                   });
           }
+          function getaccount(aid) {
+             UserService.getAccounts()
+                            .then(function (response) {
+                               vm.gridOptions.data = response.data;
+                             });
+
+          }
 
       $scope.IsVisible = false;
               $scope.ShowHide = function () {
@@ -128,29 +199,41 @@
       availableOptions: $rootScope.availOrgan,
       availableStatusOptions: $rootScope.availableStatus,
       availableManagerOptions: $rootScope.availableManagers,
+      availableReqTypes: $rootScope.availableReqTypes,
+      availableRegionTypes: $rootScope.availableRegionTypes,
+      availableContactType: $rootScope.availableContactType,
+      availableSowStatus: $rootScope.availableSowStatus,
+      availableAnticipatedValueCurrency: $rootScope.availableAnticipatedValueCurrency,
      };
           $scope.message = 'Look! I am an Account page.';
+          //if($routeParams.param1){
+            console.log($location.url());
+            // 
+            // vm.account.account_name="Test";
+          //}
 
   }
 
-  RowEditor.$inject = ['$rootScope', '$modal','UserService'];
+  RowAccountEditor.$inject = ['$rootScope', '$modal','UserService'];
 
-  function RowEditor($rootScope, $modal,UserService) {
+  function RowAccountEditor($rootScope, $modal,UserService) {
+    alert("here");
 
     var service = {};
 
-    service.editRow = editRow;
+    service.editAccountRow = editAccountRow;
 
     
 
-    function editRow(grid, row) {
-      console.log(grid);
+    function editAccountRow(grid, row) {
+      alert("heres");
+      
       console.log(row);
       $modal.open({
 
         templateUrl: 'accounts/edit-modal.html',
 
-        controller: ['$modalInstance', '$rootScope','PersonSchema', 'grid', 'row','UserService', RowEditCtrl],
+        controller: ['$modalInstance', '$rootScope','PersonSchema', 'grid', 'row','UserService', RowAccountEditCtrl],
 
         controllerAs: 'vm',
 
@@ -171,7 +254,7 @@
     return service;
 
   }
-  function RowEditCtrl($modalInstance, $rootScope,PersonSchema, grid, row ,UserService) {
+  function RowAccountEditCtrl($modalInstance, $rootScope,PersonSchema, grid, row ,UserService) {
 
     var vm = this;
     vm.schema = PersonSchema;
@@ -186,5 +269,36 @@
       UserService.editAccount(row.entity);
     }
   }
+
+
+
+
+
+
+
+AccountEditController.$inject = ['$scope','$log','$http','UserService', '$location', 'FlashService', 'RowEditor', '$timeout','$routeParams'];
+function AccountEditController($scope,$log,$http,UserService, $location,FlashService,RowEditor,$timeout,$routeParams) {
+  var vm=this;
+  var splits=$location.url().toString().split("/");
+  UserService.getAccount(splits[splits.length - 1])
+                  .then(function (response) {
+                      if (response.data) {
+                        vm.account = response.data;
+                      } 
+                  });
+      
+
+  }
+
+
+
+
+
+
+
+
+
+
+
       }
   )();

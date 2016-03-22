@@ -4,6 +4,36 @@
       angular
           .module('app')
           .controller('ProjectController', ProjectController)
+          .filter('propsFilter',function() {
+  return function(items, props) {
+    var out = [];
+
+    if (angular.isArray(items)) {
+      items.forEach(function(item) {
+        var itemMatches = false;
+
+        var keys = Object.keys(props);
+        for (var i = 0; i < keys.length; i++) {
+          var prop = keys[i];
+          var text = props[prop].toLowerCase();
+          if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
+            itemMatches = true;
+            break;
+          }
+        }
+
+        if (itemMatches) {
+          out.push(item);
+        }
+      });
+    } else {
+      // Let the output be the input untouched
+      out = items;
+    }
+
+    return out;
+  };
+})
           .directive('overlay',ProjectDirective);
           //ProjectDirective.$inject = ['ngAnimate'];
   	ProjectController.$inject = ['$rootScope','$scope','$log','$http','UserService', '$location', 'FlashService','RowEditor','$filter','$q'];
@@ -26,11 +56,35 @@
     closeOnBlur:true
       
   };
+  $scope.person = {};
+  $scope.people = [
+    { name: 'Adam',      email: 'adam@email.com',      age: 12, country: 'United States' },
+    { name: 'Amalie',    email: 'amalie@email.com',    age: 12, country: 'Argentina' },
+    { name: 'Estefanía', email: 'estefania@email.com', age: 21, country: 'Argentina' },
+    { name: 'Adrian',    email: 'adrian@email.com',    age: 21, country: 'Ecuador' },
+    { name: 'Wladimir',  email: 'wladimir@email.com',  age: 30, country: 'Ecuador' },
+    { name: 'Samantha',  email: 'samantha@email.com',  age: 30, country: 'United States' },
+    { name: 'Nicole',    email: 'nicole@email.com',    age: 43, country: 'Colombia' },
+    { name: 'Natasha',   email: 'natasha@email.com',   age: 54, country: 'Ecuador' },
+    { name: 'Michael',   email: 'michael@email.com',   age: 15, country: 'Colombia' },
+    { name: 'Nicolás',   email: 'nicolas@email.com',    age: 43, country: 'Colombia' }
+  ];
+  $scope.multipleDemo = {};
+  $scope.multipleDemo.selectedPeople = [$scope.people[5], $scope.people[4]];
   $scope.disabled = function(date) {
-          // if((date.getTime() > Math.max.apply(Math, $scope.accountrangeDates)) || (date.getTime() < Math.min.apply(Math, $scope.accountrangeDates)) )
-           if((date.getTime() > $scope.newMax) || (date.getTime() < $scope.newMin) )
-              return true;
-      return false;
+    $scope.disdate=[];
+      if($scope.resmodel.id){
+        console.log("here");
+                                                      
+                                                      angular.forEach($scope.disdate, function(value) {
+                                                              if(value.start==(date.getTime() + 19800000)){
+                                                                return false;
+                                                              }
+                                                      }); 
+      }
+      //      if((date.getTime() > $scope.newMax) || (date.getTime() < $scope.newMin) )
+      //         return true;
+      // return false;
   }
   $scope.dselect = function(date) {
     console.log("control-here");
@@ -52,6 +106,7 @@
     closeOnBlur:true,
     closeOnSelect:true
   };
+  $scope.account=[];
 
   $scope.accountEvents = {
                        onItemSelect: function(item) {
@@ -59,19 +114,30 @@
                                                       UserService.getFilteredResources(item.id).then(function (response){
                                                       $scope.example13data = response.data ;
                                                       });
+
+                                                      UserService.getAccount(item.id).then(function (response){
+                                                      $scope.account = response.data ;
+                                                      $scope.newMax = $scope.account.end_date;
+                                                      $scope.newMin = $scope.account.start_date;
+                                                      $scope.showaccountdates = 1;
+                                                      $rootScope.$broadcast('refreshDatepickers');
+                                                      $scope.IsVisible = 0; 
+                                                      
+                                                      });
+                                                      
+                                                      
                                                      },
                };
   $scope.yourEvents = {
                        onItemSelect: function(item) {
-                                                      console.log($scope.accountrangeDates);
-                                                       //$rootScope.$broadcast('refreshDatepickers');
                                                       $scope.selectedDates.length = 0;
-                                                      //$scope.selectedDates = [1454610600000, 1454697000000];
-                                                      //console.log($scope.selectedDates);
                                                       $scope.resource=item.id;
                                                       $scope.singleres=item.employee_name;
-                                                      //$scope.selectedDates = [1454610600000, 1454697000000];
-                                                      //$rootScope.$broadcast('refreshDatepickers');
+                                                      UserService.getResourceDates(''+item.id+'').then(function (response){
+                                                        $scope.disdate=response.data;
+                                                        $rootScope.$broadcast('refreshDatepickers');
+                                                      });
+                                                      
                                                      },
                };
   $scope.resourceEvents = {
@@ -148,8 +214,14 @@
          var user = filtered.length ? filtered[0] : null;
          deferred.resolve(user);
         mydata.resource_id=resource;
+        var newdate=[];
+        angular.forEach(date, function(value) {
+        newdate.push(value+19800000);
+});
         mydata.name=$scope.singleres;
-        mydata.Dates=date;
+        //mydata.Dates=date;
+        mydata.Dates=newdate;
+        mydata.percentage_loaded=100;
         var index = $scope.mynewdata.indexOf(mydata);
         $scope.mynewdata.splice(index, 1);
         if(filtered.length==0){
@@ -158,7 +230,9 @@
           for (var key in $scope.items) {
           if($scope.items[key].resource_id == resource){
             $scope.items[key].name=angular.copy($scope.singleres);
-            $scope.items[key].Dates=angular.copy(date);
+            $scope.items[key].Dates=angular.copy(newdate);
+            $scope.items[key].percentage_loaded=angular.copy(100);
+
           }
         }
         }
@@ -169,11 +243,11 @@
           var accountDetails = {};
           accountDetails.id = $scope.accountmodel.id;
           accountDetails.resources = $scope.items;
-          accountDetails.minEndDate = Math.min.apply(Math, $scope.accountrangeDates);
-          accountDetails.maxEndDate =Math.max.apply(Math, $scope.accountrangeDates);
+          accountDetails.minEndDate = Math.min.apply(Math, $scope.accountrangeDates)+19800000;
+          accountDetails.maxEndDate =Math.max.apply(Math, $scope.accountrangeDates)+19800000;
           account = {"account" : accountDetails}
           UserService.saveAccountDetails(account).then(function (response){
-                                                     console.log("here");
+                                                      FlashService.Success(response.data, true);
                                                       });
       }
       }

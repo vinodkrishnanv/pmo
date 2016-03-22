@@ -36,9 +36,8 @@
                          });
                        },3000);
     $scope.clickHandler = RowEditor.editRow;
-    console.log(jsonstring);
 		$scope.eventDetails = eventDetails;
-        $scope.message = 'Look! I am a Resource page.';
+    $scope.message = 'Look! I am a Resource page.';
         
     $scope.ShowHide = function () {
                 //If DIV is visible it will be hidden and vice versa.

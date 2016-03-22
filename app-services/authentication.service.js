@@ -12,43 +12,11 @@
         service.Login = Login;
         service.SetCredentials = SetCredentials;
         service.ClearCredentials = ClearCredentials;
-
+        service.hostName='localhost';
         return service;
-
+        
         function Login(username, password, callback) {
-
-            /* Dummy authentication for testing, uses $timeout to simulate api call
-             ----------------------------------------------*/
-            /*$timeout(function () {
-               var response;
-                UserService.GetByUsername(username)
-                    .then(function (user) {
-                        if (user !== null && user.password === password) {
-                            response = { success: true };
-                        } else {
-                            response = { success: false, message: 'Username or password is incorrect' };
-                        }
-                        callback(response);
-                    });
-					 /*var response = { success: username === 'test' && password === 'test' };
-                if(!response.success) {
-                    response.message = 'Username or password is incorrect';
-                }
-                callback(response);
-            }, 1000);*/
-
-            /* Use this for real authentication
-             ----------------------------------------------*/
-          //   var req = {
-          //      method: 'POST',
-            //    url: 'http://localhost:3000/user/search.json',
-           //     headers : { 'Content-Type': 'application/json' } ,
-           //     data:  user
-           // }
-            //var test = $http(req).then(function(response){return response;},function(response){return response;});
-            //console.log(test);
-            //return test;
-            $http.post('http://localhost:3000/user/search.json', { username: username, password: password })
+            $http.post('http://'+service.hostName+':3000/user/search.json', { username: username, password: password })
                 .success(function (response) {
                   callback(response);
                 });
