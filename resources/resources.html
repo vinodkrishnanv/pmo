@@ -1,76 +1,14 @@
 <div ng-include="'pages/navigation.html'"></div>
 <div class="jumbotron text-center">
         
-        <button class="btn btn-primary" ng-show = "!IsVisible" ng-click="ShowHide()">+</button>
+        <button class="btn btn-primary" ng-show = "!IsVisible" ng-click="ShowHide()" ui-sref="resources.add">+</button>
         <button class="btn btn-primary" ng-show = "IsVisible" ng-click="!ShowHide()">-</button>
         <br />
         <br />
         <div ng-show = "IsVisible">
 
-         <form name="form" ng-submit="vm.saveresource()" role="form">
-        <div class="form-group" ng-class="{ 'has-error': form.employee_name.$dirty && form.employee_name.$error.required }">
-        	<div class="col-md-6">
-            <label for="username">Employee name</label>
-            </div>
-        	<div class="col-md-6">
-            <input type="text" name="employee_name" id="employee_name" class="form-control" ng-model="vm.resource.employee_name" required />
-            <span ng-show="form.employee_name.$dirty && form.employee_name.$error.required" class="help-block">Employee name is required</span>
-            </div>
-        </div>
-        <div class="form-group" ng-class="{ 'has-error': form.employee_id.$dirty && form.employee_id.$error.required }">
-        	<div class="col-md-6">
-            <label for="username">Employee ID</label>
-        </div>
-        <div class="col-md-6">
-            <input type="text" name="employee_id" id="employee_id" class="form-control" ng-model="vm.resource.employee_id" required />
-            <span ng-show="form.employee_id.$dirty && form.employee_id.$error.required" class="help-block">Employee Id is required</span>
-            </div>
-        </div>
-        <div class="form-group" ng-class="{ 'has-error': form.role.$dirty && form.role.$error.required }">
-        <div class="col-md-12">	
-        	<div class="col-md-6">
-            <label for="username">Role</label>
-        </div>
-        <div class="col-md-6">
-            <input type="text" name="role" id="role" class="form-control" ng-model="vm.resource.role" required />
-            <span ng-show="form.role.$dirty && form.role.$error.required" class="help-block">Please enter a role for the employee</span>
-        </div>
-        </div>
-        </div>
-        <div class="form-group" ng-class="{ 'has-error': form.role.$dirty && form.role.$error.required }">
-        <div class="col-md-12"> 
-          <div class="col-md-6">
-            <label for="username">Skills</label>
-        </div>
-        <div ng-dropdown-multiselect="" events="resEvents" options="resdata" selected-model="resmodel" extra-settings="ressettings"></div>
-        <!--<div class="col-md-6">
-          <select name="skill" id="skill" ng-model="vm.resource.skill">
-            <option ng-repeat="point in data.availableSkillOptions" value="{{point.id}}">{{point.skill_name}}</option>
-        </select>
-            <span ng-show="form.skill.$dirty && form.skill.$error.required" class="help-block">Skills</span>
-        </div>-->
-        </div>
-        </div>
-        <div class="form-group" ng-class="{ 'has-error': form.heirarchy_id.$dirty && form.heirarchy_id.$error.required }">
-        <div class="col-md-12">	    
-            <div class="col-md-6">
-            <label for="heirarchy_id">Hierarchy</label>
-        </div>
-        <div class="col-md-6">
-            <select name="heirarchy_id" id="heirarchy_id" ng-model="vm.resource.heirarchy_id">
-      			<option ng-repeat="option in data.availableHeirarchyOptions" value="{{option.id}}">{{option.heirarchy_name}}</option>
-    		</select>
-            <span ng-show="form.heirarchy_id.$dirty && form.heirarchy_id.$error.required" class="help-block">Add a Hierarchy</span>
-        </div>
-        </div>
-        </div>
-        <div class="form-actions">
-            <button type="submit" ng-disabled="form.$invalid || vm.dataLoading" class="btn btn-primary">Save</button>
-            <img ng-if="vm.dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-            <a href="#/login" class="btn btn-link">Cancel</a>
-        </div>
-    </form>
     </div>
+    <div  ui-view="modal"></div>
 <div class="grid" ui-grid="vm.gridOptions" ui-grid-edit ui-grid-resize-columns>
   <div class="watermark" ng-show="!vm.gridOptions.data.length">No data available</div>
 </div>

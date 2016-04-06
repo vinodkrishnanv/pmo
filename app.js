@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app', ['ngRoute', 'ngCookies','ngGrid','ngSanitize','ui.grid', 'ui.grid.edit','ui.grid.resizeColumns','ui.bootstrap', 'schemaForm','angularjs-dropdown-multiselect','gm.datepickerMultiSelect','demo-calendar','ui.router','ui.calendar','ui.select'])
+        .module('app', ['ngRoute', 'ngCookies','ngGrid','ngSanitize','ui.grid', 'ui.grid.edit','ui.grid.resizeColumns','ui.bootstrap', 'schemaForm','angularjs-dropdown-multiselect','gm.datepickerMultiSelect','demo-calendar','ui.router','ui.calendar','ui.select2'])
         .config(config)
         .run(run)
         ;
@@ -85,14 +85,67 @@
                 url: "/resources",
                 templateUrl : 'resources/resources.html',
                 controller  : 'ResourcesController',
-                controllerAs: 'vm'
+                controllerAs: 'vm',
+                onEnter: ["$state", function($state) {
+     /* $(document).on("keyup", function(e) {
+        if(e.keyCode == 27) {
+          $(document).off("keyup");
+          $state.go("account");
+        }
+      });*/
+
+      $(document).on("click", ".btn-danger", function() {
+        $state.go("resources");
+      });
+
+      
+    }],
             })
+            .state('resources.add', {
+                url: '/add',
+                views:{
+                      "modal": {
+                        templateUrl: "resources/resources.add.html",
+                        controller  : 'ResourcesController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
+                
+                })
+            .state('resources.edit', {
+                url: '/edit/:id',
+                views:{
+                      "modal": {
+                        templateUrl: "resources/resources.add.html",
+                        controller  : 'ResourcesEditController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
+                    
+                // controller  : 'AccountController',
+                })
+            
             .state('project', {
                 url: "/project",
                 templateUrl : 'project/project.html',
                 controller  : 'ProjectController',
                 controllerAs: 'vm'
             })
+            .state('project.calendar', {
+                url: '/calendar',
+                views:{
+                      "modal": {
+                        templateUrl: "project/project.calendar.html",
+                        controller  : 'ProjectController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
+                    
+                // controller  : 'AccountController',
+                })
             .state('units', {
                 url: "/units",
                 templateUrl : 'ounit/unit.html',
@@ -109,6 +162,12 @@
                 url: "/skill",
                 templateUrl : 'skills/skills.html',
                 controller  : 'SkillController',
+                controllerAs: 'vm'
+            })
+            .state('services', {
+                url: "/services",
+                templateUrl : 'services/services.html',
+                controller  : 'ServicesController',
                 controllerAs: 'vm'
             }); 
             $urlRouterProvider.otherwise('/login');

@@ -1,50 +1,43 @@
   <div class="overlay" ng-class="{show : false}"><div ng-include="'pages/navigation.html'"></div>
   <div class="jumbotron text-center">
+    <div  ui-view="modal"></div>
     <div>
-      <div class="col-md-6">
+      <div class="col-md-4 text-left">
+        {{selectedDates}}
+        {{accountmodel}}
         <label for="username">Account name</label>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-4">
         <div ng-dropdown-multiselect="" events="accountEvents" options="accountdata" date-selected='dselect(date)' selected-model="accountmodel" extra-settings="accountsettings"></div>
       </div>
+      <div class="col-md-4">
+      <button ui-sref="project.calendar" class="btn btn-primary">View Calendar</button>
+      </div>
     </div>
-    <div class="marleft" ng-show="showaccountdates">
-      <div class="col-md-8"><h3>     Account Range Dates </h3>  </div>
+    <br><br><br><br>
+    <div class="row" ng-show="showaccountdates">
+      <div class="col-md-4 text-left"><h3>     Account Range Dates </h3>  </div>
       <div class="col-md-8">
-        {{newMin | date:'MMM d, y'}} -- {{newMax | date:'MMM d, y'}}
+         <pre>{{newMin | date:'MMM d, y'}} -- {{newMax | date:'MMM d, y'}}</pre>
+        
       </div>
       <!--<button ng-click="changeAccountDates()">Change Dates</button>-->
     </div>
-    
-<div class="" ng-show="calmodel" >
-  <!--<button class="btn btn-primary" ng-show = "!IsVisible" ng-click="ShowHide()">+</button>
-      <button class="btn btn-primary" ng-show = "IsVisible" ng-click="!ShowHide()">-</button>
-      <div class="" ng-show="IsVisible" >
-     
-      <div class="calres" ng-show="calrangemodel" >
-        <div class="col-md-6">
-          <label for="username">Account Date Range Select</label>
-        </div>
-        <div class="col-md-6">
-          <table>
-            <tr>
-              <td>
-                <uib-datepicker class="result_text"  ng-model='accountrange' multi-select='accountrangeDates' select-range='true' ng-click="reload()"></uib-datepicker>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
-      <button ng-click="addAccountDates()">Add Dates</button>
-    </div>-->
-    </div>
+     <br><br><br><br>
     <div ng-show="calmodel">
-      <div class="col-md-6">
+      <div class="col-md-6 text-left">
           <label for="username">Select the Resources</label>
         </div>
         <div class="col-md-6">
-          <div ng-dropdown-multiselect="" events="resourceEvents" options="example13data" selected-model="example13model" extra-settings="example13settings"></div>
-          <!--<ui-select multiple ng-model="multipleDemo.selectedPeople" theme="select2" ng-disabled="disabled" style="width: 800px;">
+          <div ng-dropdown-multiselect="" events="resourceEvents" options="example13data" selected-model="example13model" extra-settings="example13settings" group-by="group"></div>
+          
+
+  
+
+   <!-- <select-multiple ng-model="eEntity.tags" transform-to-model="transformToModel" transform-to-view="transformToView"/>
+
+    <small>hint: start to type with  a</small>
+          <ui-select multiple ng-model="multipleDemo.selectedPeople" theme="select2" ng-disabled="disabled" style="width: 800px;">
     <ui-select-match placeholder="Select person...">{{$item.name}} &lt;{{$item.email}}&gt;</ui-select-match>
     <ui-select-choices repeat="person in people | propsFilter: {name: $select.search, age: $select.search}">
       <div ng-bind-html="person.name | highlight: $select.search"></div>
@@ -56,14 +49,30 @@
   </ui-select>-->
         </div>
     </div>
+    <br> 
+    <br>  
+    <br>   
     <div class="reshere" ng-show="showreshere">
-      <div class="col-md-4">
-          <label for="username">Add dates for Resource</label>
-        </div>
-        <div class="col-md-2">
+      <h4>Add dates for Resource</h4>
+      <div class="row single">
+        <div class="col-md-4 text-right">
           <div ng-dropdown-multiselect=""  events="yourEvents" options="example13model" selected-model="resmodel" extra-settings="ressettings"></div>
+         </div>
+        <div class="col-md-4">
+          <label for="username">... loaded at ...</label>
+        </div>
+        <div class="col-md-4 text-left">
+           <select name="singleSelect" ng-model="singleperSelect">
+              <option value="25">25 %</option>
+              <option value="50">50 %</option>
+              <option value="75">75 %</option>
+              <option value="100">100 %</option>
+          </select>
+         </div>
          </div> 
-         <div class="col-md-6">
+         <br><br><br><br>
+         <div class="row">
+         <div class="col-md-12">
             <div ng-show="resource" >
               <div style='display:inline-block; vertical-align:top'>
                 <div class='btn-group'>
@@ -72,7 +81,7 @@
                   <button class='btn btn-primary' ng-model='type' btn-radio='"range"'>Range</button>
 
                 </div>
-                <br />
+                <br><br>
                 <my-customer></my-customer>
                 <table>
                   <tr>
@@ -84,10 +93,13 @@
               </div>
             </div>
          </div>
+         </div>
+         <br><br>
             
-            
-    <button ng-click="add(resource,singleres,selectedDates)">Add</button>
-    <button ng-click="saveproject()">Save</button>
+       <div ng-show="resource" >      
+          <button class="btn btn-primary" ng-click="add(resource,singleres,selectedDates)">Add</button>
+          <button class="btn btn-primary" ng-click="saveproject()">Save</button>
+        </div>
   </div>
  <!-- {{myselectedDates}}
   {{resmodel}}

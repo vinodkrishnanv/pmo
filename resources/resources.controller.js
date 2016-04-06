@@ -4,10 +4,11 @@
     angular
         .module('app')
         .controller('ResourcesController', ResourcesController)
-        .controller('RowEditCtrl', RowEditCtrl)
-        .service('RowResourceEditor', RowResourceEditor);
-	ResourcesController.$inject = ['$rootScope','$timeout','$scope','$log','$http','UserService', '$location', 'FlashService','RowResourceEditor'];
-	function ResourcesController($rootScope,$timeout,$scope,$log,$http,UserService, $location,FlashService,RowResourceEditor) {
+        .controller('ResourcesEditController', ResourcesEditController);
+        //.controller('RowEditCtrl', RowEditCtrl)
+        //.service('RowResourceEditor', RowResourceEditor)
+	ResourcesController.$inject = ['$rootScope','$timeout','$scope','$log','$http','UserService', '$location', 'FlashService','$routeParams'];
+	function ResourcesController($rootScope,$timeout,$scope,$log,$http,UserService, $location,FlashService,$routeParams) {
 
         var vm = this;
         var jsonstring="";
@@ -50,7 +51,7 @@ $scope.data = {
                           $scope.resdata = response.data;
                          });
                        },3000);
-    $scope.clickResourceHandler = RowResourceEditor.editRow;
+    //$scope.clickResourceHandler = RowResourceEditor.editRow;
 		$scope.eventDetails = eventDetails;
         $scope.message = 'Look! I am a Resource page.';
 
@@ -100,7 +101,7 @@ vm.gridOptions = {
    enableColumnResizing: true,
    enableCellEdit: false,
     columnDefs: [
-    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ng-click="grid.appScope.clickResourceHandler(grid,row)"><i class="fa fa-edit"></i></button></div>', width: 60 ,enableCellEdit: true},
+    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ui-sref="resources.edit({id:{{row.entity.id}}})""><i class="fa fa-edit"></i></button></div>', width: 60 ,enableCellEdit: true},
     { name: 'employee_name', width: 180 },
       { name: 'employee_id' , width: 130},
       { name: 'role' , width: 120},
@@ -119,84 +120,126 @@ vm.gridOptions = {
 
 
 
-RowResourceEditor.$inject = ['$rootScope', '$modal','UserService'];
+// RowResourceEditor.$inject = ['$rootScope', '$modal','UserService'];
 
-function RowResourceEditor($rootScope, $modal,UserService) {
+// function RowResourceEditor($rootScope, $modal,UserService) {
 
-  var service = {};
+//   var service = {};
 
-  service.editRow = editRow;
-
-  
-
-  function editRow(grid, row) {
-    $modal.open({
-
-      templateUrl: 'resources/edit-resource-modal.html',
-
-      controller: ['$modalInstance', '$rootScope', 'grid', 'row','UserService', '$timeout', '$location', RowEditCtrl],
-
-      controllerAs: 'vm',
-
-      resolve: {
-
-        grid: function () { return grid; },
-
-        row: function () { return row; }
-
-      }
-
-    });
-
-  }
+//   service.editRow = editRow;
 
   
 
-  return service;
+//   function editRow(grid, row) {
+//     $modal.open({
 
-}
-function RowEditCtrl($modalInstance, $rootScope, grid, row ,UserService, $timeout, $location ) {
-  //getSkilldata=ResourcesController.getSkilldata;
-  var vm = this;
-  vm.entity = angular.copy(row.entity);
-  vm.entity.resdata=$rootScope.availableSkillOptions;
-  vm.entity.ressettings=$rootScope.ressettings;
-  vm.items = $rootScope.availableHeirarchyOptions;
-  UserService.getResource(row.entity.id)
-                          .then(function (response) {                          
-                            vm.entity.employee_id = response.data.employee_id;
-                            vm.entity.employee_name=response.data.employee_name;
-                            vm.entity.heirarchy_id=response.data.heirarchy_id;
-                            vm.entity.role=response.data.role;
-                            vm.entity.skill_id=response.data.skill_id;
+//       templateUrl: 'resources/edit-resource-modal.html',
 
-                           // vm.entity.resdata=$rootScope.availableSkillOptions; 
-                            //vm.entity.skill_id=[{"id":2},{"id":3}];
+//       controller: ['$modalInstance', '$rootScope', 'grid', 'row','UserService', '$timeout', '$location', RowEditCtrl],
 
-                            //vm.entity.ressettings=$rootScope.ressettings;
-                            //vm.items = $rootScope.availableHeirarchyOptions;
-                           // console.log(vm.entity )
+//       controllerAs: 'vm',
+
+//       resolve: {
+
+//         grid: function () { return grid; },
+
+//         row: function () { return row; }
+
+//       }
+
+//     });
+
+//   }
+
+  
+
+//   return service;
+
+// }
+// function RowEditCtrl($modalInstance, $rootScope, grid, row ,UserService, $timeout, $location ) {
+//   //getSkilldata=ResourcesController.getSkilldata;
+//   var vm = this;
+//   vm.entity = angular.copy(row.entity);
+//   vm.entity.resdata=$rootScope.availableSkillOptions;
+//   vm.entity.ressettings=$rootScope.ressettings;
+//   vm.items = $rootScope.availableHeirarchyOptions;
+//   UserService.getResource(row.entity.id)
+//                           .then(function (response) {                          
+//                             vm.entity.employee_id = response.data.employee_id;
+//                             vm.entity.employee_name=response.data.employee_name;
+//                             vm.entity.heirarchy_id=response.data.heirarchy_id;
+//                             vm.entity.role=response.data.role;
+//                             vm.entity.skill_id=response.data.skill_id;
+
+//                            // vm.entity.resdata=$rootScope.availableSkillOptions; 
+//                             //vm.entity.skill_id=[{"id":2},{"id":3}];
+
+//                             //vm.entity.ressettings=$rootScope.ressettings;
+//                             //vm.items = $rootScope.availableHeirarchyOptions;
+//                            // console.log(vm.entity )
                             
-                           });
-  vm.save = save;
-  function save() {
-    // Copy row values over
-    row.entity = angular.extend(row.entity, vm.entity);
-    $modalInstance.close(row.entity);
-    var resource = {};
-    resource.id=vm.entity.id;
-    resource.employee_id=vm.entity.employee_id;
-    resource.employee_name=vm.entity.employee_name;
-    resource.heirarchy_id=vm.entity.heirarchy_id;
-    resource.resmodel=vm.entity.skill_id;
-    resource.role=vm.entity.role;
-    UserService.editResource(resource).then(function (response) {
-       row.entity = angular.extend(row.entity, response.data.success);
-        $modalInstance.close(row.entity);
-     });
-  }
+//                            });
+//   vm.save = save;
+//   function save() {
+//     // Copy row values over
+//     row.entity = angular.extend(row.entity, vm.entity);
+//     $modalInstance.close(row.entity);
+//     var resource = {};
+//     resource.id=vm.entity.id;
+//     resource.employee_id=vm.entity.employee_id;
+//     resource.employee_name=vm.entity.employee_name;
+//     resource.heirarchy_id=vm.entity.heirarchy_id;
+//     resource.resmodel=vm.entity.skill_id;
+//     resource.role=vm.entity.role;
+//     UserService.editResource(resource).then(function (response) {
+//        row.entity = angular.extend(row.entity, response.data.success);
+//         $modalInstance.close(row.entity);
+//      });
+//   }
 
-}
+// }
+
+
+ResourcesEditController.$inject = ['$scope','$log','$http','UserService', '$location', 'FlashService','$timeout','$routeParams'];
+function ResourcesEditController($scope,$log,$http,UserService, $location,FlashService,$timeout,$routeParams) {
+  var vm=this;
+   vm.saveresource = saveresource;
+  var splits=$location.url().toString().split("/");
+  console.log(splits);
+  UserService.getResource(splits[splits.length - 1])
+                  .then(function (response) {
+                      if (response.data) {
+                        vm.resource = response.data;
+                        //$scope.sermodel=vm.account.sermodel=
+                       // vm.account.start_date=$scope.minEndDate;
+             // //vm.account.end_date=$scope.maxEndDate;
+             // vm.account.anticipated_value = vm.account.anticipated_value.concat(" ").concat(vm.account.anticipated_value_currency);
+                      } 
+                  });
+
+                  function saveresource() {
+            vm.dataLoading = true;
+            vm.resource.resmodel=$scope.resmodel;
+            UserService.saveResource(vm.resource)
+                .then(function (response) {
+                    if (response.data.success) {
+                        FlashService.Success('Save successful', true);
+                        vm.dataLoading = false;
+                        UserService.getResources()
+                          .then(function (response) {
+                             vm.gridOptions.data = response.data;
+                           });
+                    } else {
+                        FlashService.Error(response.data.error.heirarchy_name[0]);
+                        vm.dataLoading = false;
+                    }
+                });
+        }
+  
+  
+      
+
+  }
 
 
      

@@ -1,118 +1,5 @@
 <div class="Modal-backdrop"></div>
  <div class="Modal-holder"  autoscroll="false">
-<!--<form name="form" ng-submit="vm.saveaccount()" role="form">
-          <div class="form-group" ng-class="{ 'has-error': form.accountName.$dirty && form.accountName.$error.required }">
-            <div class="col-md-6">
-              <label for="username">Account name</label>
-              </div>
-            <div class="col-md-6">
-              <input type="text" name="accountName" id="accountName" class="form-control" ng-model="vm.account.account_name" required />
-              <span ng-show="form.accountName.$dirty && form.accountName.$error.required" class="help-block">First name is required</span>
-              </div>
-          </div>
-          <div class="form-group" ng-class="{ 'has-error': form.organisationalUnit.$dirty && form.organisationalUnit.$error.required }">
-            <div class="col-md-6">
-              <label for="username">Organisational Unit</label>
-          </div>
-          <div class="col-md-6">
-              <select name="organisationalUnit" id="organisationalUnit"  ng-model="vm.account.organisational_unit_id">
-              <option ng-repeat="option in data.availableOptions" ng-click="vm.getServices()" value="{{option.id}}">{{option.unit_name}}</option>
-          </select>
-              <span ng-show="form.organisationalUnit.$dirty && form.organisationalUnit.$error.required" class="help-block">Organisational Unit</span>
-          </div>
-           <div ng-dropdown-multiselect="" events="serEvents" options="serdata" selected-model="sermodel" extra-settings="sersettings"></div>
-          </div>
-          <div class="form-group" ng-class="{ 'has-error': form.noOfResources.$dirty && form.noOfResources.$error.required }">
-          <div class="col-md-12"> 
-            <div class="col-md-6">
-              <label for="username">No of resources</label>
-          </div>
-          <div class="col-md-6">
-              <input type="text" name="noOfResources" id="noOfResources" class="form-control" ng-model="vm.account.resource_needed" required />
-              <span ng-show="form.noOfResources.$dirty && form.noOfResources.$error.required" class="help-block">Please enter an integer</span>
-          </div>
-          </div>
-          </div>
-          <div class="form-group" ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required }">
-            <div class="row">
-              <div class="col-md-6">
-              <label for="password">Manager</label>
-          </div>
-          <div class="col-md-6">
-              <select name="manager" id="manager" ng-model="vm.account.resource_id">
-              <option ng-repeat="option in data.availableManagerOptions" value="{{option.id}}">{{option.employee_name}}</option>
-          </select>
-              <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Manager is required</span>
-          </div>
-          </div>
-          </div>
-          <div class="form-group" ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required }">
-          <div class="col-md-12">     
-              <div class="col-md-6">
-              <label for="password">Status</label>
-          </div>
-          <div class="col-md-6">
-              <select name="status" id="status" ng-model="vm.account.status">
-              <option ng-repeat="option in data.availableStatusOptions" value="{{option.id}}">{{option.name}}</option>
-          </select>
-              <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Add a status</span>
-          </div>
-          </div>
-          </div>
-
-          <div class="form-group" ng-class="{ 'has-error': form.accountName.$dirty && form.accountName.$error.required }">
-            <div class="col-md-6">
-              <label for="reqtype">Request Type</label>
-              </div>
-            <div class="col-md-6">
-              <select name="reqtype" id="reqtype" ng-model="vm.account.reqtype">
-              <option ng-repeat="option in data.availableReqTypes" value="{{option.id}}">{{option.name}}</option>
-          </select>
-              <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Request Type is required</span>
-          </div>
-          </div>
-           <div class="doq">
-          <div class="col-md-6 mar-left">
-              <label for="dateofreq">Date of Request</label>
-              </div>
-          <div class="input-group" ng-class="{ 'has-error': form.accountName.$dirty && form.accountName.$error.required }">
-            
-               <div class="input-group">
-              <input
-                type="text"
-                id="popup"
-                class="form-control"
-                datepicker-popup=""
-                ng-model="vm.account.dateofreq"
-                is-open="opened"
-                ng-click="open()"/>
-              <span class="input-group-btn">
-                <label for="popup" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></label>
-              </span>
-            </div>
-              <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Date Type is required</span>
-          </div>
-          </div>
-          
-
-          <div class="doq">
-          <div class="col-md-6 mar-left">
-              <label for="region">Region</label>
-              </div>
-              <div class="col-md-6">
-              <select name="reqtype" id="reqtype" ng-model="vm.account.region">
-              <option ng-repeat="option in data.availableRegionTypes" value="{{option.id}}">{{option.name}}</option>
-              </select>
-            </div>
-          </div>
-
-
-          <div class="form-actions">
-              <button type="submit" ng-disabled="form.$invalid || vm.dataLoading" class="btn btn-primary">Register</button>
-              <img ng-if="vm.dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-              <a href="#/login" class="btn btn-link">Cancel</a>
-          </div>
-      </form>-->
       <div class="form-account">
       <form name="form" ng-submit="vm.saveaccount()" role="form" class="form-horizontal">
 <fieldset>
@@ -120,7 +7,7 @@
 <div class="col-md-4">
 <!-- Text input-->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="Account">Account</label>  
+  <label class="col-md-4 control-label labelcustom" for="Account">Account</label>  
   <div class="col-md-4">
   <input id="Account" name="Account" placeholder="placeholder" class="form-control input-md" ng-model="vm.account.account_name" required="" type="text">
   <span class="help-block">help</span>  
@@ -129,7 +16,7 @@
 
 <!-- Select Basic -->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="organisationalUnit">Organisational Unit</label>
+  <label class="col-md-4 control-label labelcustom" for="organisationalUnit">Organisational Unit</label>
   <div class="col-md-4">
     <select name="organisationalUnit" id="organisationalUnit" class="form-control" ng-model="vm.account.organisational_unit_id">
               <option ng-repeat="option in data.availableOptions" ng-click="vm.getServices()" value="{{option.id}}">{{option.unit_name}}</option>
@@ -140,7 +27,7 @@
 
 <!-- Select Basic -->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="accountStatus">Account Status</label>
+  <label class="col-md-4 control-label labelcustom" for="accountStatus">Account Status</label>
   <div class="col-md-4">
     <select name="status" id="status" ng-model="vm.account.status" class="form-control">
               <option ng-repeat="option in data.availableStatusOptions" value="{{option.id}}">{{option.name}}</option>
@@ -151,7 +38,7 @@
 
 <!-- Select Basic -->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="manager">Delivery Manager</label>
+  <label class="col-md-4 control-label labelcustom" for="manager">Delivery Manager</label>
   <div class="col-md-4">
     <select name="manager" id="manager" ng-model="vm.account.resource_id" class="form-control">
               <option ng-repeat="option in data.availableManagerOptions" value="{{option.id}}">{{option.employee_name}}</option>
@@ -161,7 +48,7 @@
 
 <!-- Select Basic -->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="services">Services</label>
+  <label class="col-md-4 control-label labelcustom" for="services">Services</label>
   <div class="col-md-4">
     <div ng-dropdown-multiselect="" events="serEvents" options="serdata" selected-model="sermodel" extra-settings="sersettings"></div>
     
@@ -170,7 +57,7 @@
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="noOfResources">No Of Resources</label>  
+  <label class="col-md-4 control-label labelcustom" for="noOfResources">No Of Resources</label>  
   <div class="col-md-4">
   <input id="noOfResources" name="noOfResources" placeholder="placeholder" class="form-control input-md" type="text" ng-model="vm.account.resource_needed">
   <span class="help-block">help</span>  
@@ -179,7 +66,7 @@
 
 <!-- Select Basic -->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="requestType">Request Type</label>
+  <label class="col-md-4 control-label labelcustom" for="requestType">Request Type</label>
   <div class="col-md-4">
     <select name="requestType" id="requestType" ng-model="vm.account.request_type" class="form-control">
               <option ng-repeat="option in data.availableReqTypes" value="{{option.id}}">{{option.name}}</option>
@@ -191,7 +78,7 @@
 
 <!-- Select Basic -->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="region">Region</label>
+  <label class="col-md-4 control-label labelcustom" for="region">Region</label>
   <div class="col-md-4">
     <select name="region" id="region" ng-model="vm.account.region" class="form-control">
               <option ng-repeat="option in data.availableRegionTypes" value="{{option.id}}">{{option.name}}</option>
@@ -202,7 +89,7 @@
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="location">Location</label>  
+  <label class="col-md-4 control-label labelcustom" for="location">Location</label>  
   <div class="col-md-4">
   <input id="location" name="location" placeholder="placeholder" ng-model="vm.account.location"  class="form-control input-md" required="" type="text">
   <span class="help-block">help</span>  
@@ -211,7 +98,7 @@
 
 <!-- Select Basic -->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="contactType">Contact Type</label>
+  <label class="col-md-4 control-label labelcustom" for="contactType">Contact Type</label>
   <div class="col-md-4">
     <select name="contactType" id="contactType" ng-model="vm.account.contract_type" class="form-control">
               <option ng-repeat="option in data.availableContactType" value="{{option.id}}">{{option.name}}</option>
@@ -223,7 +110,7 @@
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="customerContact">Customer Contact</label>  
+  <label class="col-md-4 control-label labelcustom" for="customerContact">Customer Contact</label>  
   <div class="col-md-4">
   <input id="customerContact" name="customerContact" placeholder="placeholder" ng-model="vm.account.customer_contact" class="form-control input-md" required="" type="text">
   <span class="help-block">help</span>  
@@ -232,7 +119,7 @@
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="salesPersonOthers">Sales Person Others</label>  
+  <label class="col-md-4 control-label labelcustom" for="salesPersonOthers">Sales Person Others</label>  
   <div class="col-md-4">
   <input id="salesPersonOthers" name="salesPersonOthers" placeholder="placeholder" ng-model="vm.account.other_persons" class="form-control input-md" type="text">
   <span class="help-block">help</span>  
@@ -241,7 +128,7 @@
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="salesEmail">Sales Email</label>  
+  <label class="col-md-4 control-label labelcustom" for="salesEmail">Sales Email</label>  
   <div class="col-md-4">
   <input id="salesEmail" name="salesEmail"  ng-model="vm.account.other_sales_email" placeholder="placeholder" class="form-control input-md" type="text">
   <span class="help-block">help</span>  
@@ -250,7 +137,7 @@
 
 <!-- Select Basic -->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="sowStatus">SOW Status</label>
+  <label class="col-md-4 control-label labelcustom" for="sowStatus">SOW Status</label>
   <div class="col-md-4">
     <select name="sowStatus" id="sowStatus" ng-model="vm.account.sow_status" class="form-control">
               <option ng-repeat="option in data.availableSowStatus" value="{{option.id}}">{{option.name}}</option>
@@ -262,7 +149,7 @@
 
 <!-- Textarea -->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="comments">Comments</label>
+  <label class="col-md-4 control-label labelcustom" for="comments">Comments</label>
   <div class="col-md-4">                     
     <textarea class="form-control" id="comments" ng-model="vm.account.comments"  name="comments">default text</textarea>
   </div>
@@ -270,7 +157,7 @@
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="anticipatedValue">Anticipated Value</label>  
+  <label class="col-md-4 control-label labelcustom" for="anticipatedValue">Anticipated Value</label>  
   <div class="col-md-4">
   <input id="anticipatedValue" name="anticipatedValue" placeholder="placeholder" ng-model="vm.account.anticipated_value" class="form-control input-md" required="" type="text">
   <span class="help-block">help</span>  
@@ -278,7 +165,7 @@
 </div>
 
 <div class="form-group">
-  <label class="col-md-4 control-label" for="anticipatedValueCurrency">Anticipated Value Currency</label>
+  <label class="col-md-4 control-label labelcustom" for="anticipatedValueCurrency">Anticipated Value Currency</label>
   <div class="col-md-4">
     <select name="anticipatedValueCurrency" id="anticipatedValueCurrency" ng-model="vm.account.anticipated_value_currency" class="form-control">
               <option ng-repeat="option in data.availableAnticipatedValueCurrency" value="{{option.id}}">{{option.name}}</option>
@@ -286,7 +173,7 @@
   </div>
 </div>
 <div class="form-group">
-  <label class="col-md-4 control-label" for="username">Account Date Range Select</label>
+  <label class="col-md-4 control-label labelcustom" for="username">Account Date Range Select</label>
   <div class="col-md-4">
                 <uib-datepicker class="result_text"  ng-model='accountrange' multi-select='accountrangeDates' select-range='true' ng-click="reload()"></uib-datepicker>
               </div>

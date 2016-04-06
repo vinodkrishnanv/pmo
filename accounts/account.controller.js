@@ -101,7 +101,7 @@ $scope.datepickerConfig = {
     vm.gridOptions = {
 
       columnDefs: [
-      { name: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ui-sref="account.edit({id:{{row.entity.id}}})" ng-click="vm.getaccount({{row.entity.id}})"><i class="fa fa-edit"></i></button></div>', width: 60 },
+      { name: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ui-sref="account.edit({id:{{row.entity.id}}})" ><i class="fa fa-edit"></i></button></div>', width: 60 },
       { name: 'account_name' },
         { name: 'organisational_unit_name' },
         { name: 'services' },
@@ -217,8 +217,6 @@ $scope.datepickerConfig = {
   RowAccountEditor.$inject = ['$rootScope', '$modal','UserService'];
 
   function RowAccountEditor($rootScope, $modal,UserService) {
-    alert("here");
-
     var service = {};
 
     service.editAccountRow = editAccountRow;
@@ -226,7 +224,6 @@ $scope.datepickerConfig = {
     
 
     function editAccountRow(grid, row) {
-      alert("heres");
       
       console.log(row);
       $modal.open({
@@ -279,13 +276,57 @@ $scope.datepickerConfig = {
 AccountEditController.$inject = ['$scope','$log','$http','UserService', '$location', 'FlashService', 'RowEditor', '$timeout','$routeParams'];
 function AccountEditController($scope,$log,$http,UserService, $location,FlashService,RowEditor,$timeout,$routeParams) {
   var vm=this;
+   vm.saveaccount = saveaccount;
+   vm.getServices=getServices;
+   
   var splits=$location.url().toString().split("/");
   UserService.getAccount(splits[splits.length - 1])
                   .then(function (response) {
                       if (response.data) {
                         vm.account = response.data;
+                        UserService.getServices(vm.account.organisational_unit_id)
+                          .then(function (response) {
+                              if (response.data.success) {
+                                $scope.serdata = response.data.success;
+                              } 
+                          });
+                        //$scope.sermodel=vm.account.sermodel=
+                       // vm.account.start_date=$scope.minEndDate;
+             // //vm.account.end_date=$scope.maxEndDate;
+             // vm.account.anticipated_value = vm.account.anticipated_value.concat(" ").concat(vm.account.anticipated_value_currency);
                       } 
                   });
+  function saveaccount() {
+              vm.dataLoading = true;
+              vm.account.sermodel=$scope.sermodel;
+              vm.account.start_date=$scope.minEndDate;
+              vm.account.end_date=$scope.maxEndDate;
+              vm.account.anticipated_value = vm.account.anticipated_value.concat(" ").concat(vm.account.anticipated_value_currency);
+              UserService.saveAccount(vm.account)
+                  .then(function (response) {
+                      if (response.data) {
+                          FlashService.Success('Save successful', true);
+                          vm.dataLoading = false;
+                          UserService.getAccounts()
+                            .then(function (response) {
+                               vm.gridOptions.data = response.data;
+                             });
+                      } else {
+                          FlashService.Error(response.message);
+                          vm.dataLoading = false;
+                      }
+                      $state.go("account");
+                  });
+          }
+
+          function getServices(){
+        UserService.getServices(vm.account.organisational_unit_id)
+                  .then(function (response) {
+                      if (response.data.success) {
+                        $scope.serdata = response.data.success;
+                      } 
+                  });
+      }
       
 
   }

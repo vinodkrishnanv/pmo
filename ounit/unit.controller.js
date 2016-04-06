@@ -46,6 +46,20 @@
     ]
 
   };
+  $scope.example13model = [];
+  $scope.example13settings = {
+    scrollableHeight: '200px',
+      scrollable: true,
+    enableSearch: true,
+    displayProp:'service_name',
+    idProp:'id',
+    externalIdProp:'',
+    closeOnBlur:true,
+      
+  };
+  UserService.getAllServices().then(function (response) {
+  $scope.example13data = response.data;
+  });
   
     /*$http.get('jsonFiles/data.json')
 
@@ -62,7 +76,7 @@
     $scope.cellValue ='';
     function saveunit() {
             vm.dataLoading = true;
-            var unit={"unit_name" : vm.unit}
+            var unit={"unit_name" : vm.unit,"services" : $scope.example13model}
             UserService.saveUnit(unit)
                 .then(function (response) {
                     if (response.data.success) {

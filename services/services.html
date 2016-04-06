@@ -1,0 +1,58 @@
+<div ng-include="'pages/navigation.html'"></div>
+<div class="jumbotron text-center">
+        
+        <button class="btn btn-primary" ng-show = "!IsVisible" ng-click="ShowHide()">+</button>
+        <button class="btn btn-primary" ng-show = "IsVisible" ng-click="!ShowHide()">-</button>
+        <br />
+        <br />
+        <div  class="hid" ng-show = "IsVisible">
+
+         <form name="form" ng-submit="vm.saveservice()" role="form">
+        <div class="form-group" ng-class="{ 'has-error': form.skill_name.$dirty && form.skill_name.$error.required }">
+        	<div class="col-md-6">
+            <label for="username">Service Name</label>
+            </div>
+        	<div class="col-md-6">
+            <input type="text" name="skill_name" id="skill_name" class="form-control" ng-model="vm.service.service_name" required />
+            <span ng-show="form.skill_name.$dirty && form.skill_name.$error.required" class="help-block">Service name is required</span>
+            </div>
+        </div>
+        
+        <div class="form-group" ng-class="{ 'has-error': form.skill_code.$dirty && form.skill_code.$error.required }">
+        <div class="col-md-12">	
+        	<div class="col-md-6">
+            <label for="username">Service Code</label>
+        </div>
+        <div class="col-md-6">
+            <input type="text" name="skill_code" id="skill_code" class="form-control" ng-model="vm.service.service_code" required />
+            <span ng-show="form.skill_code.$dirty && form.skill_code.$error.required" class="help-block">Please enter a Service Code for the Service</span>
+        </div>
+        </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" ng-disabled="form.$invalid || vm.dataLoading" class="btn btn-primary">Save</button>
+            <img ng-if="vm.dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+            <a href="#/login" class="btn btn-link">Cancel</a>
+        </div>
+    </form>
+    </div>
+<div class="skill-grid" ui-grid="vm.gridOptions" ui-grid-edit></div>
+
+</div>
+
+<!--<div class="dropdown dropdown-scroll">
+      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">Select <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+          <li role="presentation">
+              <div class="input-group input-group-sm search-control"> 
+              	<span class="input-group-addon">
+                      <span class="glyphicon glyphicon-search"></span>
+  				</span>
+                <input type="text" class="form-control" placeholder="Query" ng-model="query"></input>
+              </div>
+          </li>
+          <li role="presentation" ng-repeat='item in items | filter:query' ng-click="eventDetails(item.name)"> <a > {{item.name}} </a>
+          </li>
+      </ul>
+  </div>-->

@@ -4,47 +4,17 @@
       angular
           .module('app')
           .controller('ProjectController', ProjectController)
-          .filter('propsFilter',function() {
-  return function(items, props) {
-    var out = [];
-
-    if (angular.isArray(items)) {
-      items.forEach(function(item) {
-        var itemMatches = false;
-
-        var keys = Object.keys(props);
-        for (var i = 0; i < keys.length; i++) {
-          var prop = keys[i];
-          var text = props[prop].toLowerCase();
-          if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
-            itemMatches = true;
-            break;
-          }
-        }
-
-        if (itemMatches) {
-          out.push(item);
-        }
-      });
-    } else {
-      // Let the output be the input untouched
-      out = items;
-    }
-
-    return out;
-  };
-})
           .directive('overlay',ProjectDirective);
           //ProjectDirective.$inject = ['ngAnimate'];
-  	ProjectController.$inject = ['$rootScope','$scope','$log','$http','UserService', '$location', 'FlashService','RowEditor','$filter','$q'];
-  	function ProjectController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor,$filter,$q) {
+  	ProjectController.$inject = ['$rootScope','$scope','$log','$http','UserService', '$location', 'FlashService','RowEditor','$filter','$q','uiCalendarConfig'];
+  	function ProjectController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor,$filter,$q,uiCalendarConfig) {
 
           var vm = this;
-          //THIS IS WHERE YOU CAN INITIALIZE VALUES
           $scope.type = "individual";
         $scope.end = new Date();
        $scope.example13model = [];
        $scope.resource ;// = "";
+       $scope.singleperSelect="100";
 
   $scope.example13settings = {
     scrollableHeight: '200px',
@@ -53,38 +23,66 @@
     displayProp:'employee_name',
     idProp:'id',
     externalIdProp:'',
-    closeOnBlur:true
+    closeOnBlur:true,
+    groupByTextProvider: function(groupValue) { if (groupValue === 'F') { return 'Suggested'; } else { return 'Remaining'; } } 
       
   };
+  $scope.events = [
+
+           ] ;
+  $scope.uiConfig = {
+        calendar:{
+          height: 450,
+          width: 650,
+          editable: false,
+          header:{
+            left: 'title',
+            center: '',
+            right: 'today prev,next'
+          },
+          eventClick: $scope.alertOnEventClick,
+          eventDrop: $scope.alertOnDrop,
+          eventResize: $scope.alertOnResize,
+          eventRender: $scope.eventRender,
+          eventLimit: true, 
+          views: {
+            agenda: {
+              eventLimit: 2 // adjust to 6 only for agendaWeek/agendaDay
+            }
+          }
+        }
+      };
+       
   $scope.person = {};
-  $scope.people = [
-    { name: 'Adam',      email: 'adam@email.com',      age: 12, country: 'United States' },
-    { name: 'Amalie',    email: 'amalie@email.com',    age: 12, country: 'Argentina' },
-    { name: 'Estefanía', email: 'estefania@email.com', age: 21, country: 'Argentina' },
-    { name: 'Adrian',    email: 'adrian@email.com',    age: 21, country: 'Ecuador' },
-    { name: 'Wladimir',  email: 'wladimir@email.com',  age: 30, country: 'Ecuador' },
-    { name: 'Samantha',  email: 'samantha@email.com',  age: 30, country: 'United States' },
-    { name: 'Nicole',    email: 'nicole@email.com',    age: 43, country: 'Colombia' },
-    { name: 'Natasha',   email: 'natasha@email.com',   age: 54, country: 'Ecuador' },
-    { name: 'Michael',   email: 'michael@email.com',   age: 15, country: 'Colombia' },
-    { name: 'Nicolás',   email: 'nicolas@email.com',    age: 43, country: 'Colombia' }
-  ];
-  $scope.multipleDemo = {};
-  $scope.multipleDemo.selectedPeople = [$scope.people[5], $scope.people[4]];
   $scope.disabled = function(date) {
-    $scope.disdate=[];
+    var flag = 0;
+   
+    //$scope.disdate=[];
       if($scope.resmodel.id){
-        console.log("here");
-                                                      
+        var keepgoing =1;
+
+
                                                       angular.forEach($scope.disdate, function(value) {
-                                                              if(value.start==(date.getTime() + 19800000)){
-                                                                return false;
+                                                        if(keepgoing){
+                                                              if(parseInt(value.start)==(parseInt(date.getTime()) + 19800000)){
+                                                               // if((date.getTime() > $scope.newMax) || (date.getTime() < $scope.newMin) ){
+                                                                  flag = true;
+                                                               // }
+                                                                keepgoing=0;
+                                                              }else{
+                                                                flag = false;
+                                                                keepgoing=1;
+                                                              }
                                                               }
                                                       }); 
+                                                      return flag;
+      }else{
+        if((date.getTime() > $scope.newMax) || (date.getTime() < $scope.newMin) )
+               return true;
+            return false;
       }
-      //      if((date.getTime() > $scope.newMax) || (date.getTime() < $scope.newMin) )
-      //         return true;
-      // return false;
+     // return false;
+           
   }
   $scope.dselect = function(date) {
     console.log("control-here");
@@ -111,9 +109,18 @@
   $scope.accountEvents = {
                        onItemSelect: function(item) {
                                                       $scope.IsVisible=$scope.calmodel=$scope.calrangemodel=item.id;
-                                                      UserService.getFilteredResources(item.id).then(function (response){
+                                                      //UserService.getFilteredResources(item.id).then(function (response){
+                                                      UserService.getallFilteredResources(item.id).then(function (response){
                                                       $scope.example13data = response.data ;
+                                                      UserService.getMappedResource(item.id).then(function (response){
+                                                      $scope.example13model = response.data ;
+                                                      if($scope.example13model){
+                                                        $scope.addresmodel=$scope.showreshere=1;
+                                                        $scope.calrangemodel=0;
+                                                      }
                                                       });
+                                                      });
+                                                      
 
                                                       UserService.getAccount(item.id).then(function (response){
                                                       $scope.account = response.data ;
@@ -124,6 +131,46 @@
                                                       $scope.IsVisible = 0; 
                                                       
                                                       });
+
+                                                      $scope.eventSources = [fetchEvents];
+
+                                                      function fetchEvents(start, end, timezone, callback) {
+                                                        var aid = "";
+                                                                 aid=$scope.accountmodel.id;
+                                                              console.log($('#mycalendar').fullCalendar('getView').start.format('x'));
+                                                              var newEvents = [];
+                                                              UserService.getAccountResource(aid)
+                                                              .then(function(response) {
+                                                                angular.forEach(response.data, function (obj) {
+                                                                 newEvents.push({
+                                                                  title: obj.title,
+                                                                  start: new Date(Number(obj.start)+19800),
+                                                                  allDay: true,
+                                                                  //rendering: 'background',
+                                                                  //backgroundColor: '#f26522',
+                                                                });
+                                                               });
+                                                                  angular.copy(newEvents, $scope.events);
+                                                                  callback($scope.events);
+                                                                });  
+                                                        }
+                                                      //var newEvents = [];
+                                                       $('#mycalendar').fullCalendar('refetchEvents') ;
+                                                      // UserService.getAccountResource(item.id)
+                                                      // .then(function(response) {
+                                                      //   angular.forEach(response.data, function (obj) {
+                                                      //    newEvents.push({
+                                                      //     title: obj.title,
+                                                      //     start: new Date(Number(obj.start)+19800),
+                                                      //     allDay: true,
+                                                      //   });
+                                                      //  });
+                                                      //     angular.copy(newEvents, $scope.events);
+                                                      //    // callback($scope.events);
+                                                      //   });  
+                                                      // $scope.eventSources=[fetchEvents];
+                                                      //$('#mycalendar').fullCalendar('refetchEvents') ;
+                                                      
                                                       
                                                       
                                                      },
@@ -133,10 +180,27 @@
                                                       $scope.selectedDates.length = 0;
                                                       $scope.resource=item.id;
                                                       $scope.singleres=item.employee_name;
-                                                      UserService.getResourceDates(''+item.id+'').then(function (response){
-                                                        $scope.disdate=response.data;
+                                                      var resdata={};
+                                                      resdata.id=item.id;
+                                                      resdata.account=$scope.accountmodel.id;
+                                                      var res ={"resources":resdata};
+                                                      UserService.getResourceAccountDates(res).then(function (response){
+                                                      $scope.disdate=response.data.dis;
+                                                      angular.forEach(response.data.ena, function(value) {
+                                                              $scope.selectedDates.push(parseInt(value.start)-19800000);
+                                                      }); 
+                                                        //console.log($scope.disdate);
                                                         $rootScope.$broadcast('refreshDatepickers');
                                                       });
+
+                                                      //UserService.getResourceDates(''+item.id+'').then(function (response){
+                                                      //  $scope.disdate=response.data;
+                                                      //angular.forEach(response.data, function(value) {
+                                                       //       $scope.selectedDates.push(parseInt(value.start)-19800000);
+                                                      //}); 
+                                                        //console.log($scope.disdate);
+                                                      //  $rootScope.$broadcast('refreshDatepickers');
+                                                     // });
                                                       
                                                      },
                };
@@ -208,7 +272,6 @@
       }
 
       $scope.add = function(resource,singleres,date) {
-        console.log($scope.items);
         var deferred = $q.defer();
          var filtered = $filter('filter')($scope.items, { resource_id: resource });
          var user = filtered.length ? filtered[0] : null;
@@ -221,7 +284,7 @@
         mydata.name=$scope.singleres;
         //mydata.Dates=date;
         mydata.Dates=newdate;
-        mydata.percentage_loaded=100;
+        mydata.percentage_loaded=$scope.singleperSelect;
         var index = $scope.mynewdata.indexOf(mydata);
         $scope.mynewdata.splice(index, 1);
         if(filtered.length==0){
@@ -231,11 +294,16 @@
           if($scope.items[key].resource_id == resource){
             $scope.items[key].name=angular.copy($scope.singleres);
             $scope.items[key].Dates=angular.copy(newdate);
-            $scope.items[key].percentage_loaded=angular.copy(100);
+            $scope.items[key].percentage_loaded=angular.copy($scope.singleperSelect);
 
           }
         }
         }
+        var res = {};
+         res = {"resources" : mydata}
+         UserService.validateResDetails(res).then(function (response){
+                                                      FlashService.Success(response.data, true);
+                                                      });
       }
 
       $scope.saveproject = function() {
@@ -243,8 +311,15 @@
           var accountDetails = {};
           accountDetails.id = $scope.accountmodel.id;
           accountDetails.resources = $scope.items;
-          accountDetails.minEndDate = Math.min.apply(Math, $scope.accountrangeDates)+19800000;
-          accountDetails.maxEndDate =Math.max.apply(Math, $scope.accountrangeDates)+19800000;
+          //accountDetails.minEndDate = Math.min.apply(Math, $scope.accountrangeDates)+19800000;
+          // if($scope.newMin){
+
+          // }else{
+            
+          // }
+          accountDetails.minEndDate = $scope.newMin;
+          accountDetails.maxEndDate = $scope.newMax;
+          //accountDetails.maxEndDate =Math.max.apply(Math, $scope.accountrangeDates)+19800000;
           account = {"account" : accountDetails}
           UserService.saveAccountDetails(account).then(function (response){
                                                       FlashService.Success(response.data, true);
