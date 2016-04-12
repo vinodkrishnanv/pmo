@@ -42,24 +42,13 @@
 
     columnDefs: [
     { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ng-click="grid.appScope.clickHandler(grid,row)"><i class="fa fa-edit"></i></button></div>', width: 80 },
-    { name: 'unit_name' ,width:300 },
+    { name: 'unit_name' ,width:150 },
+    { name: 'unit_code' ,width:150 },
     ]
 
   };
-  $scope.example13model = [];
-  $scope.example13settings = {
-    scrollableHeight: '200px',
-      scrollable: true,
-    enableSearch: true,
-    displayProp:'service_name',
-    idProp:'id',
-    externalIdProp:'',
-    closeOnBlur:true,
-      
-  };
-  UserService.getAllServices().then(function (response) {
-  $scope.example13data = response.data;
-  });
+  
+  
   
     /*$http.get('jsonFiles/data.json')
 
@@ -76,7 +65,7 @@
     $scope.cellValue ='';
     function saveunit() {
             vm.dataLoading = true;
-            var unit={"unit_name" : vm.unit,"services" : $scope.example13model}
+            var unit={"unit_name" : vm.unit,"unit_code" : vm.unit_code}//,"services" : $scope.example13model}
             UserService.saveUnit(unit)
                 .then(function (response) {
                     if (response.data.success) {

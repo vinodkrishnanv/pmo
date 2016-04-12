@@ -15,7 +15,7 @@
         var rowIndexTemp = 0;
         $rootScope.availableSkillOptions = [
       {id: 'Technical', skill_type: 'Technical'},
-      {id: 'Marketing', skill_type: 'Marketing'}
+      {id: 'Soft Skill', skill_type: 'Soft Skill'}
     ];
 
         /*$scope.data = {

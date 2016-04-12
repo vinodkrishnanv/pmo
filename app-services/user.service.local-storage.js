@@ -111,7 +111,7 @@
         function saveHeirarchies(unit) {
             var req = {
                 method: 'POST',
-                url: 'http://'+hostName+':3000/heirarchies.json',
+                url: 'http://'+hostName+':3000/roles.json',
                 headers : { 'Content-Type': 'application/json' } ,
                 data:  unit
             }
@@ -163,7 +163,7 @@
         function getHeirarchies() {
             var req = {
                 method: 'GET',
-                url: 'http://'+hostName+':3000/heirarchies.json',
+                url: 'http://'+hostName+':3000/roles.json',
                 headers : { 'Content-Type': 'application/json' } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});

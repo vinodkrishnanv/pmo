@@ -11,6 +11,21 @@
         var jsonstring="";
         vm.saveservice = saveservice;
         var rowIndexTemp = 0;
+        $scope.sermodel = [];
+          $scope.sersettings = {
+            smartButtonMaxItems: 1,
+            scrollableHeight: '200px',
+              scrollable: true,
+            enableSearch: true,
+            displayProp:'unit_code',
+            idProp:'id',
+            externalIdProp:'',
+            closeOnBlur:true,
+              
+          };
+        UserService.getUnits().then(function (response) {
+          $scope.serdata = response.data;
+        });
     //     $rootScope.availableSkillOptions = [
     //   {id: 'Technical', skill_type: 'Technical'},
     //   {id: 'Marketing', skill_type: 'Marketing'}
@@ -44,6 +59,7 @@
 
      function saveservice() {
             vm.dataLoading = true;
+            vm.service.unit_code=$scope.sermodel;
             UserService.saveService(vm.service)
                 .then(function (response) {
                     if (response.data.success) {

@@ -27,8 +27,8 @@
 .controller('RowEditCtrl', RowEditCtrl)
 
 .service('RowEditor', RowEditor);
-	HeirarchyController.$inject = ['$rootScope','$scope','$log','$http','UserService', '$location', 'FlashService','RowEditor'];
-	function HeirarchyController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor) {
+	HeirarchyController.$inject = ['$rootScope','$scope','$log','$http','UserService', '$location', 'FlashService','RowEditor','$state'];
+	function HeirarchyController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor,$state) {
 		var vm = this;
         vm.editRow = RowEditor.editRow;
         vm.saveheirarchy = saveheirarchy;
@@ -39,7 +39,8 @@
 
     columnDefs: [
     { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ng-click="grid.appScope.clickHandler(grid,row)"><i class="fa fa-edit"></i></button></div>', width: 80 },
-    { name: 'heirarchy_name' ,width:300},
+    { name: 'role_name' ,width:150},
+    { name: 'heirarchy_id' ,width:150},
     ]
 
   };
@@ -59,7 +60,7 @@
     $scope.cellValue ='';
     function saveheirarchy() {
             vm.dataLoading = true;
-            var unit={"heirarchy_name" : vm.heirarchy}
+            var unit={"role_name" : vm.heirarchy,"heirarchy_id":vm.heirarchy_id}
             UserService.saveHeirarchies(unit)
                 .then(function (response) {
                     if (response.data.success) {
@@ -67,7 +68,9 @@
                         vm.dataLoading = false;
                         UserService.getHeirarchies()
                          .then(function (response) {
+                          $state.go("roles");
                           vm.gridOptions.data = response.data;
+                          console.log(vm.gridOptions);
                          });
                     } else {
                         FlashService.Error('Heirarchy Name ' + response.data.error.unit_name[0]);

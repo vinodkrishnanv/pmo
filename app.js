@@ -87,13 +87,6 @@
                 controller  : 'ResourcesController',
                 controllerAs: 'vm',
                 onEnter: ["$state", function($state) {
-     /* $(document).on("keyup", function(e) {
-        if(e.keyCode == 27) {
-          $(document).off("keyup");
-          $state.go("account");
-        }
-      });*/
-
       $(document).on("click", ".btn-danger", function() {
         $state.go("resources");
       });
@@ -150,26 +143,102 @@
                 url: "/units",
                 templateUrl : 'ounit/unit.html',
                 controller  : 'UnitController',
-                controllerAs: 'vm'
+                controllerAs: 'vm',
+                onEnter: ["$state", function($state) {
+                  $(document).on("click", ".btn-danger", function() {
+                    $state.go("units");
+                  });
+
+                  
+                }],
             })
-            .state('heirarchy', {
-                url: "/heirarchy",
+            .state('units.add', {
+                url: '/add',
+                views:{
+                      "modal": {
+                        templateUrl: "ounit/unit.add.html",
+                        controller  : 'UnitController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
+                
+                })
+            .state('roles', {
+                url: "/roles",
                 templateUrl : 'heirarchy/heirarchy.html',
                 controller  : 'HeirarchyController',
-                controllerAs: 'vm'
+                controllerAs: 'vm',
+                onEnter: ["$state", function($state) {
+                  $(document).on("click", ".btn-danger", function() {
+                    $state.go("roles");
+                  });
+
+                  
+                }],
             })
+            .state('roles.add', {
+                url: '/add',
+                views:{
+                      "modal": {
+                        templateUrl: "heirarchy/roles.add.html",
+                        controller  : 'HeirarchyController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
+                
+                })
             .state('skill', {
                 url: "/skill",
                 templateUrl : 'skills/skills.html',
                 controller  : 'SkillController',
-                controllerAs: 'vm'
+                controllerAs: 'vm',
+                onEnter: ["$state", function($state) {
+                  $(document).on("click", ".btn-danger", function() {
+                    $state.go("skill");
+                  });
+
+                  
+                }],
             })
+            .state('skill.add', {
+                url: '/add',
+                views:{
+                      "modal": {
+                        templateUrl: "skills/skills.add.html",
+                        controller  : 'SkillController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
+                
+                })
             .state('services', {
                 url: "/services",
                 templateUrl : 'services/services.html',
                 controller  : 'ServicesController',
-                controllerAs: 'vm'
-            }); 
+                controllerAs: 'vm',
+                onEnter: ["$state", function($state) {
+                  $(document).on("click", ".btn-danger", function() {
+                    $state.go("services");
+                  });
+
+                  
+                }],
+            })
+            .state('services.add', {
+                url: '/add',
+                views:{
+                      "modal": {
+                        templateUrl: "services/services.add.html",
+                        controller  : 'ServicesController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
+                
+                }); 
             $urlRouterProvider.otherwise('/login');
 
            
