@@ -41,6 +41,7 @@
         service.getallFilteredResources=getallFilteredResources;
         service.validateResDetails=validateResDetails;
         service.getResourceAccountDates=getResourceAccountDates;
+        service.getSkillDates=getSkillDates;
         return service;
 
         function handleSuccess(res) {
@@ -272,6 +273,16 @@
                 url: 'http://'+hostName+':3000/resources-dates.json',
                 headers : { 'Content-Type': 'application/json' } ,
                 data:  {'resources': resource}
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+            
+        }
+        function getSkillDates(skill) {
+            var req = {
+                method: 'POST',
+                url: 'http://'+hostName+':3000/skill-dates.json',
+                headers : { 'Content-Type': 'application/json' } ,
+                data:  {'skills': skill}
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
             

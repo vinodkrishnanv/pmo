@@ -45,7 +45,27 @@
                         angular.copy(newEvents, $scope.events);
                         callback($scope.events);
                       });  
-              }else if($scope.type=="resource"){
+              }else if($scope.type=="skill"){
+                      var newSkillEvents=[];
+                      var newSkEvents=[];
+                      angular.forEach($scope.skillmodel, function (obj) {
+                         newSkillEvents.push(obj.id);
+                       });
+                        UserService.getSkillDates(newSkillEvents.join()).then(function (response) {
+                          angular.forEach(response.data, function (object) {
+                             newSkEvents.push({
+                              title: object.title,
+                              start: new Date(Number(object.start)+19800),
+                              allDay: true,
+                            });
+                     });
+                        angular.copy(newSkEvents, $scope.events);
+                        callback($scope.events);
+              //$scope.accountdata = response.data;
+                        });
+
+              }
+              else if($scope.type=="resource"){
                       var newResourceEvents=[];
                       var newResEvents=[];
                       angular.forEach($scope.resourcemodel, function (obj) {
@@ -157,6 +177,32 @@
                             });
                      });
                         angular.copy(newResEvents, $scope.events);
+           
+          });
+        
+
+                          
+              //$scope.accountdata = response.data;
+      }
+      $scope.getSki = function() {
+
+        
+        var newSkiEvents=[];
+        var newSEvents=[];
+         $('#mycalendar').fullCalendar('refetchEvents') ;
+        angular.forEach($scope.skillmodel, function (obj) {
+                       newSEvents.push(obj.id);
+                     });
+        UserService.getSkillDates(newSEvents.join()).then(function (response) {
+          angular.forEach(response.data, function (object) {
+                             newSkiEvents.push({
+                              title: object.title,
+                              start: new Date(Number(object.start)+19800),
+                              allDay: true,
+                            });
+                     });
+                        angular.copy(newSkiEvents, $scope.events);
+                        $('#mycalendar').fullCalendar('refetchEvents') ;
            
           });
         
@@ -369,6 +415,9 @@
           UserService.getResources().then(function (response) {
             $scope.resourcedata = response.data;
           });
+          UserService.getSkills().then(function (response) {
+            $scope.skilldata = response.data;
+          });
           $scope.accountsettings = {
             smartButtonMaxItems: 1,
             scrollableHeight: '200px',
@@ -383,6 +432,7 @@
             buttonClasses:"smbutton btn btn-default"
 
           };
+          
           $scope.resourcemodel = [];
           $scope.resourcesettings = {
       scrollableHeight: '200px',
@@ -394,6 +444,18 @@
       closeOnBlur:true
         
     };
+    $scope.skillmodel = [];
+    $scope.skillsettings = {
+      scrollableHeight: '200px',
+        scrollable: true,
+      enableSearch: true,
+      displayProp:'skill_name',
+      idProp:'id',
+      externalIdProp:'',
+      closeOnBlur:true
+        
+    };
+    
 
           vm.user = null;
          // vm.allUsers = [];

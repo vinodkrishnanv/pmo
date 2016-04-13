@@ -1,7 +1,8 @@
 <div ng-include="'pages/navigation.html'"></div>
 <div class="jumbotron text-center">
-        <button class="btn btn-primary" ng-show = "!IsVisible" ng-click="ShowHide()" ui-sref="roles.add">+</button>
-        <button class="btn btn-primary" ng-show = "IsVisible" ng-click="!ShowHide()">-</button>
+  <button class="btn btn-primary"  ui-sref="roles.add">Add Role</button>
+        <!-- <button class="btn btn-primary" ng-show = "!IsVisible" ng-click="ShowHide()" ui-sref="roles.add">+</button>
+        <button class="btn btn-primary" ng-show = "IsVisible" ng-click="!ShowHide()">-</button> -->
         <br />
         <br />
   <div class="hid" ng-show = "IsVisible">
@@ -14,28 +15,6 @@
     <div  ui-view="modal"></div>
     <div class="heirarchy-grid" ui-grid="vm.gridOptions"  ui-grid-edit><div class="watermark" ng-show="!vm.gridOptions.data.length">No data available</div></div>
 
-    <!--<div id="cellModal" class="modal fade"  role="dialog"  >
-        <div class="modal-dialog modal-md">
-      		<div class="modal-content">
-      			<div class="modal-header">
-      				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      				<h3 class="modal-title"> Famous in Korea </h3>
-      			</div>
-      			<div class="modal-body">
-      			  <label> cellValue </label>
-  						<input type="text" name="input" ng-model="cellValue"/>
-  						<button ng-click="vm.save()">save</button>
-      			</div>
-      		</div>
-      	</div>
-      </div>-->
-      <div class="ui-grid-cell-contents">
-
-  <button type="button" class="btn btn-xs btn-primary" >
-
-    <i class="fa fa-edit"></i>
-
-  </button>
-
-</div>
+    
+      
     </div>

@@ -124,7 +124,12 @@
                 url: "/project",
                 templateUrl : 'project/project.html',
                 controller  : 'ProjectController',
-                controllerAs: 'vm'
+                controllerAs: 'vm',
+                onEnter: ["$state", function($state) {
+      $(document).on("click", ".btn-danger", function() {
+        $state.go("project");
+      });
+      }],
             })
             .state('project.calendar', {
                 url: '/calendar',
@@ -163,6 +168,19 @@
                       }
                     },
                 
+                })
+            .state('units.edit', {
+                url: '/edit/:id',
+                views:{
+                      "modal": {
+                        templateUrl: "ounit/unit.add.html",
+                        controller  : 'UnitController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
+                    
+                // controller  : 'AccountController',
                 })
             .state('roles', {
                 url: "/roles",

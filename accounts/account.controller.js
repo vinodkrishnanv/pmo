@@ -273,8 +273,8 @@ $scope.datepickerConfig = {
 
 
 
-AccountEditController.$inject = ['$scope','$log','$http','UserService', '$location', 'FlashService', 'RowEditor', '$timeout','$routeParams'];
-function AccountEditController($scope,$log,$http,UserService, $location,FlashService,RowEditor,$timeout,$routeParams) {
+AccountEditController.$inject = ['$rootScope','$scope','$log','$http','UserService', '$location', 'FlashService', 'RowEditor', '$timeout','$routeParams'];
+function AccountEditController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor,$timeout,$routeParams) {
   var vm=this;
    vm.saveaccount = saveaccount;
    vm.getServices=getServices;
@@ -296,6 +296,11 @@ function AccountEditController($scope,$log,$http,UserService, $location,FlashSer
              // vm.account.anticipated_value = vm.account.anticipated_value.concat(" ").concat(vm.account.anticipated_value_currency);
                       } 
                   });
+                   UserService.getManagers()
+                           .then(function (response) {
+                            $rootScope.availableManagers = response.data.success;
+                            $scope.data.availableManagerOptions = $rootScope.availableManagers;
+                           });
   function saveaccount() {
               vm.dataLoading = true;
               vm.account.sermodel=$scope.sermodel;

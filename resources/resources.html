@@ -1,8 +1,8 @@
 <div ng-include="'pages/navigation.html'"></div>
 <div class="jumbotron text-center">
-        
-        <button class="btn btn-primary" ng-show = "!IsVisible" ng-click="ShowHide()" ui-sref="resources.add">+</button>
-        <button class="btn btn-primary" ng-show = "IsVisible" ng-click="!ShowHide()">-</button>
+        <button class="btn btn-primary" ui-sref="resources.add">Add Resource</button>
+       <!--  <button class="btn btn-primary" ng-show = "!IsVisible" ng-click="ShowHide()" ui-sref="resources.add">+</button>
+        <button class="btn btn-primary" ng-show = "IsVisible" ng-click="!ShowHide()">-</button> -->
         <br />
         <br />
         <div ng-show = "IsVisible">
@@ -12,23 +12,7 @@
 <div class="grid" ui-grid="vm.gridOptions" ui-grid-edit ui-grid-resize-columns>
   <div class="watermark" ng-show="!vm.gridOptions.data.length">No data available</div>
 </div>
-<div>{{resmodel}}</div>
+<!-- <div>{{resmodel}}</div> -->
 
 </div>
 
-<!--<div class="dropdown dropdown-scroll">
-      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">Select <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-          <li role="presentation">
-              <div class="input-group input-group-sm search-control"> 
-              	<span class="input-group-addon">
-                      <span class="glyphicon glyphicon-search"></span>
-  				</span>
-                <input type="text" class="form-control" placeholder="Query" ng-model="query"></input>
-              </div>
-          </li>
-          <li role="presentation" ng-repeat='item in items | filter:query' ng-click="eventDetails(item.name)"> <a > {{item.name}} </a>
-          </li>
-      </ul>
-  </div>-->
