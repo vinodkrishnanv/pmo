@@ -174,7 +174,7 @@
                 views:{
                       "modal": {
                         templateUrl: "ounit/unit.add.html",
-                        controller  : 'UnitController',
+                        controller  : 'UnitEditController',
                         controllerAs: 'vm'
 
                       }
@@ -207,6 +207,19 @@
                     },
                 
                 })
+            .state('roles.edit', {
+                url: '/edit/:id',
+                views:{
+                      "modal": {
+                        templateUrl: "heirarchy/roles.add.html",
+                        controller  : 'HeirarchyEditController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
+                    
+                // controller  : 'AccountController',
+                })
             .state('skill', {
                 url: "/skill",
                 templateUrl : 'skills/skills.html',
@@ -232,6 +245,19 @@
                     },
                 
                 })
+            .state('skill.edit', {
+                url: '/edit/:id',
+                views:{
+                      "modal": {
+                        templateUrl: "skills/skills.add.html",
+                        controller  : 'SkillEditController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
+                    
+                // controller  : 'AccountController',
+                })
             .state('services', {
                 url: "/services",
                 templateUrl : 'services/services.html',
@@ -256,6 +282,19 @@
                       }
                     },
                 
+                })
+            .state('services.edit', {
+                url: '/edit/:id',
+                views:{
+                      "modal": {
+                        templateUrl: "services/services.add.html",
+                        controller  : 'ServicesEditController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
+                    
+                // controller  : 'AccountController',
                 }); 
             $urlRouterProvider.otherwise('/login');
 

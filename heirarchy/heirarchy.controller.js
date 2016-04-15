@@ -23,6 +23,7 @@
 
 })
  .controller('HeirarchyController', HeirarchyController)
+ .controller('HeirarchyEditController', HeirarchyEditController)
 
 .controller('RowEditCtrl', RowEditCtrl)
 
@@ -38,7 +39,7 @@
   vm.gridOptions = {
 
     columnDefs: [
-    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ng-click="grid.appScope.clickHandler(grid,row)"><i class="fa fa-edit"></i></button></div>', width: 80 },
+    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ui-sref="roles.edit({id:{{row.entity.id}}})"><i class="fa fa-edit"></i></button></div>', width: 80 },
     { name: 'role_name' ,width:150},
     { name: 'heirarchy_id' ,width:150},
     ]
@@ -137,5 +138,47 @@ function RowEditCtrl($modalInstance, $rootScope,PersonSchema, grid, row ,UserSer
 
   }
 }
+
+HeirarchyEditController.$inject = ['$scope','$state','$log','$http','UserService', '$location', 'FlashService','$timeout','$routeParams'];
+function HeirarchyEditController($scope,$state,$log,$http,UserService, $location,FlashService,$timeout,$routeParams) {
+  var vm=this;
+   vm.saveheirarchy = saveheirarchy;
+  var splits=$location.url().toString().split("/");
+  UserService.getHeirarchy(splits[splits.length - 1])
+                  .then(function (response) {
+                      if (response.data) {
+                        vm.heirarchy = response.data.role_name;
+                        vm.heirarchy_id = response.data.heirarchy_id;
+                        //$scope.sermodel=vm.account.sermodel=
+                       // vm.account.start_date=$scope.minEndDate;
+             // //vm.account.end_date=$scope.maxEndDate;
+             // vm.account.anticipated_value = vm.account.anticipated_value.concat(" ").concat(vm.account.anticipated_value_currency);
+                      } 
+                  });
+
+                  function saveheirarchy() {
+            vm.dataLoading = true;
+            var unit={"id":splits[splits.length - 1],"role_name" : vm.heirarchy,"heirarchy_id":vm.heirarchy_id}
+            UserService.editHeirarchy(unit)
+                .then(function (response) {
+                    if (response.data.success) {
+                        FlashService.Success('Save successful', true);
+                        vm.dataLoading = false;
+                        UserService.getHeirarchies()
+                         .then(function (response) {
+                          $state.go("roles");
+                          vm.gridOptions.data = response.data;
+                         });
+                    } else {
+                        FlashService.Error('Heirarchy Name ' + response.data);
+                        vm.dataLoading = false;
+                    }
+                });
+        }
+  
+  
+      
+
+  }
     }
 )();

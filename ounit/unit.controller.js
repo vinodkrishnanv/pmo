@@ -23,12 +23,13 @@
 
 })
  .controller('UnitController', UnitController)
+ .controller('UnitEditController', UnitEditController)
 
 .controller('RowEditCtrl', RowEditCtrl)
 
 .service('RowEditor', RowEditor);
-	UnitController.$inject = ['$rootScope','$scope','$log','$http','UserService', '$location', 'FlashService','RowEditor'];
-	function UnitController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor) {
+	UnitController.$inject = ['$rootScope','$scope','$state','$log','$http','UserService', '$location', 'FlashService','RowEditor'];
+	function UnitController($rootScope,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor) {
 		var vm = this;
         vm.editRow = RowEditor.editRow;
         vm.saveunit = saveunit;
@@ -41,7 +42,7 @@
   vm.gridOptions = {
 
     columnDefs: [
-    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ui-sref="resources.edit({id:{{row.entity.id}}})"><i class="fa fa-edit"></i></button></div>', width: 80 },
+    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ui-sref="units.edit({id:{{row.entity.id}}})"><i class="fa fa-edit"></i></button></div>', width: 80 },
     { name: 'unit_name' ,width:150 },
     { name: 'unit_code' ,width:150 },
     ]
@@ -73,7 +74,7 @@
                         vm.dataLoading = false;
                         UserService.getUnits()
                          .then(function (response) {
-                          vm.gridOptions.data = response.data;
+                           $state.go("units", {}, {reload: true});
                          });
                     } else {
                         FlashService.Error('Organisational Unit Name ' + response.data.error.unit_name[0]);
@@ -140,5 +141,45 @@ function RowEditCtrl($modalInstance, $rootScope,PersonSchema, grid, row ,UserSer
 
   }
 }
+UnitEditController.$inject = ['$scope','$state','$log','$http','UserService', '$location', 'FlashService','$timeout','$routeParams'];
+function UnitEditController($scope,$state,$log,$http,UserService, $location,FlashService,$timeout,$routeParams) {
+  var vm=this;
+   vm.saveunit = saveunit;
+  var splits=$location.url().toString().split("/");
+  UserService.getUnit(splits[splits.length - 1])
+                  .then(function (response) {
+                      if (response.data) {
+                        vm.unit = response.data.unit_name;
+                        vm.unit_code = response.data.unit_code;
+                        //$scope.sermodel=vm.account.sermodel=
+                       // vm.account.start_date=$scope.minEndDate;
+             // //vm.account.end_date=$scope.maxEndDate;
+             // vm.account.anticipated_value = vm.account.anticipated_value.concat(" ").concat(vm.account.anticipated_value_currency);
+                      } 
+                  });
+
+                  function saveunit() {
+            vm.dataLoading = true;
+            var unit={"id" : splits[splits.length - 1],"unit_name" : vm.unit,"unit_code":vm.unit_code}
+            UserService.editUnit(unit)
+                .then(function (response) {
+                    if (response.data.id) {
+                        FlashService.Success('Save successful', true);
+                        vm.dataLoading = false;
+                        UserService.getUnits()
+                         .then(function (response) {
+                          $state.go("units", {}, {reload: true});
+                         });
+                    } else {
+                        FlashService.Error('Unit Name ' + response.data);
+                        vm.dataLoading = false;
+                    }
+                });
+        }
+  
+  
+      
+
+  }
     }
 )();

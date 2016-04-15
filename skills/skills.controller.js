@@ -4,10 +4,11 @@
     angular
         .module('app')
         .controller('SkillController', SkillController)
+        .controller('SkillEditController', SkillEditController)
         .controller('RowEditCtrl', RowEditCtrl)
         .service('RowEditor', RowEditor);
-	SkillController.$inject = ['$rootScope','$timeout','$scope','$log','$http','UserService', '$location', 'FlashService','RowEditor'];
-	function SkillController($rootScope,$timeout,$scope,$log,$http,UserService, $location,FlashService,RowEditor) {
+	SkillController.$inject = ['$rootScope','$timeout','$scope','$state','$log','$http','UserService', '$location', 'FlashService','RowEditor'];
+	function SkillController($rootScope,$timeout,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor) {
 
         var vm = this;
         var jsonstring="";
@@ -53,7 +54,8 @@
                         vm.dataLoading = false;
                         UserService.getSkills()
                           .then(function (response) {
-                             vm.gridOptions.data = response.data;
+                            $state.go("skill", {}, {reload: true});
+                             // vm.gridOptions.data = response.data;
                            });
                     } else {
                         FlashService.Error(response.data.error.skill_name[0]);
@@ -86,7 +88,7 @@ $scope.example13settings = {
 vm.gridOptions = {
 
     columnDefs: [
-    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ng-click="grid.appScope.clickHandler(grid,row)"><i class="fa fa-edit"></i></button></div>', width: 60 },
+    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ui-sref="skill.edit({id:{{row.entity.id}}})"><i class="fa fa-edit"></i></button></div>', width: 60 },
     { name: 'skill_name' },
       { name: 'skill_type' },
       { name: 'skill_code' },
@@ -151,6 +153,47 @@ function RowEditCtrl($modalInstance, $rootScope, grid, row ,UserService) {
   }
 
 }
+
+SkillEditController.$inject = ['$scope','$log','$state','$http','UserService', '$location', 'FlashService','$timeout','$routeParams'];
+function SkillEditController($scope,$log,$state,$http,UserService, $location,FlashService,$timeout,$routeParams) {
+  var vm=this;
+   vm.saveskill = saveskill;
+  var splits=$location.url().toString().split("/");
+  console.log(splits);
+  UserService.getSkill(splits[splits.length - 1])
+                  .then(function (response) {
+                      if (response.data) {
+                        vm.skill = response.data;
+                        //$scope.sermodel=vm.account.sermodel=
+                       // vm.account.start_date=$scope.minEndDate;
+             // //vm.account.end_date=$scope.maxEndDate;
+             // vm.account.anticipated_value = vm.account.anticipated_value.concat(" ").concat(vm.account.anticipated_value_currency);
+                      } 
+                  });
+
+                  function saveskill() {
+            vm.dataLoading = true;
+            UserService.saveSkill(vm.skill)
+                .then(function (response) {
+                    if (response.data.success) {
+                        FlashService.Success('Save successful', true);
+                        vm.dataLoading = false;
+                        UserService.getSkills()
+                          .then(function (response) {
+                            $state.go("skill", {}, {reload: true});
+                             // vm.gridOptions.data = response.data;
+                           });
+                    } else {
+                        FlashService.Error(response.data.error.skill_name[0]);
+                        vm.dataLoading = false;
+                    }
+                });
+        }
+  
+  
+      
+
+  }
 
 
      

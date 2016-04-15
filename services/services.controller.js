@@ -3,9 +3,10 @@
 
     angular
         .module('app')
-        .controller('ServicesController', ServicesController);
-	ServicesController.$inject = ['$rootScope','$timeout','$scope','$log','$http','UserService', '$location', 'FlashService','RowEditor'];
-	function ServicesController($rootScope,$timeout,$scope,$log,$http,UserService, $location,FlashService,RowEditor) {
+        .controller('ServicesController', ServicesController)
+        .controller('ServicesEditController', ServicesEditController);
+	ServicesController.$inject = ['$rootScope','$timeout','$scope','$state','$log','$http','UserService', '$location', 'FlashService','RowEditor'];
+	function ServicesController($rootScope,$timeout,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor) {
 
         var vm = this;
         var jsonstring="";
@@ -14,6 +15,8 @@
         $scope.sermodel = [];
           $scope.sersettings = {
             smartButtonMaxItems: 1,
+            showUncheckAll :false,
+            selectionLimit: 1,
             scrollableHeight: '200px',
               scrollable: true,
             enableSearch: true,
@@ -59,7 +62,7 @@
 
      function saveservice() {
             vm.dataLoading = true;
-            vm.service.unit_code=$scope.sermodel;
+            vm.service.unit_code=$scope.sermodel.id;
             UserService.saveService(vm.service)
                 .then(function (response) {
                     if (response.data.success) {
@@ -67,7 +70,8 @@
                         vm.dataLoading = false;
                         UserService.getAllServices()
                           .then(function (response) {
-                             vm.gridOptions.data = response.data;
+                            $state.go("services", {}, {reload: true});
+                             // vm.gridOptions.data = response.data;
                            });
                     } else {
                         FlashService.Error(response.data.error.skill_name[0]);
@@ -94,7 +98,7 @@ $scope.example13settings = {
 vm.gridOptions = {
 
     columnDefs: [
-    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ng-click="grid.appScope.clickHandler(grid,row)"><i class="fa fa-edit"></i></button></div>', width: 60 },
+    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ui-sref="services.edit({id:{{row.entity.id}}})"><i class="fa fa-edit"></i></button></div>', width: 60 },
     { name: 'service_name' },
       { name: 'service_code' },
     ]
@@ -108,7 +112,48 @@ vm.gridOptions = {
 
 
 
+ServicesEditController.$inject = ['$scope','$log','$state','$http','UserService', '$location', 'FlashService','$timeout','$routeParams'];
+function ServicesEditController($scope,$log,$state,$http,UserService, $location,FlashService,$timeout,$routeParams) {
+  var vm=this;
+   vm.saveservice = saveservice;
+  var splits=$location.url().toString().split("/");
+  console.log(splits);
+  UserService.getService(splits[splits.length - 1])
+                  .then(function (response) {
+                      if (response.data) {
+                        vm.service = response.data;
+                        //$scope.sermodel=vm.account.sermodel=
+                       // vm.account.start_date=$scope.minEndDate;
+             // //vm.account.end_date=$scope.maxEndDate;
+             // vm.account.anticipated_value = vm.account.anticipated_value.concat(" ").concat(vm.account.anticipated_value_currency);
+                      } 
+                  });
 
+                  function saveservice() {
+            vm.dataLoading = true;
+            vm.service.unit_code=$scope.sermodel.id;
+            vm.service.id = splits[splits.length - 1];
+            UserService.editService(vm.service)
+                .then(function (response) {
+                    if (response.data.success) {
+                        FlashService.Success('Save successful', true);
+                        vm.dataLoading = false;
+                        UserService.getServices()
+                          .then(function (response) {
+                            $state.go("services", {}, {reload: true});
+                             // vm.gridOptions.data = response.data;
+                           });
+                    } else {
+                        FlashService.Error(response.data);
+                        vm.dataLoading = false;
+                    }
+                });
+        }
+  
+  
+      
+
+  }
 
 
      

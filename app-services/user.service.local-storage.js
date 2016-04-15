@@ -17,7 +17,11 @@
         service.getAccounts = getAccounts;
         service.getAccount=getAccount;
         service.getUnits = getUnits;
+        service.getUnit = getUnit;
+        service.editUnit= editUnit;
         service.getHeirarchies = getHeirarchies;
+        service.getHeirarchy = getHeirarchy;
+        service.editHeirarchy = editHeirarchy;
         service.saveHeirarchies = saveHeirarchies;
         service.editAccount = editAccount;
         service.Create = Create;
@@ -27,10 +31,13 @@
         service.getResources = getResources;
         service.getResource = getResource;
         service.saveSkill = saveSkill;
+        service.getSkill = getSkill;
         service.saveService= saveService;
         service.getSkills = getSkills;
         service.getManagers = getManagers;
         service.getServices = getServices;
+        service.getService=getService;
+        service.editService=editService;
         service.getAllServices = getAllServices;
         service.getFilteredResources = getFilteredResources;
         service.saveAccountDetails = saveAccountDetails;
@@ -99,7 +106,6 @@
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
         function editResource(resource) {
-            console.log(resource);
             var req = {
                 method: 'PUT',
                 url: 'http://'+hostName+':3000/resources/' + resource.id + '.json',
@@ -109,6 +115,38 @@
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
+        function editService(ser) {
+            var req = {
+                method: 'PUT',
+                url: 'http://'+hostName+':3000/services/' + ser.id + '.json',
+                headers : { 'Content-Type': 'application/json' } ,
+                data:  ser
+                //{"id":unit.id,"unit_name":unit.unit_name}
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        function editUnit(unit) {
+            var req = {
+                method: 'PUT',
+                url: 'http://'+hostName+':3000/organisational_units/' + unit.id + '.json',
+                headers : { 'Content-Type': 'application/json' } ,
+                data:  unit
+                //{"id":unit.id,"unit_name":unit.unit_name}
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        
+        function editHeirarchy(role) {
+            var req = {
+                method: 'PUT',
+                url: 'http://'+hostName+':3000/roles/' + role.id + '.json',
+                headers : { 'Content-Type': 'application/json' } ,
+                data:  role
+                //{"id":unit.id,"unit_name":unit.unit_name}
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        
         function saveHeirarchies(unit) {
             var req = {
                 method: 'POST',
@@ -149,6 +187,14 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/service_units/'+id+'.json',
+                headers : { 'Content-Type': 'application/json' } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        function getService(id) {
+            var req = {
+                method: 'GET',
+                url: 'http://'+hostName+':3000/services/'+id+'.json',
                 headers : { 'Content-Type': 'application/json' } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -291,6 +337,33 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/resources/'+id+'.json',
+                headers : { 'Content-Type': 'application/json' } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+            
+        }
+        function getUnit(id) {
+            var req = {
+                method: 'GET',
+                url: 'http://'+hostName+':3000/organisational_units/'+id+'.json',
+                headers : { 'Content-Type': 'application/json' } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+            
+        }
+        function getHeirarchy(id) {
+            var req = {
+                method: 'GET',
+                url: 'http://'+hostName+':3000/roles/'+id+'.json',
+                headers : { 'Content-Type': 'application/json' } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+            
+        }
+        function getSkill(id) {
+            var req = {
+                method: 'GET',
+                url: 'http://'+hostName+':3000/skills/'+id+'.json',
                 headers : { 'Content-Type': 'application/json' } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
