@@ -164,7 +164,9 @@ $scope.datepickerConfig = {
               vm.account.sermodel=$scope.sermodel;
               vm.account.start_date=$scope.minEndDate;
               vm.account.end_date=$scope.maxEndDate;
-              vm.account.anticipated_value = vm.account.anticipated_value.concat(" ").concat(vm.account.anticipated_value_currency);
+              if(vm.account.anticipated_value && vm.account.anticipated_value_currency){
+                vm.account.anticipated_value = vm.account.anticipated_value.concat(" ").concat(vm.account.anticipated_value_currency);
+              }
               UserService.saveAccount(vm.account)
                   .then(function (response) {
                       if (response.data) {
@@ -286,9 +288,11 @@ function AccountEditController($rootScope,$scope,$state,$log,$http,UserService, 
                   .then(function (response) {
                       if (response.data) {
                         vm.account = response.data;
+                        if(vm.account.anticipated_value){
                         var sp=vm.account.anticipated_value.split(" ");
                         vm.account.anticipated_value=sp[0];
                         vm.account.anticipated_value_currency=sp[1];
+                        }
                         UserService.getServices(vm.account.organisational_unit_id)
                           .then(function (response) {
                               if (response.data.success) {
@@ -311,7 +315,9 @@ function AccountEditController($rootScope,$scope,$state,$log,$http,UserService, 
               vm.account.sermodel=$scope.sermodel;
               vm.account.start_date=$scope.minEndDate;
               vm.account.end_date=$scope.maxEndDate;
-              vm.account.anticipated_value = vm.account.anticipated_value.concat(" ").concat(vm.account.anticipated_value_currency);
+              if(vm.account.anticipated_value && vm.account.anticipated_value_currency){
+                vm.account.anticipated_value = vm.account.anticipated_value.concat(" ").concat(vm.account.anticipated_value_currency);
+              }
               UserService.saveAccount(vm.account)
                   .then(function (response) {
                       if (response.data) {
