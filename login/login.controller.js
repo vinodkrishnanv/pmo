@@ -5,10 +5,10 @@
         .module('app')
         .controller('LoginController', LoginController);
 
-    LoginController.$inject = ['$location', 'AuthenticationService', 'FlashService'];
-    function LoginController($location, AuthenticationService, FlashService) {
+    LoginController.$inject = ['$rootScope','$location', 'AuthenticationService', 'FlashService'];
+    function LoginController($rootScope,$location, AuthenticationService, FlashService) {
         var vm = this;
-
+        $rootScope.shownav=false;
         vm.login = login;
 
         (function initController() {
@@ -26,6 +26,7 @@
                     FlashService.Error("No User Present");
                     vm.dataLoading = false;
                 }
+                $rootScope.shownav=true;
             });
         };
     }

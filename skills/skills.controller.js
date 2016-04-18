@@ -11,6 +11,7 @@
 	function SkillController($rootScope,$timeout,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor) {
 
         var vm = this;
+        $rootScope.shownav=true;
         var jsonstring="";
         vm.saveskill = saveskill;
         var rowIndexTemp = 0;

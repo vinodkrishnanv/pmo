@@ -1,6 +1,10 @@
 
 <div class="Modal-backdrop"></div>
 <div class="Modal-holder"  autoscroll="false">
+  <h2 class="labelcustom">Organisational Unit</h2>
+  <br>
+  <br>
+  <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
   <div class="form-account">
     <form name="form" ng-submit="vm.saveunit()" role="form" class="form-horizontal">
     <fieldset>
@@ -8,14 +12,12 @@
         <label class="col-md-4 control-label labelcustom" for="username">Organisational Unit</label>  
         <div class="col-md-4">
         <input id="unit_name" name="unit_name" placeholder="placeholder" class="form-control" ng-model="vm.unit" required="" type="text">
-        <span class="help-block">help</span>  
         </div>
       </div>
       <div class="form-group">
         <label class="col-md-4 control-label labelcustom" for="username">Organisational Unit Code</label>  
         <div class="col-md-4">
         <input id="unit_code" name="unit_code" placeholder="placeholder" class="form-control" ng-model="vm.unit_code" required="" type="text">
-        <span class="help-block">help</span>  
         </div>
       </div>
         <div class="form-group">

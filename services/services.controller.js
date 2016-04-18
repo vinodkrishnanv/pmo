@@ -9,6 +9,7 @@
 	function ServicesController($rootScope,$timeout,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor) {
 
         var vm = this;
+        $rootScope.shownav=true;
         var jsonstring="";
         vm.saveservice = saveservice;
         var rowIndexTemp = 0;

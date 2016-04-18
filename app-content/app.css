@@ -9,6 +9,9 @@
     text-align: center;
     z-index: 1000;
 }
+.bg-footer{
+  background-color:#656565;
+}
 
 .menuBardemoBasicUsage .page {
   margin: 0 auto;

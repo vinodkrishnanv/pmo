@@ -28,9 +28,10 @@
   .controller('RowAccountEditCtrl', RowAccountEditCtrl)
 
   .service('RowAccountEditor', RowAccountEditor);
-  	AccountController.$inject = ['$rootScope','$scope','$log','$http','UserService', '$location', 'FlashService', 'RowEditor', '$timeout','$routeParams'];
-  	function AccountController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor,$timeout,$routeParams) {
+  	AccountController.$inject = ['$rootScope','$scope','$state','$log','$http','UserService', '$location', 'FlashService', 'RowEditor', '$timeout','$routeParams'];
+  	function AccountController($rootScope,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor,$timeout,$routeParams) {
   		var vm = this;
+        $rootScope.shownav=true;
           vm.clickHandlers = RowAccountEditor.editAccountRow;
           vm.saveaccount = saveaccount;
           vm.getaccount = getaccount;
@@ -169,10 +170,11 @@ $scope.datepickerConfig = {
                       if (response.data) {
                           FlashService.Success('Save successful', true);
                           vm.dataLoading = false;
-                          UserService.getAccounts()
-                            .then(function (response) {
-                               vm.gridOptions.data = response.data;
-                             });
+                          $state.go("account", {}, {reload: true});
+                          // UserService.getAccounts()
+                          //   .then(function (response) {
+                          //      vm.gridOptions.data = response.data;
+                          //    });
                       } else {
                           FlashService.Error(response.message);
                           vm.dataLoading = false;
@@ -273,8 +275,8 @@ $scope.datepickerConfig = {
 
 
 
-AccountEditController.$inject = ['$rootScope','$scope','$log','$http','UserService', '$location', 'FlashService', 'RowEditor', '$timeout','$routeParams'];
-function AccountEditController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor,$timeout,$routeParams) {
+AccountEditController.$inject = ['$rootScope','$scope','$state','$log','$http','UserService', '$location', 'FlashService', 'RowEditor', '$timeout','$routeParams'];
+function AccountEditController($rootScope,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor,$timeout,$routeParams) {
   var vm=this;
    vm.saveaccount = saveaccount;
    vm.getServices=getServices;
@@ -284,6 +286,9 @@ function AccountEditController($rootScope,$scope,$log,$http,UserService, $locati
                   .then(function (response) {
                       if (response.data) {
                         vm.account = response.data;
+                        var sp=vm.account.anticipated_value.split(" ");
+                        vm.account.anticipated_value=sp[0];
+                        vm.account.anticipated_value_currency=sp[1];
                         UserService.getServices(vm.account.organisational_unit_id)
                           .then(function (response) {
                               if (response.data.success) {
@@ -312,10 +317,11 @@ function AccountEditController($rootScope,$scope,$log,$http,UserService, $locati
                       if (response.data) {
                           FlashService.Success('Save successful', true);
                           vm.dataLoading = false;
-                          UserService.getAccounts()
-                            .then(function (response) {
-                               vm.gridOptions.data = response.data;
-                             });
+                          $state.go("account", {}, {reload: true});
+                          // UserService.getAccounts()
+                          //   .then(function (response) {
+                          //      vm.gridOptions.data = response.data;
+                          //    });
                       } else {
                           FlashService.Error(response.message);
                           vm.dataLoading = false;

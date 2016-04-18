@@ -31,6 +31,7 @@
 	HeirarchyController.$inject = ['$rootScope','$scope','$log','$http','UserService', '$location', 'FlashService','RowEditor','$state'];
 	function HeirarchyController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor,$state) {
 		var vm = this;
+    $rootScope.shownav=true;
         vm.editRow = RowEditor.editRow;
         vm.saveheirarchy = saveheirarchy;
         var rowIndexTemp = 0;

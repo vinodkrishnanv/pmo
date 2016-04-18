@@ -10,6 +10,7 @@
   	function ProjectController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor,$filter,$q,uiCalendarConfig) {
 
           var vm = this;
+          $rootScope.shownav=true;
           $scope.type = "individual";
         $scope.end = new Date();
        $scope.example13model = [];

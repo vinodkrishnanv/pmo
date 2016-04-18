@@ -7,10 +7,11 @@
         .controller('ResourcesEditController', ResourcesEditController);
         //.controller('RowEditCtrl', RowEditCtrl)
         //.service('RowResourceEditor', RowResourceEditor)
-	ResourcesController.$inject = ['$rootScope','$timeout','$scope','$log','$http','UserService', '$location', 'FlashService','$routeParams'];
-	function ResourcesController($rootScope,$timeout,$scope,$log,$http,UserService, $location,FlashService,$routeParams) {
+	ResourcesController.$inject = ['$rootScope','$state','$timeout','$scope','$log','$http','UserService', '$location', 'FlashService','$routeParams'];
+	function ResourcesController($rootScope,$state,$timeout,$scope,$log,$http,UserService, $location,FlashService,$routeParams) {
 
         var vm = this;
+        $rootScope.shownav=true;
         var jsonstring="";
         vm.saveresource = saveresource;
         //vm.getSkilldata = getSkilldata;
@@ -72,10 +73,10 @@ $scope.data = {
                     if (response.data.success) {
                         FlashService.Success('Save successful', true);
                         vm.dataLoading = false;
-                        UserService.getResources()
-                          .then(function (response) {
-                             vm.gridOptions.data = response.data;
-                           });
+                        // UserService.getResources()
+                          // .then(function (response) {
+                            $state.go("resources", {}, {reload: true});
+                           // });
                     } else {
                         FlashService.Error(response.data.error.heirarchy_name[0]);
                         vm.dataLoading = false;
@@ -200,8 +201,8 @@ vm.gridOptions = {
 // }
 
 
-ResourcesEditController.$inject = ['$scope','$log','$http','UserService', '$location', 'FlashService','$timeout','$routeParams'];
-function ResourcesEditController($scope,$log,$http,UserService, $location,FlashService,$timeout,$routeParams) {
+ResourcesEditController.$inject = ['$scope','$state','$rootScope','$log','$http','UserService', '$location', 'FlashService','$timeout','$routeParams'];
+function ResourcesEditController($scope,$state,$rootScope,$log,$http,UserService, $location,FlashService,$timeout,$routeParams) {
   var vm=this;
    vm.saveresource = saveresource;
   var splits=$location.url().toString().split("/");
@@ -220,15 +221,27 @@ function ResourcesEditController($scope,$log,$http,UserService, $location,FlashS
                   function saveresource() {
             vm.dataLoading = true;
             vm.resource.resmodel=$scope.resmodel;
-            UserService.saveResource(vm.resource)
+
+
+for(var i = 0; i < $rootScope.availableHeirarchyOptions.length; i++)
+{
+  if($rootScope.availableHeirarchyOptions[i].id == vm.resource.heirarchy_id)
+  {
+    vm.resource.role= $rootScope.availableHeirarchyOptions[i].role_name;
+  }
+}
+
+
+            vm.resource.id=splits[splits.length - 1];
+            UserService.editResource(vm.resource)
                 .then(function (response) {
                     if (response.data.success) {
                         FlashService.Success('Save successful', true);
                         vm.dataLoading = false;
-                        UserService.getResources()
-                          .then(function (response) {
-                             vm.gridOptions.data = response.data;
-                           });
+                        // UserService.getResources()
+                          // .then(function (response) {
+                            $state.go("resources", {}, {reload: true});
+                           // });
                     } else {
                         FlashService.Error(response.data.error.heirarchy_name[0]);
                         vm.dataLoading = false;

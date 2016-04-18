@@ -31,6 +31,7 @@
 	UnitController.$inject = ['$rootScope','$scope','$state','$log','$http','UserService', '$location', 'FlashService','RowEditor'];
 	function UnitController($rootScope,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor) {
 		var vm = this;
+    $rootScope.shownav=true;
         vm.editRow = RowEditor.editRow;
         vm.saveunit = saveunit;
         var rowIndexTemp = 0;

@@ -2,7 +2,7 @@
 <html ng-app="app">
 <head>
     <meta charset="utf-8" />
-    <title>PMO Dashboard</title>
+    <title>Lister - OMC | PMO</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
     <link href="app-content/app.css" rel="stylesheet" />
       <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
@@ -61,6 +61,8 @@
     <div class="jumbotron">
         <div class="container">
             <div class="">
+
+                <div ng-include="'pages/navigation.html'" ng-show="shownav"></div>
                 <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
                 <div ui-view></div>
             </div>
@@ -92,5 +94,17 @@
     <script src="services/services.controller.js"></script>
     <script src="//cdn.rawgit.com/angular-ui/bower-ui-grid/master/ui-grid.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/ng-grid/2.0.11/ng-grid.min.js"></script>
+    <footer>
+        <div class="bg-footer">
+         <div class="col-md-6 text-left">
+            <a href="http://www.listertechnologies.com">
+                <img src="img/logo.png"  alt="Lister Technologies" title="Lister Technologies">
+            </a>
+        </div>
+         <div class="col-md-6 text-right">
+                <img src="img/partners_oracle1.png"  title="Oracle " alt="Oracle">
+         </div>
+         </div>   
+    </footer>
 </body>
 </html>

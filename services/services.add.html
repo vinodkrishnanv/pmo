@@ -1,6 +1,10 @@
 
 <div class="Modal-backdrop"></div>
 <div class="Modal-holder"  autoscroll="false">
+  <h2 class="labelcustom">Services</h2>
+  <br>
+  <br>
+  <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
   <div class="form-account">
     <form name="form" ng-submit="vm.saveservice()" role="form" class="form-horizontal">
     <fieldset>
@@ -8,7 +12,6 @@
         <label class="col-md-4 control-label labelcustom" for="username">Service name</label>  
         <div class="col-md-4">
         <input id="skill_name" name="skill_name" placeholder="placeholder" class="form-control" ng-model="vm.service.service_name" required="" type="text">
-        <span class="help-block">help</span>  
         </div>
       </div>
       
@@ -16,12 +19,11 @@
         <label class="col-md-4 control-label labelcustom" for="username">Service Code</label>  
         <div class="col-md-4">
         <input id="service_code" name="service_code" placeholder="placeholder" class="form-control" ng-model="vm.service.service_code" required="" type="text">
-        <span class="help-block">help</span>  
         </div>
       </div>
       <div class="form-group">
           <label class="col-md-4 control-label labelcustom" for="skill_type">Organisational Unit</label>
-          <div class="col-md-4">
+          <div class="col-md-4 text-left">
             <div ng-dropdown-multiselect="" events="serEvents" options="serdata" selected-model="sermodel" extra-settings="sersettings" ></div>
           </div>
       </div>
