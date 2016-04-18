@@ -92,6 +92,8 @@ $scope.datepickerConfig = {
         {id: 'Lead', name: 'Lead'},
         {id: 'SOW Signed', name: 'SOW Signed'},
         {id: 'SOW Not Signed', name: 'SOW Not Signed'},
+        {id: 'Closed', name: 'Closed'},
+        {id: 'Execution', name: 'Execution'},
       ];
       $rootScope.availableAnticipatedValueCurrency =  [
         {id: 'INR', name: 'INR'},
