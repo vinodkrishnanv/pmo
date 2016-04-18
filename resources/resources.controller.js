@@ -102,7 +102,7 @@ vm.gridOptions = {
    enableColumnResizing: true,
    enableCellEdit: false,
     columnDefs: [
-    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ui-sref="resources.edit({id:{{row.entity.id}}})""><i class="fa fa-edit"></i></button></div>', width: 60 ,enableCellEdit: true},
+    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/resources/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a></div>', width: 60 ,enableCellEdit: true},
     { name: 'employee_name', width: 180 },
       { name: 'employee_id' , width: 130},
       { name: 'role' , width: 120},

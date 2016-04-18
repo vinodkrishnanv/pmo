@@ -104,7 +104,7 @@ $scope.datepickerConfig = {
     vm.gridOptions = {
 
       columnDefs: [
-      { name: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ui-sref="account.edit({id:{{row.entity.id}}})" ><i class="fa fa-edit"></i></button></div>', width: 60 },
+      { name: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/account/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary"  ><i class="fa fa-edit"></i></button></a></div>', width: 60 },
       { name: 'account_name' },
         { name: 'organisational_unit_name' },
         { name: 'services' },

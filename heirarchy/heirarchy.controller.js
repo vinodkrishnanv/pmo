@@ -40,7 +40,7 @@
   vm.gridOptions = {
 
     columnDefs: [
-    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ui-sref="roles.edit({id:{{row.entity.id}}})"><i class="fa fa-edit"></i></button></div>', width: 80 },
+    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/roles/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a></div>', width: 80 },
     { name: 'role_name' ,width:150},
     { name: 'heirarchy_id' ,width:150},
     ]

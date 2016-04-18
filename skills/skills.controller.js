@@ -89,7 +89,7 @@ $scope.example13settings = {
 vm.gridOptions = {
 
     columnDefs: [
-    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><button type="button" class="btn btn-xs btn-primary" ui-sref="skill.edit({id:{{row.entity.id}}})"><i class="fa fa-edit"></i></button></div>', width: 60 },
+    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/skill/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a></div>', width: 60 },
     { name: 'skill_name' },
       { name: 'skill_type' },
       { name: 'skill_code' },
