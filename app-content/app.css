@@ -1,6 +1,9 @@
 ﻿.menuBardemoBasicUsage .page-container {
   background-color: #f1f1f1;
   padding: 32px; }
+  .Modal-holder{
+    overflow-y:auto; 
+  }
 
   .watermark {
     opacity: 0.25;
