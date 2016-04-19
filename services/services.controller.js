@@ -75,7 +75,14 @@
                              // vm.gridOptions.data = response.data;
                            });
                     } else {
-                        FlashService.Error(response.data.error.skill_name[0]);
+                      if(response.data.error.service_name){
+                        FlashService.Error('Service Name ' +response.data.error.service_name[0]);
+
+                      }
+                      if(response.data.error.service_code){
+                        FlashService.Error('Service Code ' +response.data.error.service_code[0]);
+                        
+                      }
                         vm.dataLoading = false;
                     }
                 });
@@ -145,7 +152,14 @@ function ServicesEditController($scope,$log,$state,$http,UserService, $location,
                              // vm.gridOptions.data = response.data;
                            });
                     } else {
-                        FlashService.Error(response.data);
+                        if(response.data.error.service_name){
+                        FlashService.Error('Service Name ' +response.data.error.service_name[0]);
+
+                      }
+                      if(response.data.error.service_code){
+                        FlashService.Error('Service Code ' +response.data.error.service_code[0]);
+                        
+                      }
                         vm.dataLoading = false;
                     }
                 });

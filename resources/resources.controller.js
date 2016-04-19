@@ -78,7 +78,12 @@ $scope.data = {
                             $state.go("resources", {}, {reload: true});
                            // });
                     } else {
-                        FlashService.Error(response.data.error.heirarchy_name[0]);
+                      if(response.data.error.employee_id){
+                        FlashService.Error('Employee ID ' +response.data.error.employee_id[0]);
+                      }
+                      if(response.data.error.heirarchy_name){
+                        FlashService.Error('Heirarchy Name ' +response.data.error.heirarchy_name[0]);
+                      }
                         vm.dataLoading = false;
                     }
                 });
@@ -103,10 +108,10 @@ vm.gridOptions = {
    enableCellEdit: false,
     columnDefs: [
     { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/resources/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a></div>', width: 60 ,enableCellEdit: true},
-    { name: 'employee_name', width: 180 },
+    { name: 'employee_name', width: 260 },
       { name: 'employee_id' , width: 130},
-      { name: 'role' , width: 120},
-      { name: 'heirarchy_id' , width: 140},
+      { name: 'role' , width: 180},
+      // { name: 'heirarchy_id' , width: 140},
       { name: 'skill', enableColumnResizing: true },
       //{ name: 'skill_id' },
     ]
@@ -243,7 +248,12 @@ for(var i = 0; i < $rootScope.availableHeirarchyOptions.length; i++)
                             $state.go("resources", {}, {reload: true});
                            // });
                     } else {
-                        FlashService.Error(response.data.error.heirarchy_name[0]);
+                      if(response.data.error.employee_id){
+                        FlashService.Error('Employee ID ' +response.data.error.employee_id[0]);
+                      }
+                      if(response.data.error.heirarchy_name){
+                        FlashService.Error('Heirarchy Name  ' +response.data.error.heirarchy_name[0]);
+                      }
                         vm.dataLoading = false;
                     }
                 });

@@ -75,8 +75,11 @@
                           console.log(vm.gridOptions);
                          });
                     } else {
-                        FlashService.Error('Heirarchy Name ' + response.data.error.unit_name[0]);
+                      if(response.data.error.heirarchy_id)
+                        FlashService.Error('Heirarchy ID ' + response.data.error.heirarchy_id[0]);
+                        
                         vm.dataLoading = false;
+
                     }
                 });
         }

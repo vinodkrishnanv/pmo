@@ -78,7 +78,12 @@
                            $state.go("units", {}, {reload: true});
                          });
                     } else {
+                      if(response.data.error.unit_name){
                         FlashService.Error('Organisational Unit Name ' + response.data.error.unit_name[0]);
+                      }
+                      if(response.data.error.unit_code){
+                        FlashService.Error('Organisational Unit Code ' + response.data.error.unit_code[0]);
+                      }
                         vm.dataLoading = false;
                     }
                 });
@@ -172,7 +177,12 @@ function UnitEditController($scope,$state,$log,$http,UserService, $location,Flas
                           $state.go("units", {}, {reload: true});
                          });
                     } else {
-                        FlashService.Error('Unit Name ' + response.data);
+                        if(response.data.error.unit_name){
+                        FlashService.Error('Organisational Unit Name ' + response.data.error.unit_name[0]);
+                      }
+                      if(response.data.error.unit_code){
+                        FlashService.Error('Organisational Unit Code ' + response.data.error.unit_code[0]);
+                      }
                         vm.dataLoading = false;
                     }
                 });

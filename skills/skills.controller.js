@@ -59,7 +59,12 @@
                              // vm.gridOptions.data = response.data;
                            });
                     } else {
-                        FlashService.Error(response.data.error.skill_name[0]);
+                      if(response.data.error.skill_name){
+                        FlashService.Error('Skill Name ' +response.data.error.skill_name[0]);                        
+                      }
+                     if(response.data.error.skill_code){
+                        FlashService.Error('Skill Code ' +response.data.error.skill_code[0]);                        
+                      }
                         vm.dataLoading = false;
                     }
                 });
@@ -185,7 +190,12 @@ function SkillEditController($scope,$log,$state,$http,UserService, $location,Fla
                              // vm.gridOptions.data = response.data;
                            });
                     } else {
-                        FlashService.Error(response.data.error.skill_name[0]);
+                        if(response.data.error.skill_name){
+                        FlashService.Error('Skill Name ' +response.data.error.skill_name[0]);                        
+                      }
+                     if(response.data.error.skill_code){
+                        FlashService.Error('Skill Code ' +response.data.error.skill_code[0]);                        
+                      }
                         vm.dataLoading = false;
                     }
                 });
