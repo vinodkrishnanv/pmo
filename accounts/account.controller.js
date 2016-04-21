@@ -100,13 +100,14 @@ $scope.datepickerConfig = {
         {id: 'USD', name: 'USD'},
       ];
       
-      
+      var d=new Date();
     vm.gridOptions = {
 
       columnDefs: [
       { name: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/account/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary"  ><i class="fa fa-edit"></i></button></a></div>', width: 60 },
       { name: 'account_name',minWidth: 260 },
-        { name: 'organisational_unit_name' ,minWidth: 260},
+      { name: 'account_code',minWidth: 130 },
+        { name: 'organisational_unit_code' ,displayName:'OU Code',minWidth: 130},
         { name: 'services' ,minWidth: 260},
         {  name: 'resource_needed',minWidth: 180 },
         { name: 'manager' ,minWidth: 260},
@@ -128,7 +129,7 @@ $scope.datepickerConfig = {
         enableGridMenu: true,
         enableSelectAll: true,
         exporterMenuPdf: false,
-        exporterCsvFilename: 'myFile.csv',
+        exporterCsvFilename: 'Accounts_'+d.toDateString().split(' ').join('_')+'.csv',
         exporterPdfDefaultStyle: {fontSize: 9},
         exporterPdfTableStyle: {margin: [30, 30, 30, 30]},
         exporterPdfTableHeaderStyle: {fontSize: 10, bold: true, italics: true, color: 'red'},
@@ -184,7 +185,7 @@ $scope.datepickerConfig = {
     scrollableHeight: '200px',
       scrollable: true,
     enableSearch: true,
-    displayProp:'service_name',
+    displayProp:'service_code',
     idProp:'id',
     externalIdProp:'id',
     closeOnBlur:true
@@ -370,7 +371,7 @@ function AccountEditController($rootScope,$scope,$state,$log,$http,UserService, 
                           FlashService.Error(response.message);
                           vm.dataLoading = false;
                       }
-                      $state.go("account");
+                      // $state.go("account");
                   });
           }
 

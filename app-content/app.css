@@ -4,7 +4,9 @@
   .header-pad {
     padding-top: 8px;
   }
-  
+  #menuitem-4, #menuitem-5, #menuitem-6 {
+    display: none;
+}
   .Modal-holder{
     overflow-y:auto; 
   }

@@ -17,13 +17,19 @@
   </div>
 </div>
 
+<div class="form-group">
+  <label class="col-md-4 control-label labelcustom" for="Account Code">Account Code</label>  
+  <div class="col-md-4">
+  <input id="Account Code" name="Account Code" placeholder="placeholder" class="form-control input-md" ng-model="vm.account.account_code" required="" type="text">
+  </div>
+</div>
 <!-- Select Basic -->
 <div class="form-group">
   <label class="col-md-4 control-label labelcustom" for="organisationalUnit">Organisational Unit</label>
   <div class="col-md-4">
     <select name="organisationalUnit" id="organisationalUnit" class="form-control" ng-model="vm.account.organisational_unit_id" required>
               <option value="">Please select</option>
-              <option ng-repeat="option in data.availableOptions" ng-click="vm.getServices()" value="{{option.id}}">{{option.unit_name}}</option>
+              <option ng-repeat="option in data.availableOptions" ng-click="vm.getServices()" value="{{option.id}}">{{option.unit_code}}</option>
     </select>
     
   </div>
