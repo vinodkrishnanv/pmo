@@ -157,7 +157,9 @@ function HeirarchyEditController($scope,$state,$log,$http,UserService, $location
                   .then(function (response) {
                       if (response.data) {
                         vm.heirarchy = response.data.role_name;
+                        vm.role_code = response.data.role_code;
                         vm.heirarchy_id = response.data.heirarchy_id;
+                        
                         //$scope.sermodel=vm.account.sermodel=
                        // vm.account.start_date=$scope.minEndDate;
              // //vm.account.end_date=$scope.maxEndDate;
