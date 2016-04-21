@@ -105,13 +105,49 @@ $scope.datepickerConfig = {
 
       columnDefs: [
       { name: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/account/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary"  ><i class="fa fa-edit"></i></button></a></div>', width: 60 },
-      { name: 'account_name' },
-        { name: 'organisational_unit_name' },
-        { name: 'services' },
-        {  name: 'resource_needed' },
-        { name: 'manager' },
-        { name: 'status' },
-      ]
+      { name: 'account_name',minWidth: 260 },
+        { name: 'organisational_unit_name' ,minWidth: 260},
+        { name: 'services' ,minWidth: 260},
+        {  name: 'resource_needed',minWidth: 180 },
+        { name: 'manager' ,minWidth: 260},
+        { name: 'status',minWidth: 180 },
+        { name: 'start_date' ,minWidth: 180},
+        { name: 'end_date'  ,minWidth: 180},
+        { name: 'resource_allocated'  ,minWidth: 200},
+        { name: 'request_type' ,minWidth: 260},
+        { name: 'region' ,minWidth: 160},
+        { name: 'location' ,minWidth: 200},
+        { name: 'contract_type' ,minWidth: 160},
+        { name: 'customer_contact' ,minWidth: 260},
+        { name: 'other_persons' ,minWidth: 260},
+        { name: 'other_sales_email' ,minWidth: 260},
+        { name: 'sow_status' ,minWidth: 260},
+        { name: 'comments' ,minWidth: 400},
+        { name: 'anticipated_value' ,minWidth: 160},
+      ],
+        enableGridMenu: true,
+        enableSelectAll: true,
+        exporterMenuPdf: false,
+        exporterCsvFilename: 'myFile.csv',
+        exporterPdfDefaultStyle: {fontSize: 9},
+        exporterPdfTableStyle: {margin: [30, 30, 30, 30]},
+        exporterPdfTableHeaderStyle: {fontSize: 10, bold: true, italics: true, color: 'red'},
+        exporterPdfHeader: { text: "My Header", style: 'headerStyle' },
+        exporterPdfFooter: function ( currentPage, pageCount ) {
+          return { text: currentPage.toString() + ' of ' + pageCount.toString(), style: 'footerStyle' };
+        },
+        exporterPdfCustomFormatter: function ( docDefinition ) {
+          docDefinition.styles.headerStyle = { fontSize: 22, bold: true };
+          docDefinition.styles.footerStyle = { fontSize: 10, bold: true };
+          return docDefinition;
+        },
+        exporterPdfOrientation: 'portrait',
+        exporterPdfPageSize: 'LETTER',
+        exporterPdfMaxGridWidth: 500,
+        exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
+        onRegisterApi: function(gridApi){
+          $scope.gridApi = gridApi;
+        }
 
     };
     $timeout(function () {

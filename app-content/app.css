@@ -1,10 +1,16 @@
 ﻿.menuBardemoBasicUsage .page-container {
   background-color: #f1f1f1;
   padding: 32px; }
+  .header-pad {
+    padding-top: 8px;
+  }
+  
   .Modal-holder{
     overflow-y:auto; 
   }
-
+.ui-grid-row:hover .ui-grid-cell {
+  background-color: #6eb8ff;
+}
   .watermark {
     opacity: 0.25;
     font-size: 3em;

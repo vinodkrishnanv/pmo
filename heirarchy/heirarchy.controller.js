@@ -42,6 +42,7 @@
     columnDefs: [
     { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/roles/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a></div>', width: 80 },
     { name: 'role_name' ,width:150},
+    { name: 'role_code' ,width:150},
     { name: 'heirarchy_id' ,width:150},
     ]
 
@@ -62,21 +63,25 @@
     $scope.cellValue ='';
     function saveheirarchy() {
             vm.dataLoading = true;
-            var unit={"role_name" : vm.heirarchy,"heirarchy_id":vm.heirarchy_id}
+            var unit={"role_name" : vm.heirarchy,"role_code" : vm.role_code,"heirarchy_id":vm.heirarchy_id}
             UserService.saveHeirarchies(unit)
                 .then(function (response) {
                     if (response.data.success) {
                         FlashService.Success('Save successful', true);
                         vm.dataLoading = false;
-                        UserService.getHeirarchies()
-                         .then(function (response) {
-                          $state.go("roles");
-                          vm.gridOptions.data = response.data;
-                          console.log(vm.gridOptions);
-                         });
+                        // UserService.getHeirarchies()
+                        //  .then(function (response) {
+                          $state.go("roles", {}, {reload: true});
+                          // vm.gridOptions.data = response.data;
+                          // console.log(vm.gridOptions);
+                         // });
                     } else {
-                      if(response.data.error.heirarchy_id)
+                      if(response.data.error.heirarchy_id){
                         FlashService.Error('Heirarchy ID ' + response.data.error.heirarchy_id[0]);
+                      }
+                      if(response.data.error.role_code){
+                        FlashService.Error('Role Code ' + response.data.error.role_code[0]);
+                      }
                         
                         vm.dataLoading = false;
 
@@ -162,19 +167,24 @@ function HeirarchyEditController($scope,$state,$log,$http,UserService, $location
 
                   function saveheirarchy() {
             vm.dataLoading = true;
-            var unit={"id":splits[splits.length - 1],"role_name" : vm.heirarchy,"heirarchy_id":vm.heirarchy_id}
+            var unit={"id":splits[splits.length - 1],"role_name" : vm.heirarchy,"role_code" : vm.role_code,"heirarchy_id":vm.heirarchy_id}
             UserService.editHeirarchy(unit)
                 .then(function (response) {
-                    if (response.data.success) {
+                    if (response.data.id) {
                         FlashService.Success('Save successful', true);
                         vm.dataLoading = false;
-                        UserService.getHeirarchies()
-                         .then(function (response) {
-                          $state.go("roles");
-                          vm.gridOptions.data = response.data;
-                         });
+                        //UserService.getHeirarchies()
+                         //.then(function (response) {
+                          $state.go("roles", {}, {reload: true});
+                          //vm.gridOptions.data = response.data;
+                         //});
                     } else {
-                        FlashService.Error('Heirarchy Name ' + response.data);
+                      if(response.data.error.role_code){
+                        FlashService.Error('Role Code ' + response.data.error.role_code[0]);
+                      }
+                      if(response.data.error.heirarchy_id){
+                        FlashService.Error('Heirarchy ID ' + response.data.error.heirarchy_id[0]);
+                      }
                         vm.dataLoading = false;
                     }
                 });
