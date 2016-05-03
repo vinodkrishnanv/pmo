@@ -130,7 +130,7 @@ function ServicesEditController($scope,$log,$state,$http,UserService, $location,
                   .then(function (response) {
                       if (response.data) {
                         vm.service = response.data;
-                        //$scope.sermodel=vm.account.sermodel=
+                        $scope.sermodel.id=vm.service.organisational_unit_id;
                        // vm.account.start_date=$scope.minEndDate;
              // //vm.account.end_date=$scope.maxEndDate;
              // vm.account.anticipated_value = vm.account.anticipated_value.concat(" ").concat(vm.account.anticipated_value_currency);

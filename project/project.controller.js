@@ -80,9 +80,14 @@
       //                                                 }); 
       //                                                 return flag;
       // }else{
-        if((date.getTime() > $scope.newMax) || (date.getTime() < $scope.newMin) )
+        if($scope.newMax || $scope.newMin){
+          if((date.getTime() > $scope.newMax) || (date.getTime() < $scope.newMin) )
                return true;
-            return false;
+            return false;  
+        }else{
+          return false;  
+        }
+        
       // }
      // return false;
            
