@@ -216,6 +216,8 @@ function ResourcesEditController($scope,$state,$rootScope,$log,$http,UserService
                   .then(function (response) {
                       if (response.data) {
                         vm.resource = response.data;
+                        $scope.resmodel=vm.resource.skill_id;
+                        // $scope.resmodel=vm.resource.resmodel;
                         //$scope.sermodel=vm.account.sermodel=
                        // vm.account.start_date=$scope.minEndDate;
              // //vm.account.end_date=$scope.maxEndDate;

@@ -143,14 +143,10 @@ function ServicesEditController($scope,$log,$state,$http,UserService, $location,
             vm.service.id = splits[splits.length - 1];
             UserService.editService(vm.service)
                 .then(function (response) {
-                    if (response.data.success) {
+                    if (response.data.id) {
                         FlashService.Success('Save successful', true);
                         vm.dataLoading = false;
-                        UserService.getServices()
-                          .then(function (response) {
                             $state.go("services", {}, {reload: true});
-                             // vm.gridOptions.data = response.data;
-                           });
                     } else {
                         if(response.data.error.service_name){
                         FlashService.Error('Service Name ' +response.data.error.service_name[0]);

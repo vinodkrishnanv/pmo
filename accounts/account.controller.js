@@ -336,6 +336,11 @@ function AccountEditController($rootScope,$scope,$state,$log,$http,UserService, 
                           .then(function (response) {
                               if (response.data.success) {
                                 $scope.serdata = response.data.success;
+                                UserService.getAccountServices(splits[splits.length - 1])
+                                    .then(function (response) {
+                                      $scope.sermodel=response.data.service_id;
+
+                                    });
                               } 
                           });
                         //$scope.sermodel=vm.account.sermodel=

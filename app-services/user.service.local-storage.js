@@ -47,8 +47,10 @@
         service.getMappedResource=getMappedResource;
         service.getallFilteredResources=getallFilteredResources;
         service.validateResDetails=validateResDetails;
+        service.validateNewResDetails=validateNewResDetails;
         service.getResourceAccountDates=getResourceAccountDates;
         service.getSkillDates=getSkillDates;
+        service.getAccountServices=getAccountServices;
         return service;
 
         function handleSuccess(res) {
@@ -199,6 +201,14 @@
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
+        function getAccountServices(id) {
+            var req = {
+                method: 'GET',
+                url: 'http://'+hostName+':3000/accounts-services/'+id+'.json',
+                headers : { 'Content-Type': 'application/json' } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
         function getManagers() {
             var req = {
                 method: 'GET',
@@ -288,10 +298,20 @@
                 method: 'POST',
                 url: 'http://'+hostName+':3000/resource-occupied.json',
                 headers : { 'Content-Type': 'application/json' } ,
-                data:  res
+                data:  {'resources': res}
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
+        function validateNewResDetails(res) {
+            var req = {
+                method: 'POST',
+                url: 'http://'+hostName+':3000/resource-new-occupied.json',
+                headers : { 'Content-Type': 'application/json' } ,
+                data:  {'resources': res}
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        
 
         function saveAccount(account) {
             //console.log(account);
