@@ -23,7 +23,7 @@
 
     </div>
       <div ng-show= 'accountmodel.id' class="col-md-3 text-right">
-      <button ui-sref="project.calendar" class="btn btn-primary">View Calendar</button>
+      <button ui-sref="project.calendar" class="btn btn-primary">View Current Allocation</button>
       </div>
     </div>
     <div class="row" ng-show="showaccountdates">
@@ -72,7 +72,7 @@
          <div class="col-md-6">
             <div ng-show="resource" >
               <div style='display:inline-block; vertical-align:top'>
-                <div class='btn-group'>
+                <div id='btn-group' class='btn-group'>
                   <button class='btn btn-primary' ng-model='type' btn-radio='"individual"'>Individual</button>
 
                   <button class='btn btn-primary' ng-model='type' btn-radio='"range"'>Range</button>
@@ -98,13 +98,16 @@
          <div id="wrapper" class="wrapper col-md-6">
         <div id="inner-wrapper" class="inner-wrapper parent" ng-repeat="n in items">
       <div class="one-col">{{n.name}}</div>
-      <div class="two-col "><div class="col-md-11">{{n.minDate | date:'MMM d, y'}}------{{n.maxDate | date:'MMM d, y'}}</div><i class="fa fa-times" ng-click="remresdate({{n}})" aria-hidden="true"></i>
+      <div class="two-col "><div class="col-md-11">{{n.minDate | date:'MMM d, y'}} -- {{n.maxDate | date:'MMM d, y'}}</div><i class="fa fa-times" ng-click="remresdate({{n}})" aria-hidden="true"></i>
 <!-- <table>
         <div ng-repeat="task in n.Dates">
               {{task | date:'MMM d, y'}}
         </div>
     </table> --></div>
       </div>
+      <div class="text-center">
+          <button class="btn btn-primary" ng-show="items.length"  ng-disabled="!items.length" ng-click="saveproject()">Save</button>
+          </div>
     </div>
          </div>
          <br><br>
@@ -113,9 +116,9 @@
        <div class="col-md-6">     
          <!--  <button class="btn btn-primary" ng-disabled="!selectedDates.length || !resmodel.length" ng-click="add(resource,singleres,selectedDates)">Add</button> -->
           </div>
-          <div class="col-md-6">
+          <!-- <div class="col-md-6">
           <button class="btn btn-primary" ng-show="items.length"  ng-disabled="!items.length" ng-click="saveproject()">Save</button>
-          </div>
+          </div> -->
         </div>
   </div>
  <!-- {{myselectedDates}}

@@ -174,7 +174,7 @@ body {
   position: relative;
   /*background: white;*/
   border: 1px solid white;
-  border-radius:2px;
+  border-radius:6px;
 }
 .hdr h4 {
     background-color: steelblue;
@@ -193,6 +193,7 @@ body {
 .fa.fa-times {
     cursor: pointer;
     font-size: 12px !important;
+    padding-left:7px:;
 }
 .custom-nav{
   margin-left: 2%;

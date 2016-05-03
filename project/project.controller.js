@@ -10,6 +10,16 @@
   	function ProjectController($rootScope,$scope,$log,$http,UserService, $location,FlashService,RowEditor,$filter,$q,uiCalendarConfig) {
 
           var vm = this;
+          var splits=$location.url().toString().split("/");
+          var strings=splits[splits.length-1];
+          var newEl = angular.element( document.querySelector( "div#btn-grp" ) );
+          console.log(newEl);
+          if(strings=="calendar"){
+            console.log(newEl.hasClass(".btn-grp")); 
+            newEl.addClass("hidden"); 
+          }else{
+            newEl.removeClass("hidden"); 
+          }
           var rTEvents = [];
           $rootScope.shownav=true;
           $scope.type = "range";
@@ -407,10 +417,13 @@
                                                           newstr=newstr+(" "+sumstr+datestring);
                                                         }
                                                       });
-
-                                                            FlashService.Error(newstr, true);
+                                                            if(newstr){
+                                                            FlashService.Error(newstr, true);  
+                                                            }
+                                                            
                                                       var mydata={};
         });
+  $scope.selectedDates.length=0;
 
       }
       
@@ -430,7 +443,8 @@
           //accountDetails.maxEndDate =Math.max.apply(Math, $scope.accountrangeDates)+19800000;
           account = {"account" : accountDetails}
           UserService.saveAccountDetails(account).then(function (response){
-                                                      FlashService.Success(response.data, true);
+                                                      // FlashService.Success(response.data, true);
+                                                       FlashService.Success("All the Mapped People has been successfully added to the project", true); 
                                                       });
       }
       }
