@@ -283,6 +283,7 @@
           eventResize: $scope.alertOnResize,
           eventRender: $scope.eventRender,
           eventLimit: true, 
+          weekends: false,
           views: {
             agenda: {
               eventLimit: 2 // adjust to 6 only for agendaWeek/agendaDay

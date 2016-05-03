@@ -2,7 +2,7 @@
     <!-- <div ng-include="'pages/navigation.html'"></div> -->
   <div class="jumbotron text-center">
     <div  ui-view="modal"></div>
-    <div>
+    <div class="row">
       <div class="col-md-2 text-left">
        <!--  {{selectedDates}}
         {{accountmodel}} -->
@@ -10,11 +10,11 @@
       </div>
       <div class="col-md-3 text-left">
         <div ng-dropdown-multiselect="" events="accountEvents" options="accountdata" date-selected='dselect(date)' selected-model="accountmodel" extra-settings="accountsettings"></div>
-       <div class="row" ng-show="showaccountdates">({{newMin | date:'MMM d, y'}} -- {{newMax | date:'MMM d, y'}})</div>
+       
       </div>
       <div class="col-md-4" ng-show="calmodel">
       <div class="col-md-6 text-left">
-          <label for="username">Select the Resources</label>
+          <label for="username">Select People</label>
         </div>
         <div class="col-md-6">
           <div ng-dropdown-multiselect="" events="resourceEvents" options="example13data" selected-model="example13model" extra-settings="example13settings" group-by="group"></div>
@@ -26,12 +26,24 @@
       <button ui-sref="project.calendar" class="btn btn-primary">View Calendar</button>
       </div>
     </div>
+    <div class="row" ng-show="showaccountdates">
+      <div class="col-md-2 text-left">
+       <!--  {{selectedDates}}
+        {{accountmodel}} -->
+        <label for="username">Account Timeline</label>
+      </div>
+      <div class="col-md-3 text-left">
+        <i class="red">
+      ({{newMin | date:'MMM d, y'}} -- {{newMax | date:'MMM d, y'}})
+    </i>
+      </div>
+    </div>
     <div class="reshere" ng-show="showreshere">
-      <div class="hdr"><h4>Add dates for Resource</h4> </div>
+      <div class="hdr"><h4>Map People to Projects</h4> </div>
       <div class="single">
          <ul class="nav navbar-nav custom-nav">
           <li ng-repeat="field in example13model">
-              <button class='btn btn-danger' id='{{field.employee_name + field.id}}' ng-click='respevents({{field.id}},"{{field.employee_name}}")'  >{{field.employee_name}}</button>
+              <button class='btn btn-default' id='{{field.employee_name + field.id}}' ng-click='respevents({{field.id}},"{{field.employee_name}}")'  >{{field.employee_name}}</button>
           </li>
           </ul>
           </div>
@@ -43,10 +55,10 @@
         <div class="col-md-4 hide text-right">
           <div ng-dropdown-multiselect=""  events="yourEvents" options="example13model" selected-model="resmodel" extra-settings="ressettings"></div>
          </div>
-        <div class="col-md-2">
-          <label for="username">Percentage Loaded.</label>
+        <div class="col-md-3 text-right">
+          <label for="username">Percentage Loaded</label>
         </div>
-        <div class="col-md-2 text-left">
+        <div class="col-md-2">
            <select name="singleSelect" ng-model="singleperSelect">
               <option value="25">25 %</option>
               <option value="50">50 %</option>
@@ -77,11 +89,16 @@
                 </table>
               </div>
             </div>
+            <br>
+            <div ng-show="resource">     
+          <button class="btn btn-primary" ng-disabled="!selectedDates.length || !resmodel.length" ng-click="add(resource,singleres,selectedDates)">Add</button>
+          </div>
          </div>
+
          <div id="wrapper" class="wrapper col-md-6">
         <div id="inner-wrapper" class="inner-wrapper parent" ng-repeat="n in items">
       <div class="one-col">{{n.name}}</div>
-      <div class="two-col "><pre class="col-md-11">{{n.minDate | date:'MMM d, y'}}------{{n.maxDate | date:'MMM d, y'}}</pre><i class="fa fa-times" ng-click="remresdate({{n}})" aria-hidden="true"></i>
+      <div class="two-col "><div class="col-md-11">{{n.minDate | date:'MMM d, y'}}------{{n.maxDate | date:'MMM d, y'}}</div><i class="fa fa-times" ng-click="remresdate({{n}})" aria-hidden="true"></i>
 <!-- <table>
         <div ng-repeat="task in n.Dates">
               {{task | date:'MMM d, y'}}
@@ -92,9 +109,13 @@
          </div>
          <br><br>
             
-       <div ng-show="resource" >      
-          <button class="btn btn-primary" ng-disabled="!selectedDates.length || !resmodel.length" ng-click="add(resource,singleres,selectedDates)">Add</button>
-          <button class="btn btn-primary" ng-disabled="!items.length" ng-click="saveproject()">Save</button>
+       <div ng-show="resource" > 
+       <div class="col-md-6">     
+         <!--  <button class="btn btn-primary" ng-disabled="!selectedDates.length || !resmodel.length" ng-click="add(resource,singleres,selectedDates)">Add</button> -->
+          </div>
+          <div class="col-md-6">
+          <button class="btn btn-primary" ng-show="items.length"  ng-disabled="!items.length" ng-click="saveproject()">Save</button>
+          </div>
         </div>
   </div>
  <!-- {{myselectedDates}}

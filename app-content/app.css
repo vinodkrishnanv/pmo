@@ -134,9 +134,9 @@ body {
   -webkit-border-radius: 5px; 
 }
 .reshere {
-    border: 2px solid #000000;
+    border: 2px solid #757575;
     border-radius: 9px;
-    margin-top: 100px;
+    margin-top: 25px;
     padding-bottom: 40px;
 }
 .section {
@@ -173,7 +173,7 @@ body {
   padding: 0 10px 0 10px;
   position: relative;
   /*background: white;*/
-  border: 1px solid steelblue;
+  border: 1px solid white;
   border-radius:2px;
 }
 .hdr h4 {
@@ -218,14 +218,14 @@ ul.custom-nav li{
 }
 .one-col {
   width: 180px;
-  font-size: 27px;
+  font-size: 16px;
 }
 
 .two-col {
     float: right;
     margin-right: 0;
     width: 280px;
-    font-size: 27px;
+    font-size: 16px;
     border-left: 2px solid white;
 }
 

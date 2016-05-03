@@ -59,7 +59,11 @@
   $scope.person = {};
   $scope.disabled = function(date) {
     var flag = 0;
-   
+    var d = new Date(date);
+    var day=d.getDay();
+    if(day==0 || day==6){
+      return true;
+    }else{
     //$scope.disdate=[];
       // if($scope.resmodel.id){
       //   var keepgoing =1;
@@ -87,13 +91,13 @@
         }else{
           return false;  
         }
+      }
         
       // }
      // return false;
            
   }
   $scope.dselect = function(date) {
-    console.log("control-here");
            if((date.getTime() > Math.max.apply(Math, $scope.accountrangeDates)) || (date.getTime() < Math.min.apply(Math, $scope.accountrangeDates)) )
               return true;
       return false;
@@ -116,6 +120,7 @@
 
   $scope.accountEvents = {
                        onItemSelect: function(item) {
+                                                      $scope.items.length=0;
                                                       $scope.IsVisible=$scope.calmodel=$scope.calrangemodel=item.id;
                                                       //UserService.getFilteredResources(item.id).then(function (response){
                                                       UserService.getallFilteredResources(item.id).then(function (response){
@@ -265,12 +270,12 @@
       $scope.respevents = function (id,name) { 
         var text= 'button'+'#'+name+id ;
       var myEl = angular.element( document.querySelector( text ) ); 
-        if(myEl.hasClass("btn-danger")){
-          myEl.removeClass('btn-danger');
-          myEl.addClass('btn-warning');
+        if(myEl.hasClass("btn-default")){
+          myEl.removeClass('btn-default');
+          myEl.addClass('btn-primary');
         }else{
-          myEl.removeClass('btn-warning');
-          myEl.addClass('btn-danger');
+          myEl.removeClass('btn-primary');
+          myEl.addClass('btn-default');
         }
         var news = { id: '', employee_name: ''};
       news.id=id;
@@ -329,9 +334,9 @@
         angular.forEach($scope.resmodel, function(value) {
           var text= 'button'+'#'+value.employee_name+value.id ;
           var myEl = angular.element( document.querySelector( text ) ); 
-        if(myEl.hasClass("btn-warning")){
-          myEl.removeClass('btn-warning');
-          myEl.addClass('btn-danger');
+        if(myEl.hasClass("btn-primary")){
+          myEl.removeClass('btn-primary');
+          myEl.addClass('btn-default');
         }
         var deferred = $q.defer();
          var filtered = $filter('filter')($scope.items, { resource_id: value.id });
@@ -341,7 +346,12 @@
         mydata.account_id=$scope.accountmodel.id;
         var newdate=[];
         angular.forEach(date, function(value) {
-        newdate.push(value+19800000);
+    var d = new Date(value);
+    var day=d.getDay();
+    if(!(day==0 || day==6)){
+     newdate.push(value+19800000);
+    }
+        // newdate.push(value+19800000);
         });
         mydata.name=value.employee_name;
         mydata.maxDate= Math.max.apply(Math, date);
@@ -387,7 +397,7 @@
                                                             }
                                                           }
                                                           var sumstr="";
-                                                          sumstr=(value.name + " is occupied with some other project on the following dates - ");
+                                                          sumstr=(value.name + " is occupied on the following dates - ");
                                                            var datestring='';
                                                           angular.forEach(value.dates,function(nvalue) {
                                                             var d = new Date(Number(nvalue));
@@ -398,55 +408,12 @@
                                                         }
                                                       });
 
-                                                            FlashService.Success(newstr, true);
+                                                            FlashService.Error(newstr, true);
                                                       var mydata={};
         });
 
       }
-      function doWhateverWithAll(someArray,date) {
-  // Mark which request we're currently doing
-         var currentRequest = 0;
-  // Make this promise based.
-   var deferred = $q.defer();
-         // var deferred = $q.deferred();
-  // Set up a result array
-        var results = []
-  function makeNextRequest() {
-    var deferred = $q.defer();
-         var filtered = $filter('filter')($scope.items, { resource_id: someArray[currentRequest].id });
-         var user = filtered.length ? filtered[0] : null;
-         deferred.resolve(user);
-        mydata.resource_id=someArray[currentRequest].id;
-        var newdate=[];
-        angular.forEach(date, function(value) {
-        newdate.push(value+19800000);
-        });
-        mydata.name=someArray[currentRequest].employee_name;
-        mydata.maxDate= Math.max.apply(Math, date);
-        mydata.minDate= Math.min.apply(Math, date);
-        mydata.Dates=newdate;
-        mydata.percentage_loaded=$scope.singleperSelect;
-    // Do whatever you need with the array item.
-    // var postData = someArray[currentRequest];
-    UserService.validateResDetails(mydata).then(function (response){
-      results.push(response.data);
-      // Increment progress.
-      currentRequest++;
-      // Continue if there are more items.
-      if (currentRequest < someArray.length){
-        makeNextRequest();
-      }
-      // Resolve the promise otherwise.
-      else {
-        deferred.resolve(results);  
-      }  
-        });
-    
-    // TODO handle errors appropriately.
-  }
-  // return a promise for the completed requests
-  return deferred.promise;
-}
+      
       $scope.saveproject = function() {
         var account = {};
           var accountDetails = {};
