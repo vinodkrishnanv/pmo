@@ -67,7 +67,9 @@
             <div class="">
 
                 <div ng-include="'pages/navigation.html'" ng-show="shownav"></div>
-                <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
+                <div ng-class="{ 'alert text-left': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind-html="flash.message">
+                </div>
+                <!-- <i class="fa fa-times text-right" ng-if="flash" ng-click="MessageClear()" aria-hidden="true"></i> -->
                 <div ui-view></div>
             </div>
         </div>

@@ -72,10 +72,10 @@
          <div class="col-md-6">
             <div ng-show="resource" >
               <div style='display:inline-block; vertical-align:top'>
-                <div id='btn-group' class='btn-group'>
-                  <button class='btn btn-primary' ng-model='type' btn-radio='"individual"'>Individual</button>
+                <div id='btn-group' class='btn-group hideoncalendar'>
+                  <button class='btn btn-primary' ng-model='type' uib-btn-radio='"individual"'>Individual</button>
 
-                  <button class='btn btn-primary' ng-model='type' btn-radio='"range"'>Range</button>
+                  <button class='btn btn-primary' ng-model='type' uib-btn-radio='"range"'>Range</button>
 
                 </div>
                 <br><br>
@@ -97,8 +97,11 @@
 
          <div id="wrapper" class="wrapper col-md-6">
         <div id="inner-wrapper" class="inner-wrapper parent" ng-repeat="n in items">
-      <div class="one-col">{{n.name}}</div>
-      <div class="two-col "><div class="col-md-11">{{n.minDate | date:'MMM d, y'}} -- {{n.maxDate | date:'MMM d, y'}}</div><i class="fa fa-times" ng-click="remresdate({{n}})" aria-hidden="true"></i>
+      <div class="one-col row">
+        <div class="col-md-6">{{n.name}}</div>
+        <div class="col-md-6">{{n.percentage_loaded}}%</div>
+        </div>
+      <div class="two-col "><div class="col-md-11">{{n.minDate | date:'MMM d, y'}} -- {{n.maxDate | date:'MMM d, y'}}</div><i class="fa fa-times" ng-click="remresdate({{n.resource_id}})" aria-hidden="true"></i>
 <!-- <table>
         <div ng-repeat="task in n.Dates">
               {{task | date:'MMM d, y'}}
