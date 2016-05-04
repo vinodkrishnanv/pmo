@@ -129,6 +129,7 @@
                                   FlashService.clearMessage();
                                   $scope.items.length=0;
                                   $scope.resmodel.length=0;
+                                  $scope.resource=0;
                                   $scope.IsVisible=$scope.calmodel=$scope.calrangemodel=item.id;
                                   //UserService.getFilteredResources(item.id).then(function (response){
                                   UserService.getallFilteredResources(item.id).then(function (response){
@@ -370,9 +371,11 @@
                                                               if(value.success==0){
                                                                 for (var key in $scope.items) {
                                                                   if($scope.items[key].resource_id == value.resource_id){
-                                                                    if($scope.tempitems[key].saved){
+                                                                    if($scope.tempitems[key]){
+                                                                      if($scope.tempitems[key].saved){
                                                                       var newflag=1;
                                                                     }
+                                                                  }
                                                                     $scope.newitem=angular.copy($scope.tempitems[key]);
                                                                     var newitem=$scope.items.splice(key, 1);
                                                                     if(newflag){
