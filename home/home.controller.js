@@ -28,9 +28,6 @@
 
             function fetchEvents(start, end, timezone, callback) {
               var aid = "";
-              console.log($scope.accountmodel.length);
-              console.log($scope.skillmodel.length);
-              console.log($scope.resourcemodel.length);
               if(!($scope.accountmodel.length) && !($scope.skillmodel.length) && !($scope.resourcemodel.length)){
                 $scope.type = "free";
               }
