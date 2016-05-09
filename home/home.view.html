@@ -1,5 +1,4 @@
-﻿<!-- <div ng-include="'pages/navigation.html'"></div> -->
-<div>
+﻿ <!-- <div>
                   <button class='btn btn-primary margin-5' ng-model='type' btn-radio='"account"'>Account</button>
 
                   <button class='btn btn-primary margin-5' ng-model='type' btn-radio='"resource"'>People</button>
@@ -19,18 +18,44 @@
                           </button>
 
       </div>
-      <!--<calendar selected="day"></calendar>-->
 
       <div id="mycalendar" ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources" calendar="calendar"></div>
-      <!--<button type="button" class="btn btn-primary" ng-click="addEvent()">
-                            Add Event
-                          </button>
-                          <div>{{resourcemodel}}</div>-->
-<!--<h3>All registered users:</h3>
-<ul>
-    <li ng-repeat="user in vm.allUsers">
-        {{user.username}} ({{user.firstName}} {{user.lastName}})
-        - <a href="#" ng-click="vm.deleteUser(user.id)">Delete</a>
-    </li>
-</ul>-->
+      
+<p>&nbsp;</p>  -->
+<div class="row">
+  <div class="col-md-3">
+    <div class="col-md-6">
+      <span class='amp'>Account</span>
+    </div>
+    <div class="col-md-6">
+      <div  ng-dropdown-multiselect="" events="accountEvents" options="accountdata" date-selected='dselect(date)' selected-model="accountmodel" extra-settings="accountsettings"></div>
+    </div>
+  </div>
+  <div class="col-md-1">
+    <span class="amp">&amp;</span>
+  </div>
+  <div class="col-md-3">
+    <div class="col-md-6">
+       <span class='amp' >People</span>
+    </div>
+    <div class="col-md-6">
+        <div  ng-dropdown-multiselect="" events="resourceEvents" options="resourcedata" selected-model="resourcemodel" extra-settings="resourcesettings"></div>
+
+    </div>
+  </div>
+  <div class="col-md-1">
+    <span class="amp">&amp;</span>
+  </div>
+  <div class="col-md-3">
+    <div class="col-md-6">
+       <span class='amp' >Skill</span>
+    </div>
+    <div class="col-md-6">
+      <div  ng-dropdown-multiselect="" events="skillEvents" options="skilldata" selected-model="skillmodel" extra-settings="skillsettings"></div>
+    </div>
+  </div>
+      </div>
+
+      <div id="mycalendar" ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources" calendar="calendar"></div>
+      
 <p>&nbsp;</p>

@@ -51,6 +51,7 @@
         service.getResourceAccountDates=getResourceAccountDates;
         service.getSkillDates=getSkillDates;
         service.getAccountServices=getAccountServices;
+        service.getNewDates=getNewDates;
         return service;
 
         function handleSuccess(res) {
@@ -339,6 +340,16 @@
                 url: 'http://'+hostName+':3000/resources-dates.json',
                 headers : { 'Content-Type': 'application/json' } ,
                 data:  {'resources': resource}
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+            
+        }
+        function getNewDates(arg) {
+            var req = {
+                method: 'POST',
+                url: 'http://'+hostName+':3000/new-dates.json',
+                headers : { 'Content-Type': 'application/json' } ,
+                data:  arg
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
             

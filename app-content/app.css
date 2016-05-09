@@ -7,6 +7,12 @@
   #menuitem-4, #menuitem-5, #menuitem-6 {
     display: none;
 }
+span.amp {
+   font-family:Baskerville,"Goudy Old Style","Palatino","Book Antiqua",serif;
+   font-size:28px;
+   font-style:italic;
+   color:#ef6e24;
+}
 .single ul li button{
   margin:4px;
 }
