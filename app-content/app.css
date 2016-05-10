@@ -7,11 +7,27 @@
   #menuitem-4, #menuitem-5, #menuitem-6 {
     display: none;
 }
+.fc-left > h2 {
+    font-size: 21px;
+    font-weight: bold;
+}
+.fc-today{
+  background-color: #caecfe !important;
+}
+.fc-day{
+  background-color: #ffffff;
+}
+.fc-head-container{
+ background-color: #ffffff; 
+}
+.fc-day-number{
+   font-weight: bold; 
+}
 span.amp {
-   font-family:Baskerville,"Goudy Old Style","Palatino","Book Antiqua",serif;
-   font-size:28px;
-   font-style:italic;
-   color:#ef6e24;
+   /*font-family:Baskerville,"Goudy Old Style","Palatino","Book Antiqua",serif;*/
+   font-size:22px;
+   /*font-style:italic;*/
+   /*color:#ef6e24;*/
 }
 .single ul li button{
   margin:4px;

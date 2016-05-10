@@ -212,6 +212,7 @@
             center: '',
             right: 'today prev,next'
           },
+          eventBackgroundColor: "#000000",
           eventClick: $scope.alertOnEventClick,
           eventDrop: $scope.alertOnDrop,
           eventResize: $scope.alertOnResize,
