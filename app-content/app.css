@@ -12,7 +12,8 @@
     font-weight: bold;
 }
 .fc-today{
-  background-color: #caecfe !important;
+  /*background-color: #caecfe !important;*/
+  background-color: yellow !important;
 }
 .fc-day{
   background-color: #ffffff;
