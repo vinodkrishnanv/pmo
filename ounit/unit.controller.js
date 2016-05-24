@@ -24,14 +24,16 @@
 })
  .controller('UnitController', UnitController)
  .controller('UnitEditController', UnitEditController)
+ .controller('UnitDeleteController', UnitDeleteController)
 
 .controller('RowEditCtrl', RowEditCtrl)
 
 .service('RowEditor', RowEditor);
-	UnitController.$inject = ['$rootScope','$scope','$state','$log','$http','UserService', '$location', 'FlashService','RowEditor'];
-	function UnitController($rootScope,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor) {
+	UnitController.$inject = ['$rootScope','$scope','$cookieStore','$state','$log','$http','UserService', '$location', 'FlashService','RowEditor'];
+	function UnitController($rootScope,$scope,$cookieStore,$state,$log,$http,UserService, $location,FlashService,RowEditor) {
 		var vm = this;
     $rootScope.shownav=true;
+    $rootScope.rootAccess =  $cookieStore.get("rootAccess");
         vm.editRow = RowEditor.editRow;
         vm.saveunit = saveunit;
         var rowIndexTemp = 0;
@@ -43,7 +45,7 @@
   vm.gridOptions = {
 
     columnDefs: [
-    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/units/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary"  ><i class="fa fa-edit"></i></button></a></div>', width: 80 },
+    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/units/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary"  ><i class="fa fa-edit"></i></button></a>&nbsp<a href="#/units/delete/{{row.entity.id}}"  ><button type="button" class="btn btn-xs danger-class"  ><i  class="fa fa-trash"></i></button></a></div>', width: 70 },
     { name: 'unit_name' ,width:150 },
     { name: 'unit_code' ,width:150 },
     ]
@@ -63,7 +65,6 @@
      .then(function (response) {
       vm.gridOptions.data = response.data;
      });
-     console.log(vm.gridOptions);
     $scope.cellValue ='';
     function saveunit() {
             vm.dataLoading = true;
@@ -191,6 +192,34 @@ function UnitEditController($scope,$state,$log,$http,UserService, $location,Flas
   
       
 
+  }
+
+   UnitDeleteController.$inject = ['$rootScope','$scope','$state','$log','$http','UserService', '$location', 'FlashService', 'RowEditor', '$timeout','$routeParams'];
+function UnitDeleteController($rootScope,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor,$timeout,$routeParams) {
+  var vm=this;
+  vm.deleteunit = deleteunit;
+  var splits=$location.url().toString().split("/");
+  $scope.deltext="";
+  UserService.deleteDependency({"type":"unit","data":splits[splits.length - 1]})
+                  .then(function (response) {
+                    if(response.data){
+                      $scope.deltext="The data you are trying to delete has a dependency and will be deleted if you proceed";
+                    }
+                  });
+  function deleteunit() {
+              vm.dataLoading = true;
+              UserService.deleteUnit(splits[splits.length - 1])
+                  .then(function (response) {
+                      if (response.status==204) {
+                          FlashService.Success('Delete successful', true);
+                          vm.dataLoading = false;
+                          $state.go("units", {}, {reload: true});
+                      } else {
+                          FlashService.Error(response.message);
+                          vm.dataLoading = false;
+                      }
+                  });
+          }
   }
     }
 )();

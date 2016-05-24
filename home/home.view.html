@@ -55,7 +55,31 @@
     </div>
   </div>
       </div>
-<br>
+        <br>
+        <div class="row">
+        <div class="newwrapper col-md-4"  ng-disabled="accountmodel.length">
+         <ul class="nav navbar-nav custom-nav">
+          <li ng-repeat="field in accountmodel">
+              <button class='btn btn-default' disabled >{{field.account_name}}</button>
+          </li>
+          </ul>
+          </div>
+          <div class="newwrapper col-md-4" ng-disabled="resourcemodel.length">
+         <ul class="nav navbar-nav custom-nav">
+          <li ng-repeat="field in resourcemodel">
+              <button class='btn btn-default'   disabled >{{field.employee_name}}</button>
+          </li>
+          </ul>
+          </div>
+          <div class="newwrapper col-md-4"  ng-disabled="resourcemodel.length">
+         <ul class="nav navbar-nav custom-nav">
+          <li ng-repeat="field in skillmodel">
+              <button class='btn btn-default' disabled >{{field.skill_name}}</button>
+          </li>
+          </ul>
+          </div>
+          </div>
+          <br>
       <div id="mycalendar" ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources" calendar="calendar"></div>
       
 <p>&nbsp;</p>

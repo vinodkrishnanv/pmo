@@ -40,18 +40,9 @@
                 controller  : 'AccountController',
 				controllerAs: 'vm',
                 onEnter: ["$state", function($state) {
-     /* $(document).on("keyup", function(e) {
-        if(e.keyCode == 27) {
-          $(document).off("keyup");
-          $state.go("account");
-        }
-      });*/
-
       $(document).on("click", ".btn-danger", function() {
         $state.go("account");
       });
-
-      
     }],
             })
     //.state('parent', {url: '/act', abstract: true, template: '<ui-view/>'} )
@@ -78,6 +69,20 @@
                     
                 // controller  : 'AccountController',
                 })
+            .state('account.delete', {
+                url: '/delete/:id',
+                views:{
+                      "modal": {
+                        templateUrl: "accounts/account.delete.html",
+                        controller  : 'AccountDeleteController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
+                    
+                // controller  : 'AccountController',
+                })
+            
             
 
             // route for the contact page
@@ -112,6 +117,19 @@
                       "modal": {
                         templateUrl: "resources/resources.add.html",
                         controller  : 'ResourcesEditController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
+                    
+                // controller  : 'AccountController',
+                })
+            .state('resources.delete', {
+                url: '/delete/:id',
+                views:{
+                      "modal": {
+                        templateUrl: "resources/resource.delete.html",
+                        controller  : 'ResourcesDeleteController',
                         controllerAs: 'vm'
 
                       }
@@ -182,6 +200,17 @@
                     
                 // controller  : 'AccountController',
                 })
+            .state('units.delete', {
+                url: '/delete/:id',
+                views:{
+                      "modal": {
+                        templateUrl: "ounit/unit.delete.html",
+                        controller  : 'UnitDeleteController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
+                })
             .state('roles', {
                 url: "/roles",
                 templateUrl : 'heirarchy/heirarchy.html',
@@ -217,8 +246,17 @@
 
                       }
                     },
-                    
-                // controller  : 'AccountController',
+                })
+            .state('roles.delete', {
+                url: '/delete/:id',
+                views:{
+                      "modal": {
+                        templateUrl: "heirarchy/roles.delete.html",
+                        controller  : 'HeirarchyDeleteController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
                 })
             .state('skill', {
                 url: "/skill",
@@ -258,6 +296,17 @@
                     
                 // controller  : 'AccountController',
                 })
+            .state('skill.delete', {
+                url: '/delete/:id',
+                views:{
+                      "modal": {
+                        templateUrl: "skills/skills.delete.html",
+                        controller  : 'SkillDeleteController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
+                })
             .state('services', {
                 url: "/services",
                 templateUrl : 'services/services.html',
@@ -281,7 +330,6 @@
 
                       }
                     },
-                
                 })
             .state('services.edit', {
                 url: '/edit/:id',
@@ -293,8 +341,17 @@
 
                       }
                     },
-                    
-                // controller  : 'AccountController',
+                })
+            .state('services.delete', {
+                url: '/delete/:id',
+                views:{
+                      "modal": {
+                        templateUrl: "services/services.delete.html",
+                        controller  : 'ServicesDeleteController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
                 }); 
             $urlRouterProvider.otherwise('/login');
 
@@ -302,41 +359,6 @@
     }
 	
 
-    /*scotchApp.controller('aboutController', function($scope) {
-        $scope.message = 'Look! I am an about page.';
-    });
-
-    scotchApp.controller('contactController', function($scope) {
-        $scope.message = 'Contact us! JK. This is just a demo.';
-    });*/
-/*provider.$inject = ['$stateProvider'];
-function provider($stateProvider) {
-    "use strict";
-    var provider = this;
-    this.$get = function() {
-      return provider;
-    };
-    this.state = function(stateName, options) {
-      var modalInstance;
-      $stateProvider.state(stateName, {
-        url: options.url,
-        onEnter: function($modal, $state) {
-          modalInstance = $modal.open(options);
-          modalInstance.result["finally"](function() {
-            modalInstance = null;
-            if ($state.$current.name === stateName) {
-              $state.go("^");
-            }
-          });
-        },
-        onExit: function() {
-          if (modalInstance) {
-            modalInstance.close();
-          }
-        }
-      });
-    };
-  }*/
     run.$inject = ['$rootScope', '$location', '$cookieStore', '$http'];
     function run($rootScope, $location, $cookieStore, $http) {
         // keep user logged in after page refresh
@@ -354,13 +376,5 @@ function provider($stateProvider) {
             }
         });
     }
-   /* modalStateProvider.state("menu", {
-        template: "I am a Dialog!",
-        controller: function ($scope) {
-          $scope.dismiss = function () {
-            $scope.$dismiss();
-          };
-        }
-  });*/
 
 })();

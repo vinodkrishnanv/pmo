@@ -5,11 +5,12 @@
         .module('app')
         .factory('UserService', UserService);
 
-    UserService.$inject = ['$http','$timeout', '$filter', '$q'];
-    function UserService($http,$timeout, $filter, $q) {
+    UserService.$inject = ['$cookieStore','$http','$timeout', '$filter', '$q'];
+    function UserService($cookieStore,$http,$timeout, $filter, $q) {
 
         var service = {};
         var hostName='localhost';
+        var globals=$cookieStore.get('globals');
         service.saveAccount = saveAccount;
         service.saveUnit = saveUnit;
         service.editUnit = editUnit;
@@ -52,6 +53,13 @@
         service.getSkillDates=getSkillDates;
         service.getAccountServices=getAccountServices;
         service.getNewDates=getNewDates;
+        service.deleteAccount=deleteAccount;
+        service.deleteResource=deleteResource;
+        service.deleteRole=deleteRole;
+        service.deleteSkill = deleteSkill;
+        service.deleteService = deleteService;
+        service.deleteUnit = deleteUnit;
+        service.deleteDependency=deleteDependency;
         return service;
 
         function handleSuccess(res) {
@@ -80,11 +88,23 @@
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
+        function deleteDependency(data) {
+            
+            var req = {
+                method: 'POST',
+                url: 'http://'+hostName+':3000/deletedependency.json',
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
+                data:  data
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        
         function Create(user) {
             var req = {
                 method: 'POST',
                 url: 'http://'+hostName+':3000/users.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json'  } ,
                 data:  user
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -93,7 +113,8 @@
             var req = {
                 method: 'POST',
                 url: 'http://'+hostName+':3000/organisational_units.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
                 data:  unit
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -102,7 +123,8 @@
             var req = {
                 method: 'PUT',
                 url: unit.url,
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
                 data:  unit
                 //{"id":unit.id,"unit_name":unit.unit_name}
             }
@@ -112,9 +134,57 @@
             var req = {
                 method: 'PUT',
                 url: 'http://'+hostName+':3000/resources/' + resource.id + '.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
+                // data:  {"resource":resource}
                 data:  resource
                 //{"id":unit.id,"unit_name":unit.unit_name}
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        
+        function deleteRole(id) {
+            var req = {
+                method: 'DELETE',
+                url: 'http://'+hostName+':3000/roles/' + id + '.json',
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        function deleteUnit(id) {
+            var req = {
+                method: 'DELETE',
+                url: 'http://'+hostName+':3000/organisational_units/' + id + '.json',
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        function deleteSkill(id) {
+            var req = {
+                method: 'DELETE',
+                url: 'http://'+hostName+':3000/skills/' + id + '.json',
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        function deleteService(id) {
+            var req = {
+                method: 'DELETE',
+                url: 'http://'+hostName+':3000/services/' + id + '.json',
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        function deleteResource(id) {
+            var req = {
+                method: 'DELETE',
+                url: 'http://'+hostName+':3000/resources/' + id + '.json',
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
@@ -122,7 +192,8 @@
             var req = {
                 method: 'PUT',
                 url: 'http://'+hostName+':3000/services/' + ser.id + '.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
                 data:  ser
                 //{"id":unit.id,"unit_name":unit.unit_name}
             }
@@ -132,7 +203,8 @@
             var req = {
                 method: 'PUT',
                 url: 'http://'+hostName+':3000/organisational_units/' + unit.id + '.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
                 data:  unit
                 //{"id":unit.id,"unit_name":unit.unit_name}
             }
@@ -143,7 +215,8 @@
             var req = {
                 method: 'PUT',
                 url: 'http://'+hostName+':3000/roles/' + role.id + '.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
                 data:  role
                 //{"id":unit.id,"unit_name":unit.unit_name}
             }
@@ -154,7 +227,8 @@
             var req = {
                 method: 'POST',
                 url: 'http://'+hostName+':3000/roles.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
                 data:  unit
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -163,7 +237,8 @@
             var req = {
                 method: 'POST',
                 url: 'http://'+hostName+':3000/freeresources.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
                 data:  date
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -172,7 +247,8 @@
             var req = {
                 method: 'POST',
                 url: 'http://'+hostName+':3000/disenresourcedates.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
                 data:  data
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -182,7 +258,8 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/organisational_units.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                            "accessToken" : $cookieStore.get('globals').currentUser.accesstoken } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
@@ -190,7 +267,8 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/service_units/'+id+'.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
@@ -198,7 +276,8 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/services/'+id+'.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
@@ -206,7 +285,8 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/accounts-services/'+id+'.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
@@ -214,7 +294,8 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/managers.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
@@ -222,7 +303,8 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/roles.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
@@ -230,7 +312,8 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/accounts.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
@@ -238,7 +321,17 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/accounts/'+id+'.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        function deleteAccount(id) {
+            var req = {
+                method: 'DELETE',
+                url: 'http://'+hostName+':3000/accounts/'+id+'.json',
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
@@ -246,7 +339,8 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/resources.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
@@ -254,7 +348,8 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/filtered-resources/'+id+'.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
@@ -262,7 +357,8 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/allfiltered-resources/'+id+'.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
@@ -271,7 +367,8 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/skills.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
@@ -279,7 +376,8 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/services.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
@@ -289,7 +387,8 @@
             var req = {
                 method: 'POST',
                 url: 'http://'+hostName+':3000/account-details.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
                 data:  account
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -298,7 +397,8 @@
             var req = {
                 method: 'POST',
                 url: 'http://'+hostName+':3000/resource-occupied.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
                 data:  {'resources': res}
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -307,7 +407,8 @@
             var req = {
                 method: 'POST',
                 url: 'http://'+hostName+':3000/resource-new-occupied.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
                 data:  {'resources': res}
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -319,7 +420,8 @@
             var req = {
                 method: 'POST',
                 url: 'http://'+hostName+':3000/accounts.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
                 data:  account
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -328,7 +430,8 @@
             var req = {
                 method: 'POST',
                 url: 'http://'+hostName+':3000/resources.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
                 data:  resource
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -338,7 +441,8 @@
             var req = {
                 method: 'POST',
                 url: 'http://'+hostName+':3000/resources-dates.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
                 data:  {'resources': resource}
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -348,7 +452,8 @@
             var req = {
                 method: 'POST',
                 url: 'http://'+hostName+':3000/new-dates.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
                 data:  arg
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -358,7 +463,8 @@
             var req = {
                 method: 'POST',
                 url: 'http://'+hostName+':3000/skill-dates.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
                 data:  {'skills': skill}
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -368,7 +474,8 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/resources/'+id+'.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
             
@@ -377,7 +484,8 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/organisational_units/'+id+'.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
             
@@ -386,7 +494,8 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/roles/'+id+'.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
             
@@ -395,7 +504,8 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/skills/'+id+'.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
             
@@ -404,7 +514,8 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/account-resources/'+id+'.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
             
@@ -413,7 +524,8 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/mapped-resources/'+id+'.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
             
@@ -423,7 +535,8 @@
             var req = {
                 method: 'POST',
                 url: 'http://'+hostName+':3000/skills.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
                 data:  skill
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
@@ -433,7 +546,8 @@
             var req = {
                 method: 'POST',
                 url: 'http://'+hostName+':3000/services.json',
-                headers : { 'Content-Type': 'application/json' } ,
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
                 data:  service
             }
             return $http(req).then(function(response){return response;},function(response){return response;});

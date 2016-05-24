@@ -5,12 +5,13 @@
     .module('app')
     .controller('HomeController', HomeController);
 
-    HomeController.$inject = ['UserService','$timeout','$scope', '$rootScope','$compile','uiCalendarConfig'];
-    function HomeController(UserService,$timeout,$scope, $rootScope,$compile,uiCalendarConfig) {
+    HomeController.$inject = ['UserService','$timeout','$cookieStore','$scope', '$rootScope','$compile','uiCalendarConfig'];
+    function HomeController(UserService,$timeout,$cookieStore,$scope, $rootScope,$compile,uiCalendarConfig) {
           //
 
           var date = new Date();
           $rootScope.shownav=true;
+          $rootScope.rootAccess =  $cookieStore.get("rootAccess");
           var d = date.getDate();
           var m = date.getMonth();
           var y = date.getFullYear();
@@ -46,12 +47,16 @@
                       angular.forEach($scope.resourcemodel, function (obj) {
                          newResourceEvents.push(obj.id);
                        });
-                   UserService.getNewDates({"accounts":newAccEvents.join(),"skills":newSkillEvents.join(),"resources":newResourceEvents.join()}).then(function (response) {
+                var startdate=$('#mycalendar').fullCalendar('getView').start.format('x');
+                var enddate = ($('#mycalendar').fullCalendar('getView').end.format('x'));
+                   UserService.getNewDates({"accounts":newAccEvents.join(),"skills":newSkillEvents.join(),"resources":newResourceEvents.join(),'startdate':startdate,'enddate':enddate}).then(function (response) {
                           angular.forEach(response.data, function (object) {
                              newEvents.push({
                               title: object.title,
                               start: new Date(Number(object.start)+19800),
                               allDay: true,
+                              description: object.description,
+                              type: object.type,
                             });
                      });
                         angular.copy(newEvents, $scope.events);
@@ -68,6 +73,7 @@
                               title: object.title,
                               start: new Date(Number(object.start)),
                               allDay: true,
+                              description:"",
                             });
                      });
                         angular.copy(newFreeEvents, $scope.events);
@@ -194,9 +200,15 @@
           if($scope.type=="free"){
           var s="background-color:#378006;border-color:#378006";
         }else{
+          if (event.type=="free") {
+          var s="background-color:#378006;border-color:#378006";
+          } else{
           var s="background-color:#8B4513;border-color:#8B4513";
+          };
         }
-        element.attr({'tooltip': event.title,
+        element.attr({
+          // 'tooltip': event.description.split("|").join('\n'),
+          'tooltip': event.description.split("|").join(','),
           'style':s,
          'tooltip-append-to-body': true,
           'eventColor': '#378006'});
@@ -442,7 +454,7 @@
             enableSearch: true,
             displayProp:'account_name',
             idProp:'id',
-            externalIdProp:'id',
+            externalIdProp:'',
             // selectionLimit: 1,
             // showUncheckAll :false,
             // closeOnSelect:true,

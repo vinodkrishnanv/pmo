@@ -9,10 +9,8 @@
 
     </div>
     <div  ui-view="modal"></div>
-<div class="grid" ui-grid="vm.gridOptions" ui-grid-edit ui-grid-resize-columns>
+<div class="grid" ui-grid="vm.gridOptions" external-scopes="$scope"  ui-grid-edit ui-grid-resize-columns>
   <div class="watermark" ng-show="!vm.gridOptions.data.length">No data available</div>
 </div>
-<!-- <div>{{resmodel}}</div> -->
-
 </div>
 

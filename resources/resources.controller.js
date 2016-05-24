@@ -4,14 +4,16 @@
     angular
         .module('app')
         .controller('ResourcesController', ResourcesController)
-        .controller('ResourcesEditController', ResourcesEditController);
+        .controller('ResourcesEditController', ResourcesEditController)
+        .controller('ResourcesDeleteController', ResourcesDeleteController);
         //.controller('RowEditCtrl', RowEditCtrl)
         //.service('RowResourceEditor', RowResourceEditor)
-	ResourcesController.$inject = ['$rootScope','$state','$timeout','$scope','$log','$http','UserService', '$location', 'FlashService','$routeParams'];
-	function ResourcesController($rootScope,$state,$timeout,$scope,$log,$http,UserService, $location,FlashService,$routeParams) {
+	ResourcesController.$inject = ['$rootScope','$state','$cookieStore','$timeout','$scope','$log','$http','UserService', '$location', 'FlashService','$routeParams'];
+	function ResourcesController($rootScope,$state,$cookieStore,$timeout,$scope,$log,$http,UserService, $location,FlashService,$routeParams) {
 
         var vm = this;
         $rootScope.shownav=true;
+        $rootScope.rootAccess =  $cookieStore.get("rootAccess");
         var jsonstring="";
         vm.saveresource = saveresource;
         //vm.getSkilldata = getSkilldata;
@@ -102,12 +104,12 @@ $scope.example13settings = {
 	enableSearch: true,
     
 };
-
+$scope.$scope = $scope;
 vm.gridOptions = {
    enableColumnResizing: true,
    enableCellEdit: false,
     columnDefs: [
-    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/resources/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a></div>', width: 60 ,enableCellEdit: true},
+    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/resources/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a>&nbsp<a href="#/resources/delete/{{row.entity.id}}"  ><button type="button" class="btn btn-xs danger-class"  ><i  class="fa fa-trash"></i></button></a></div>', width: 70 },
     { name: 'employee_name', width: 260 },
       { name: 'employee_id' , width: 130},
       { name: 'role' , width: 180},
@@ -117,94 +119,15 @@ vm.gridOptions = {
     ]
 
   };
+  $scope.removeaccount = function(id) {
+        console.log(id);
+      }; 
   //vm.gridOptions.columnDefs[6].visible = false;
   UserService.getResources()
      .then(function (response) {
       vm.gridOptions.data = response.data;
      });
     }
-
-
-
-// RowResourceEditor.$inject = ['$rootScope', '$modal','UserService'];
-
-// function RowResourceEditor($rootScope, $modal,UserService) {
-
-//   var service = {};
-
-//   service.editRow = editRow;
-
-  
-
-//   function editRow(grid, row) {
-//     $modal.open({
-
-//       templateUrl: 'resources/edit-resource-modal.html',
-
-//       controller: ['$modalInstance', '$rootScope', 'grid', 'row','UserService', '$timeout', '$location', RowEditCtrl],
-
-//       controllerAs: 'vm',
-
-//       resolve: {
-
-//         grid: function () { return grid; },
-
-//         row: function () { return row; }
-
-//       }
-
-//     });
-
-//   }
-
-  
-
-//   return service;
-
-// }
-// function RowEditCtrl($modalInstance, $rootScope, grid, row ,UserService, $timeout, $location ) {
-//   //getSkilldata=ResourcesController.getSkilldata;
-//   var vm = this;
-//   vm.entity = angular.copy(row.entity);
-//   vm.entity.resdata=$rootScope.availableSkillOptions;
-//   vm.entity.ressettings=$rootScope.ressettings;
-//   vm.items = $rootScope.availableHeirarchyOptions;
-//   UserService.getResource(row.entity.id)
-//                           .then(function (response) {                          
-//                             vm.entity.employee_id = response.data.employee_id;
-//                             vm.entity.employee_name=response.data.employee_name;
-//                             vm.entity.heirarchy_id=response.data.heirarchy_id;
-//                             vm.entity.role=response.data.role;
-//                             vm.entity.skill_id=response.data.skill_id;
-
-//                            // vm.entity.resdata=$rootScope.availableSkillOptions; 
-//                             //vm.entity.skill_id=[{"id":2},{"id":3}];
-
-//                             //vm.entity.ressettings=$rootScope.ressettings;
-//                             //vm.items = $rootScope.availableHeirarchyOptions;
-//                            // console.log(vm.entity )
-                            
-//                            });
-//   vm.save = save;
-//   function save() {
-//     // Copy row values over
-//     row.entity = angular.extend(row.entity, vm.entity);
-//     $modalInstance.close(row.entity);
-//     var resource = {};
-//     resource.id=vm.entity.id;
-//     resource.employee_id=vm.entity.employee_id;
-//     resource.employee_name=vm.entity.employee_name;
-//     resource.heirarchy_id=vm.entity.heirarchy_id;
-//     resource.resmodel=vm.entity.skill_id;
-//     resource.role=vm.entity.role;
-//     UserService.editResource(resource).then(function (response) {
-//        row.entity = angular.extend(row.entity, response.data.success);
-//         $modalInstance.close(row.entity);
-//      });
-//   }
-
-// }
-
 
 ResourcesEditController.$inject = ['$scope','$state','$rootScope','$log','$http','UserService', '$location', 'FlashService','$timeout','$routeParams'];
 function ResourcesEditController($scope,$state,$rootScope,$log,$http,UserService, $location,FlashService,$timeout,$routeParams) {
@@ -266,6 +189,42 @@ for(var i = 0; i < $rootScope.availableHeirarchyOptions.length; i++)
 
   }
 
+
+
+ResourcesDeleteController.$inject = ['$rootScope','$scope','$state','$log','$http','UserService', '$location', 'FlashService', 'RowEditor', '$timeout','$routeParams'];
+function ResourcesDeleteController($rootScope,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor,$timeout,$routeParams) {
+  var vm=this;
+   vm.deleteresource = deleteresource;
+   $scope.deltext="";
+  var splits=$location.url().toString().split("/");
+  UserService.deleteDependency({"type":"resource","data":splits[splits.length - 1]})
+                  .then(function (response) {
+                    if(response.data){
+                      $scope.deltext="The data you are trying to delete has a dependency and will be deleted if you proceed";
+                    }
+                  });
+  function deleteresource() {
+          vm.dataLoading = true;
+              UserService.deleteResource(splits[splits.length - 1])
+                  .then(function (response) {
+                    console.log(response.status);
+                      if (response.status==204) {
+                          FlashService.Success('Delete successful', true);
+                          vm.dataLoading = false;
+                          $state.go("resources", {}, {reload: true});
+                          // UserService.getAccounts()
+                          //   .then(function (response) {
+                          //      vm.gridOptions.data = response.data;
+                          //    });
+                      } else {
+                          FlashService.Error(response.message);
+                          vm.dataLoading = false;
+                      }
+                      // $state.go("account");
+                  });
+              
+          }
+  }
 
      
     

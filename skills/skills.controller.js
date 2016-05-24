@@ -5,13 +5,15 @@
         .module('app')
         .controller('SkillController', SkillController)
         .controller('SkillEditController', SkillEditController)
+        .controller('SkillDeleteController', SkillDeleteController)
         .controller('RowEditCtrl', RowEditCtrl)
         .service('RowEditor', RowEditor);
-	SkillController.$inject = ['$rootScope','$timeout','$scope','$state','$log','$http','UserService', '$location', 'FlashService','RowEditor'];
-	function SkillController($rootScope,$timeout,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor) {
+	SkillController.$inject = ['$rootScope','$timeout','$cookieStore','$scope','$state','$log','$http','UserService', '$location', 'FlashService','RowEditor'];
+	function SkillController($rootScope,$timeout,$cookieStore,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor) {
 
         var vm = this;
         $rootScope.shownav=true;
+        $rootScope.rootAccess =  $cookieStore.get("rootAccess");
         var jsonstring="";
         vm.saveskill = saveskill;
         var rowIndexTemp = 0;
@@ -94,7 +96,7 @@ $scope.example13settings = {
 vm.gridOptions = {
 
     columnDefs: [
-    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/skill/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a></div>', width: 60 },
+    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/skill/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a>&nbsp<a href="#/skill/delete/{{row.entity.id}}"  ><button type="button" class="btn btn-xs danger-class"  ><i  class="fa fa-trash"></i></button></a></div>', width: 70 },
     { name: 'skill_name' },
       { name: 'skill_type' },
       { name: 'skill_code' },
@@ -204,6 +206,40 @@ function SkillEditController($scope,$log,$state,$http,UserService, $location,Fla
   
       
 
+  }
+
+SkillDeleteController.$inject = ['$rootScope','$scope','$state','$log','$http','UserService', '$location', 'FlashService', 'RowEditor', '$timeout','$routeParams'];
+function SkillDeleteController($rootScope,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor,$timeout,$routeParams) {
+  var vm=this;
+   vm.deleteskill = deleteskill;
+   
+  var splits=$location.url().toString().split("/");
+  $scope.deltext="";
+  UserService.deleteDependency({"type":"skill","data":splits[splits.length - 1]})
+                  .then(function (response) {
+                    if(response.data){
+                      $scope.deltext="The data you are trying to delete has a dependency and will be deleted if you proceed";
+                    }
+                  });                     
+  function deleteskill() {
+              vm.dataLoading = true;
+              UserService.deleteSkill(splits[splits.length - 1])
+                  .then(function (response) {
+                      if (response.status==204) {
+                          FlashService.Success('Delete successful', true);
+                          vm.dataLoading = false;
+                          $state.go("skill", {}, {reload: true});
+                          // UserService.getAccounts()
+                          //   .then(function (response) {
+                          //      vm.gridOptions.data = response.data;
+                          //    });
+                      } else {
+                          FlashService.Error(response.message);
+                          vm.dataLoading = false;
+                      }
+                      // $state.go("account");
+                  });
+          }
   }
 
 

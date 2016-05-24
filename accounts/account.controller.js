@@ -24,19 +24,20 @@
   })*/
    .controller('AccountController', AccountController)
    .controller('AccountEditController', AccountEditController)
+   .controller('AccountDeleteController', AccountDeleteController)
 
   .controller('RowAccountEditCtrl', RowAccountEditCtrl)
 
   .service('RowAccountEditor', RowAccountEditor);
-  	AccountController.$inject = ['$rootScope','$scope','$state','$log','$http','UserService', '$location', 'FlashService', 'RowEditor', '$timeout','$routeParams'];
-  	function AccountController($rootScope,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor,$timeout,$routeParams) {
+  	AccountController.$inject = ['$rootScope','$cookieStore','$scope','$state','$log','$http','UserService', '$location', 'FlashService', 'RowEditor', '$timeout','$routeParams'];
+  	function AccountController($rootScope,$cookieStore,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor,$timeout,$routeParams) {
   		var vm = this;
         $rootScope.shownav=true;
+        $rootScope.rootAccess =  $cookieStore.get("rootAccess");
           vm.clickHandlers = RowAccountEditor.editAccountRow;
           vm.saveaccount = saveaccount;
           vm.getaccount = getaccount;
           vm.getServices = getServices;
-          
           var rowIndexTemp = 0;
     var colKeyTemp = '';
     var availOrgan ='';
@@ -104,7 +105,7 @@ $scope.datepickerConfig = {
     vm.gridOptions = {
 
       columnDefs: [
-      { name: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/account/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary"  ><i class="fa fa-edit"></i></button></a></div>', width: 60 },
+      { name: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/account/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary"  ><i class="fa fa-edit"></i></button></a>&nbsp<a href="#/account/delete/{{row.entity.id}}"  ><button type="button" class="btn btn-xs danger-class"  ><i  class="fa fa-trash"></i></button></a></div>', width: 70 },
       { name: 'account_name',minWidth: 260 },
       { name: 'account_code',minWidth: 130 },
         { name: 'organisational_unit_code' ,displayName:'OU Code',minWidth: 130},
@@ -154,7 +155,6 @@ $scope.datepickerConfig = {
     $timeout(function () {
           UserService.getUnits()
                            .then(function (response) {
-                            console.log(response.data)
                             $rootScope.availOrgan = response.data;
                            $scope.data.availableOptions= $rootScope.availOrgan;
                            });
@@ -164,7 +164,6 @@ $scope.datepickerConfig = {
                            .then(function (response) {
                             $rootScope.availableManagers = response.data.success;
                             $scope.data.availableManagerOptions = $rootScope.availableManagers;
-                            console.log($scope.data.availableManagerOptions);
                             //$scope.resdata = response.data;
                            });
                          },3000);
@@ -180,7 +179,13 @@ $scope.datepickerConfig = {
           $scope.selectRange = 1;
           $scope.minEndDate=Math.min.apply(Math, $scope.accountrangeDates);
           $scope.maxEndDate=Math.max.apply(Math, $scope.accountrangeDates);
-      }
+      };
+      // function removeaccount() {
+      //   alert("sdsd");
+      // };
+      $scope.removeaccount = function(id) {
+        alert(id);
+      }; 
       $rootScope.sersettings  = $scope.sersettings  = {
     scrollableHeight: '200px',
       scrollable: true,
@@ -249,11 +254,6 @@ $scope.datepickerConfig = {
       availableAnticipatedValueCurrency: $rootScope.availableAnticipatedValueCurrency,
      };
           $scope.message = 'Look! I am an Account page.';
-          //if($routeParams.param1){
-            console.log($location.url());
-            // 
-            // vm.account.account_name="Test";
-          //}
 
   }
 
@@ -391,6 +391,39 @@ function AccountEditController($rootScope,$scope,$state,$log,$http,UserService, 
       
 
   }
+
+
+
+  AccountDeleteController.$inject = ['$rootScope','$scope','$state','$log','$http','UserService', '$location', 'FlashService', 'RowEditor', '$timeout','$routeParams'];
+function AccountDeleteController($rootScope,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor,$timeout,$routeParams) {
+  var vm=this;
+   vm.deleteaccount = deleteaccount;
+   
+  var splits=$location.url().toString().split("/");
+  $scope.deltext="";
+  UserService.deleteDependency({"type":"account","data":splits[splits.length - 1]})
+                  .then(function (response) {
+                    if(response.data){
+                      $scope.deltext="The data you are trying to delete has a dependency and will be deleted if you proceed";
+                    }
+                  });                       
+  function deleteaccount() {
+              vm.dataLoading = true;
+              UserService.deleteAccount(splits[splits.length - 1])
+                  .then(function (response) {
+                      if (response.status==204) {
+                          FlashService.Success('Delete successful', true);
+                          vm.dataLoading = false;
+                          $state.go("account", {}, {reload: true});
+                      } else {
+                          FlashService.Error(response.message);
+                          vm.dataLoading = false;
+                      }
+                  });
+          }
+  }
+
+  
 
 
 

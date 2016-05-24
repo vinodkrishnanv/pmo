@@ -4,12 +4,14 @@
     angular
         .module('app')
         .controller('ServicesController', ServicesController)
-        .controller('ServicesEditController', ServicesEditController);
-	ServicesController.$inject = ['$rootScope','$timeout','$scope','$state','$log','$http','UserService', '$location', 'FlashService','RowEditor'];
-	function ServicesController($rootScope,$timeout,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor) {
+        .controller('ServicesEditController', ServicesEditController)
+        .controller('ServicesDeleteController', ServicesDeleteController);
+	ServicesController.$inject = ['$rootScope','$timeout','$cookieStore','$scope','$state','$log','$http','UserService', '$location', 'FlashService','RowEditor'];
+	function ServicesController($rootScope,$timeout,$cookieStore,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor) {
 
         var vm = this;
         $rootScope.shownav=true;
+        $rootScope.rootAccess =  $cookieStore.get("rootAccess");
         var jsonstring="";
         vm.saveservice = saveservice;
         var rowIndexTemp = 0;
@@ -106,7 +108,7 @@ $scope.example13settings = {
 vm.gridOptions = {
 
     columnDefs: [
-    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/services/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a></div>', width: 60 },
+    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/services/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a>&nbsp<a href="#/services/delete/{{row.entity.id}}"  ><button type="button" class="btn btn-xs danger-class"  ><i  class="fa fa-trash"></i></button></a></div>', width: 70 },
     { name: 'service_name' },
       { name: 'service_code' },
     ]
@@ -164,6 +166,35 @@ function ServicesEditController($scope,$log,$state,$http,UserService, $location,
   
       
 
+  }
+
+  ServicesDeleteController.$inject = ['$rootScope','$scope','$state','$log','$http','UserService', '$location', 'FlashService', 'RowEditor', '$timeout','$routeParams'];
+function ServicesDeleteController($rootScope,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor,$timeout,$routeParams) {
+  var vm=this;
+   vm.deleteservice = deleteservice;
+   
+  var splits=$location.url().toString().split("/");
+  $scope.deltext="";
+  UserService.deleteDependency({"type":"service","data":splits[splits.length - 1]})
+                  .then(function (response) {
+                    if(response.data){
+                      $scope.deltext="The data you are trying to delete has a dependency and will be deleted if you proceed";
+                    }
+                  });                 
+  function deleteservice() {
+              vm.dataLoading = true;
+              UserService.deleteService(splits[splits.length - 1])
+                  .then(function (response) {
+                      if (response.status==204) {
+                          FlashService.Success('Delete successful', true);
+                          vm.dataLoading = false;
+                          $state.go("services", {}, {reload: true});
+                      } else {
+                          FlashService.Error(response.message);
+                          vm.dataLoading = false;
+                      }
+                  });
+          }
   }
 
 

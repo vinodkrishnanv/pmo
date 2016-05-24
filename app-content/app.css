@@ -7,6 +7,10 @@
   #menuitem-4, #menuitem-5, #menuitem-6 {
     display: none;
 }
+.danger-class{
+  background:#d9534f;
+  color:white;
+}
 .fc-left > h2 {
     font-size: 21px;
     font-weight: bold;
@@ -325,6 +329,22 @@ height: 49px;
 .form-account{
   
 }
+.Modal-Inner {
+    background: #ffffff none repeat scroll 0 0;
+    border-radius: 8px;
+    margin: auto;
+    padding-bottom: 75px;
+    width: 33%;
+}
+.newwrapper ul {
+    border: 1px solid #d4d4d4;
+    border-radius: 6px;
+    min-height: 82px;
+    min-width: 100%;
+}
+.newwrapper ul li {
+    padding: 3px;
+}
 .Modal-holder
 {
   position: fixed;
@@ -338,6 +358,13 @@ height: 49px;
 }
 .Modal-holder-project div#mycalendar{
   width: 50%
+}
+.Modal-holder-project button#cancel{
+  float: left !important;
+}
+
+div#mycalendar{
+  float: left;
 }
 .row.single {
     margin-left: 25%;
@@ -636,6 +663,9 @@ body > .ui-select-bootstrap.open {
 }
 .labelcustom{
   color:#ffffff;
+}
+.Modal-Inner h2.labelcustom{
+ color:black; 
 }
 
 /*Select 2 end*/

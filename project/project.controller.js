@@ -5,8 +5,8 @@
                 .module('app')
                 .controller('ProjectController', ProjectController)
                 .directive('overlay',ProjectDirective);
-        	ProjectController.$inject = ['$state','$rootScope','$anchorScroll','$scope','$log','$http','UserService', '$location', 'FlashService','RowEditor','$filter','$q','uiCalendarConfig'];
-        	function ProjectController($state,$rootScope,$anchorScroll,$scope,$log,$http,UserService, $location,FlashService,RowEditor,$filter,$q,uiCalendarConfig) {
+        	ProjectController.$inject = ['$state','$rootScope','$cookieStore','$anchorScroll','$scope','$log','$http','UserService', '$location', 'FlashService','RowEditor','$filter','$q','uiCalendarConfig'];
+        	function ProjectController($state,$rootScope,$cookieStore,$anchorScroll,$scope,$log,$http,UserService, $location,FlashService,RowEditor,$filter,$q,uiCalendarConfig) {
             
                 var vm = this;
                 var splits=$location.url().toString().split("/");
@@ -19,6 +19,7 @@
                 }
                 var rTEvents = [];
                 $rootScope.shownav=true;
+                $rootScope.rootAccess =  $cookieStore.get("rootAccess");
                 $scope.type = "range";
                 $scope.class=="red";
                 $scope.end = new Date();
@@ -197,6 +198,20 @@
                                                             $scope.addresmodel=$scope.showreshere=1;
                                                             $scope.calrangemodel=0;
                                                            },
+                              onItemDeselect: function(item) {
+                                console.log(item.id)
+                                                            var rs=$filter('filter')($scope.resmodel, {id: item.id});
+                                                            if(rs[0]){
+                                                            for (var i = $scope.resmodel.length - 1; i >= 0; i--) {
+                                                                  if ($scope.resmodel[i].id==item.id) {
+                                                                      $scope.resmodel.splice(i, 1);
+                                                                  }
+                                                              }                                                
+                                                            }
+                                                           },
+                                                            onDeselectAll: function() {
+                                                              $scope.resmodel.length=0;
+                                                            },
                                 };
         $scope.accountmodel = [];
         UserService.getAccounts().then(function (response) {
