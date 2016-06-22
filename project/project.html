@@ -3,16 +3,27 @@
   <div class="jumbotron text-center">
     <div  ui-view="modal"></div>
     <div class="row">
-      <div class="col-md-2 text-left">
-       <!--  {{selectedDates}}
-        {{accountmodel}} -->
+      <div class="col-md-3">
+      <div class="col-md-6 text-left">
         <label for="username">Account name</label>
       </div>
-      <div class="col-md-3 text-left">
+      <div class="col-md-6 text-left">
         <div ng-dropdown-multiselect="" events="accountEvents" options="accountdata" date-selected='dselect(date)' selected-model="accountmodel" extra-settings="accountsettings"></div>
        
       </div>
-      <div class="col-md-4" ng-show="calmodel">
+      </div>
+
+      <div class="col-md-3" ng-show= 'accountmodel.id'>
+        <div class="col-md-6 text-left">
+          <label for="username">Service name</label>
+        </div>
+        <div class="col-md-6 text-left">
+          <div ng-dropdown-multiselect="" events="serEvents" options="serdata"  selected-model="sermodel" extra-settings="sersettings"></div>
+         
+        </div>
+      </div>
+
+      <div class="col-md-3" ng-show="calmodel">
       <div class="col-md-6 text-left">
           <label for="username">Select People</label>
         </div>
@@ -28,8 +39,6 @@
     </div>
     <div class="row" ng-show="showaccountdates">
       <div class="col-md-2 text-left">
-       <!--  {{selectedDates}}
-        {{accountmodel}} -->
         <label for="username">Account Timeline</label>
       </div>
       <div class="col-md-3 text-left">
@@ -55,6 +64,8 @@
         <div class="col-md-4 hide text-right">
           <div ng-dropdown-multiselect=""  events="yourEvents" options="example13model" selected-model="resmodel" extra-settings="ressettings"></div>
          </div>
+         <!-- {{resmodel}} -->
+         <!-- {{items}} -->
         <div class="col-md-3 text-right">
           <label for="username">Percentage Loaded</label>
         </div>
@@ -69,7 +80,7 @@
          </div> 
          <br><br><br><br>
          <div class="row">
-         <div class="col-md-6">
+         <div class="col-md-5">
             <div ng-show="resource" >
               <div style='display:inline-block; vertical-align:top'>
                 <div id='btn-group' class='btn-group hideoncalendar'>
@@ -91,17 +102,20 @@
             </div>
             <br>
             <div ng-show="resource">     
-          <button class="btn btn-primary" ng-disabled="!selectedDates.length || !resmodel.length" ng-click="add(resource,singleres,selectedDates)">Add</button>
+          <button class="btn btn-primary" ng-disabled="!selectedDates.length || !resmodel.length || !sermodel.id" ng-click="add(resource,singleres,selectedDates)">Add</button>
           </div>
          </div>
 
-         <div id="wrapper" class="wrapper col-md-6">
-        <div id="inner-wrapper" class="inner-wrapper parent" ng-repeat="n in items">
+         <div id="wrapper" class="wrapper col-md-7">
+        <div id="inner-wrapper" class="inner-wrapper parent" ng-repeat="n in items |  orderBy:'resource_id' | orderBy : 'service_id' ">
+          <!-- <div ng-show="showservice({{n.service_id}})">
+            <div class="col-md-6">{{n.service_id}}</div>
+        </div> -->
       <div class="one-col row">
-        <div class="col-md-6">{{n.name}}</div>
-        <div class="col-md-6">{{n.percentage_loaded}}%</div>
+        <div class="col-md-9">{{n.name}}({{n.service_code}})</div>
+        <div class="col-md-3">{{n.percentage_loaded}}%</div>
         </div>
-      <div class="two-col "><div class="col-md-11">{{n.minDate | date:'MMM d, y'}} -- {{n.maxDate | date:'MMM d, y'}}</div><i class="fa fa-times" ng-click="remresdate({{n.resource_id}})" aria-hidden="true"></i>
+      <div class="two-col "><div class="col-md-11">{{n.minDate | date:'MMM d, y'}} -- {{n.maxDate | date:'MMM d, y'}}</div><i class="fa fa-times" ng-click="remresdate({{n.resource_id}},{{n.service_id}})" aria-hidden="true"></i>
 <!-- <table>
         <div ng-repeat="task in n.Dates">
               {{task | date:'MMM d, y'}}

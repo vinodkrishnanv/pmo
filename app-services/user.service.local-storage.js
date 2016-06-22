@@ -46,6 +46,7 @@
         service.getResourceDates = getResourceDates;
         service.getFreeResourceDates = getFreeResourceDates;
         service.getMappedResource=getMappedResource;
+        service.getModeledResource=getModeledResource;
         service.getallFilteredResources=getallFilteredResources;
         service.validateResDetails=validateResDetails;
         service.validateNewResDetails=validateNewResDetails;
@@ -409,7 +410,8 @@
                 url: 'http://'+hostName+':3000/resource-new-occupied.json',
                 headers : { 'Content-Type': 'application/json',
                 "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
-                data:  {'resources': res}
+                // data:  {'resources': res}
+                data:   res
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
@@ -524,6 +526,16 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/mapped-resources/'+id+'.json',
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+            
+        }
+        function getModeledResource(id) {
+            var req = {
+                method: 'GET',
+                url: 'http://'+hostName+':3000/model-resources/'+id+'.json',
                 headers : { 'Content-Type': 'application/json',
                 "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }

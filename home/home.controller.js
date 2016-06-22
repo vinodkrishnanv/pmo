@@ -24,6 +24,7 @@
             };
 
             $scope.accountmodel = [];
+            $scope.sermodel = [];
             $scope.skillmodel = [];
             $scope.eventSources = [fetchEvents];
 
@@ -38,6 +39,11 @@
                       angular.forEach($scope.accountmodel, function (obj) {
                          newAccEvents.push(obj.id);
                        });
+                      var newSerEvents=[];
+                      var newSeEvents=[];
+                      angular.forEach($scope.sermodel, function (obj) {
+                         newSerEvents.push(obj.id);
+                       });
                       var newSkillEvents=[];
                       var newSkEvents=[];
                       angular.forEach($scope.skillmodel, function (obj) {
@@ -47,9 +53,13 @@
                       angular.forEach($scope.resourcemodel, function (obj) {
                          newResourceEvents.push(obj.id);
                        });
+                      if($scope.accountmodel.length > 1){
+                        newSerEvents.length = 0;
+                        $scope.sermodel.length = 0;
+                      }
                 var startdate=$('#mycalendar').fullCalendar('getView').start.format('x');
                 var enddate = ($('#mycalendar').fullCalendar('getView').end.format('x'));
-                   UserService.getNewDates({"accounts":newAccEvents.join(),"skills":newSkillEvents.join(),"resources":newResourceEvents.join(),'startdate':startdate,'enddate':enddate}).then(function (response) {
+                   UserService.getNewDates({"accounts":newAccEvents.join(),"services":newSerEvents.join(),"skills":newSkillEvents.join(),"resources":newResourceEvents.join(),'startdate':startdate,'enddate':enddate}).then(function (response) {
                           angular.forEach(response.data, function (object) {
                              newEvents.push({
                               title: object.title,
@@ -254,6 +264,27 @@
 
         $scope.accountEvents = {
          onItemSelect: function(item) {
+          UserService.getAccountServices(item.id).then(function (response) {
+            $scope.serdata = response.data.service_id ;
+          });
+          $scope.type="filter";
+          $scope.eventSources=[fetchEvents];
+          $('#mycalendar').fullCalendar('refetchEvents') ;
+          },
+          onItemDeselect: function(item) {
+          $scope.type="filter";
+          $scope.eventSources=[fetchEvents];
+          $('#mycalendar').fullCalendar('refetchEvents') ;
+          },
+          onDeselectAll: function() {
+          $scope.accountmodel.length=0;
+          $scope.type="filter";
+          $scope.eventSources=[fetchEvents];
+          $('#mycalendar').fullCalendar('refetchEvents') ;
+          },
+        };
+        $scope.serEvents = {
+         onItemSelect: function(item) {
           $scope.type="filter";
           $scope.eventSources=[fetchEvents];
           $('#mycalendar').fullCalendar('refetchEvents') ;
@@ -453,6 +484,20 @@
             scrollable: true,
             enableSearch: true,
             displayProp:'account_name',
+            idProp:'id',
+            externalIdProp:'',
+            // selectionLimit: 1,
+            // showUncheckAll :false,
+            // closeOnSelect:true,
+            buttonClasses:"smbutton btn btn-default"
+
+          };
+           $scope.sersettings = {
+            // smartButtonMaxItems: 1,
+            scrollableHeight: '200px',
+            scrollable: true,
+            enableSearch: true,
+            displayProp:'service_code',
             idProp:'id',
             externalIdProp:'',
             // selectionLimit: 1,

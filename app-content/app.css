@@ -7,6 +7,11 @@
   #menuitem-4, #menuitem-5, #menuitem-6 {
     display: none;
 }
+.col-md-3.bg-account {
+    border: 1px solid #d4d4d4;
+    border-radius: 5px;
+    padding: 8px 0;
+}
 .danger-class{
   background:#d9534f;
   color:white;
@@ -18,6 +23,9 @@
 .fc-today{
   /*background-color: #caecfe !important;*/
   background-color: yellow !important;
+}
+.max-width{
+  max-width: 100% !important;
 }
 .fc-day{
   background-color: #ffffff;
@@ -245,7 +253,7 @@ ul.custom-nav li{
   padding: 3px; /* Delete this line to remove the blue colour on columns. */
 }
 .one-col {
-  width: 180px;
+  width: 300px;
   font-size: 16px;
 }
 

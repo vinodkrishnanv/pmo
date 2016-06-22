@@ -72,27 +72,7 @@
           if(day==0 || day==6){
             return true;
           }else{
-            //----Loop for disabling date in date selector calendar------
-          //$scope.disdate=[];
-            // if($scope.resmodel.id){
-            //   var keepgoing =1;
-
-
-            //                                                 angular.forEach($scope.disdate, function(value) {
-            //                                                   if(keepgoing){
-            //                                                         if(parseInt(value.start)==(parseInt(date.getTime()) + 19800000)){
-            //                                                          // if((date.getTime() > $scope.newMax) || (date.getTime() < $scope.newMin) ){
-            //                                                             flag = true;
-            //                                                          // }
-            //                                                           keepgoing=0;
-            //                                                         }else{
-            //                                                           flag = false;
-            //                                                           keepgoing=1;
-            //                                                         }
-            //                                                         }
-            //                                                 }); 
-            //                                                 return flag;
-            // }else{
+            
               if($scope.newMax || $scope.newMin){
                 if((date.getTime() > $scope.newMax) || (date.getTime() < $scope.newMin) )
                      return true;
@@ -132,10 +112,14 @@
                                   $scope.resmodel.length=0;
                                   $scope.resource=0;
                                   $scope.IsVisible=$scope.calmodel=$scope.calrangemodel=item.id;
+                                  UserService.getAccountServices(item.id).then(function (response){
+                                    $scope.serdata = response.data.service_id ;
+                                  });
                                   //UserService.getFilteredResources(item.id).then(function (response){
                                   UserService.getallFilteredResources(item.id).then(function (response){
                                     $scope.example13data = response.data ;
-                                    UserService.getMappedResource(item.id).then(function (response){
+                                    UserService.getModeledResource(item.id).then(function (response){
+                                       // UserService.getMappedResource(item.id).then(function (response){
                                       $scope.example13model = response.data;
                                       if($scope.example13model){
                                         $scope.addresmodel=$scope.showreshere=1;
@@ -199,7 +183,6 @@
                                                             $scope.calrangemodel=0;
                                                            },
                               onItemDeselect: function(item) {
-                                console.log(item.id)
                                                             var rs=$filter('filter')($scope.resmodel, {id: item.id});
                                                             if(rs[0]){
                                                             for (var i = $scope.resmodel.length - 1; i >= 0; i--) {
@@ -214,6 +197,7 @@
                                                             },
                                 };
         $scope.accountmodel = [];
+        $scope.sermodel = [];
         UserService.getAccounts().then(function (response) {
         $scope.accountdata = response.data;
         });
@@ -225,6 +209,19 @@
           displayProp:'account_name',
           idProp:'id',
           externalIdProp:'id',
+          selectionLimit: 1,
+          showUncheckAll :false,
+          closeOnSelect:true
+            
+        };
+        $scope.sersettings = {
+          smartButtonMaxItems: 1,
+          scrollableHeight: '200px',
+          scrollable: true,
+          enableSearch: true,
+          displayProp:'service_code',
+          idProp:'id',
+          externalIdProp:'',
           selectionLimit: 1,
           showUncheckAll :false,
           closeOnSelect:true
@@ -312,14 +309,23 @@
                 $scope.calrangemodel = 1;
                 $rootScope.$broadcast('refreshDatepickers');
             }
-            $scope.remresdate = function (value) {
+            $scope.remresdate = function (value,service_id) {
               for (var key in $scope.items) {
-                if($scope.items[key].resource_id == value){
+                if(($scope.items[key].resource_id == value) && $scope.items[key].service_id == service_id){
                    $scope.items.splice(key, 1);
                 }
               }
             }
-
+            var ser = 0;
+            $scope.showservice = function(value){
+              if(ser == value){
+                return 0;
+              }else{
+                ser=value;
+                return 1;
+              }
+            }
+            var resids=[];
             $scope.add = function(resource,singleres,date) {
               var text= 'div.single ul li button' ;
               var myEl = angular.element( document.querySelectorAll( text ) ); 
@@ -327,16 +333,14 @@
                 myEl.removeClass('btn-primary');
                 myEl.addClass('btn-default');
               }
+
               $scope.tempitems=angular.copy($scope.items);
               angular.forEach($scope.resmodel, function(value) {
-              //   var text= 'button'+'#'+value.employee_name+value.id ;
-              //   var myEl = angular.element( document.querySelector( text ) ); 
-              // if(myEl.hasClass("btn-primary")){
-              //   myEl.removeClass('btn-primary');
-              //   myEl.addClass('btn-default');
-              // }
+              if((resids.indexOf(value.id) == -1)){
+                resids.push(value.id);
+              }
               var deferred = $q.defer();
-               var filtered = $filter('filter')($scope.items, { resource_id: value.id });
+               var filtered = $filter('filter')($scope.items, { resource_id: value.id, service_id: $scope.sermodel.id});
                var user = filtered.length ? filtered[0] : null;
                deferred.resolve(user);
               mydata.resource_id=value.id;
@@ -348,9 +352,10 @@
           if(!(day==0 || day==6)){
            newdate.push(value+19800000);
           }
-              // newdate.push(value+19800000);
               });
               mydata.name=value.employee_name;
+              mydata.service_id=$scope.sermodel.id;
+              mydata.service_code=$scope.sermodel.service_code;
               mydata.maxDate= Math.max.apply(Math, date);
               mydata.minDate= Math.min.apply(Math, date);
               mydata.Dates=newdate;
@@ -358,16 +363,19 @@
               var index = $scope.mynewdata.indexOf(mydata);
               $scope.mynewdata.splice(index, 1);
               var flag;
+              var key = $scope.sermodel.id;
               if(filtered.length==0){
-              $scope.items.push(angular.copy(mydata));
+             $scope.items.push(angular.copy(mydata));
               }else{
                 flag=1;
                 for (var key in $scope.items) {
-                if($scope.items[key].resource_id == value.id){
+                if(($scope.items[key].resource_id == value.id) && ($scope.items[key].service_id == $scope.sermodel.id) ){
                   flag=0;
                   $scope.items[key].account_id=angular.copy($scope.accountmodel.id);
                   $scope.items[key].name=angular.copy(value.employee_name);
                   $scope.items[key].Dates=angular.copy(newdate);
+                  $scope.items[key].service_id=angular.copy($scope.sermodel.id);
+                  $scope.items[key].service_code=angular.copy($scope.sermodel.service_code);
                   $scope.items[key].percentage_loaded=angular.copy($scope.singleperSelect);
                   $scope.items[key].maxDate=angular.copy(Math.max.apply(Math, date));
                   $scope.items[key].minDate=angular.copy(Math.min.apply(Math, date));
@@ -378,14 +386,102 @@
                 }
               }
               });
+        var mynewres = {};
+        var newstr= '';
+        angular.forEach($scope.resmodel, function(value) {
+          var resflag=0;
+          var newresflag =0;
+          var sumstr="";
+                var datestring='';
+                for (var key in $scope.items) {
+                  if($scope.items[key].resource_id == value.id){
+                      sumstr=(value.employee_name + " is occupied on the following dates - ");
+                      angular.forEach($scope.items[key].Dates, function(val) {
+                        var keys=val;
+                        if(mynewres[keys]){
+                        mynewres[keys]=mynewres[keys]+Number($scope.items[key].percentage_loaded);
+                        }else{
+                          mynewres[keys]=Number($scope.items[key].percentage_loaded);                      
+                        }
+                        
+                          
+                        if(mynewres[keys] > 100){
+                          resflag=1;
+                          // var datestring='';
+                          var d = new Date(Number(keys));
+                          datestring=datestring+((d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear())+ ",");
+                          // newstr=newstr+(" "+sumstr+datestring)+"<br>";
+                          newresflag=0;
+
+                        }else{
+                          newresflag=1;
+                        }
+                      });    
+        if(resflag){
+          //$scope.items=angular.copy($scope.tempitems);
+          var fi=$filter('filter')($scope.items, {service_id: $scope.sermodel.id});
+                                                            if(fi[0]){
+                                                            for (var i = $scope.items.length - 1; i >= 0; i--) {
+                                                                  if (($scope.items[i].service_id==$scope.sermodel.id) && ($scope.items[i].resource_id==value.id)) {
+                                                                      $scope.myitem=angular.copy($scope.tempitems[i]);
+                                                                      $scope.items.splice(i, 1);
+                                                                      if($scope.myitem){
+                                                                        $scope.items.splice(i, 0,$scope.myitem);
+                                                                      }
+                                                                  }
+                                                              }                                                
+                                                            }
+                                                            
+                         // $scope.items.splice(key, 1);
+
+        }
+                  }
+                }
+                if(datestring){
+                newstr=newstr+(" "+sumstr+datestring)+"<br>";
+                }
+                // newstr=newstr+"<br>";
+               mynewres = {};
+               });
+        if(newstr){
+                FlashService.Error(newstr, true);  
+        }
+        var finalres={};
+        var servces={};
+        angular.forEach(resids, function(value) {
+           var newtempres={};
+           var newser=[];
+          for (var key in $scope.items) {
+                if(($scope.items[key].resource_id == value)){
+                  newser.push($scope.items[key].service_id);
+                  // for (var newkey in $scope.items[key].Dates){
+                     angular.forEach($scope.items[key].Dates, function(val) {
+                    if(newtempres[val]){
+                      newtempres[val] = newtempres[val] + Number($scope.items[key].percentage_loaded);
+                    }else{
+                      newtempres[val] = Number($scope.items[key].percentage_loaded);  
+                    }
+                  });
+                  
+                }
+              }
+              var nkey= value;
+              finalres[nkey] = newtempres;
+              servces[nkey] = newser;
+        });
+        var data = {"resources":finalres,"account_id":$scope.accountmodel.id,"service_ids":servces}
         $scope.resmodel.length = 0;
               var res = {};
                var newstr='';
-              UserService.validateNewResDetails($scope.items).then(function (response){
+               
+
+              // UserService.validateNewResDetails($scope.items).then(function (response){
+                  UserService.validateNewResDetails(data).then(function (response){
+                                                            var errres=[];
                                                             angular.forEach(response.data, function(value) {
                                                               if(value.success==0){
                                                                 for (var key in $scope.items) {
-                                                                  if($scope.items[key].resource_id == value.resource_id){
+                                                                  if(($scope.items[key].resource_id == value.resource_id) && ($scope.items[key].service_id == value.service_id)){
                                                                     if($scope.tempitems[key]){
                                                                       if($scope.tempitems[key].saved){
                                                                       var newflag=1;
@@ -400,13 +496,17 @@
                                                                 }
                                                                 var sumstr="";
                                                                 sumstr=(value.name + " is occupied on the following dates - ");
+                                                                
                                                                  var datestring='';
                                                                  value.dates.sort();
                                                                 angular.forEach(value.dates,function(nvalue) {
                                                                   var d = new Date(Number(nvalue));
                                                                 datestring=datestring+((d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear())+ ",");
                                                             });
+                                                                if(errres.indexOf(value.resource_id) == -1){
                                                                 newstr=newstr+(" "+sumstr+datestring)+"<br>";
+                                                                errres.push(value.resource_id);
+                                                                }
                                                               }
                                                             });
                                                                   if(newstr){
@@ -439,10 +539,9 @@
                 accountDetails.maxEndDate = $scope.newMax;
                 //accountDetails.maxEndDate =Math.max.apply(Math, $scope.accountrangeDates)+19800000;
                 account = {"account" : accountDetails}
-                UserService.saveAccountDetails(account).then(function (response){
-                                                            // FlashService.Success(response.data, true);
-                                                             FlashService.Success("People have been mapped to the project", true); 
-                                                            });
+                 UserService.saveAccountDetails(account).then(function (response){
+                                                              FlashService.Success("People have been mapped to the project", true); 
+                                                             });
                 // set the location.hash to the id of
             // the element you wish to scroll to.
                   $location.hash('top');
