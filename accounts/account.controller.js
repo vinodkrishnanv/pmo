@@ -454,11 +454,12 @@ function AccountEditController($rootScope,$scope,$state,$log,$http,UserService, 
                      function saveaccount() {
               vm.dataLoading = true;
               var newserv=[];
+              var count=0;
               for (var k in vm.ser){
                 if (vm.ser.hasOwnProperty(k)) {
                      vm.ser[k].id=k;
                      newserv.push(vm.ser[k]);
-
+                     count++;
                 }
             }
             if(count==$scope.sermodel.length){

@@ -61,6 +61,7 @@
         service.deleteService = deleteService;
         service.deleteUnit = deleteUnit;
         service.deleteDependency=deleteDependency;
+        service.getServiceDates=getServiceDates;
         return service;
 
         function handleSuccess(res) {
@@ -94,6 +95,17 @@
             var req = {
                 method: 'POST',
                 url: 'http://'+hostName+':3000/deletedependency.json',
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
+                data:  data
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        function getServiceDates(data) {
+            
+            var req = {
+                method: 'POST',
+                url: 'http://'+hostName+':3000/get-service-dates.json',
                 headers : { 'Content-Type': 'application/json',
                 "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
                 data:  data

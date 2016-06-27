@@ -108,6 +108,7 @@
         $scope.accountEvents = {
                              onItemSelect: function(item) {
                                   FlashService.clearMessage();
+                                  $scope.sermodel= [];
                                   $scope.items.length=0;
                                   $scope.resmodel.length=0;
                                   $scope.resource=0;
@@ -134,7 +135,7 @@
                                     $scope.account = response.data ;
                                     $scope.newMax = $scope.account.end_date;
                                     $scope.newMin = $scope.account.start_date;
-                                    $scope.showaccountdates = 1;
+                                    
                                     $rootScope.$broadcast('refreshDatepickers');
                                     $scope.IsVisible = 0; 
                                   });
@@ -177,6 +178,28 @@
                                               });
                                             },
                      };
+                     $scope.serEvents = {
+                             onItemSelect: function(item) {
+
+                              var data = {"account_id":$scope.accountmodel.id,"service_id":item.id}
+                                              UserService.getServiceDates(data).then(function (response){
+                                                var mindate = new Date(response.data[0].start_date).getTime();
+                                                var maxdate = new Date(response.data[0].end_date).getTime();
+                                                $scope.newMax = maxdate ;//+ 19800000;
+                                                $scope.newMin = mindate ;//+ 19800000;
+                                                $scope.showaccountdates = 1;
+                                                // console.log(response.data[0].start_date);
+                                                // console.log(d);
+                                                // d=d+19800000;
+                                              // $scope.disdate=response.data.dis;
+                                              // angular.forEach(response.data.ena, function(value) {
+                                              //         $scope.selectedDates.push(parseInt(value.start)-19800000);
+                                              // }); 
+                                                // $rootScope.$broadcast('refreshDatepickers');
+                                              });
+                                            },
+                     };
+                     
         $scope.resourceEvents = {
                              onItemSelect: function(item) {
                                                             $scope.addresmodel=$scope.showreshere=1;
