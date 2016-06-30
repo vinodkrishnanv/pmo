@@ -12,6 +12,7 @@
                 var splits=$location.url().toString().split("/");
                 var strings=splits[splits.length-1];
                 var newEl = angular.element( document.querySelector( ".hideoncalendar" ) );
+                $scope.showprodate=0;
                 if(strings=="calendar"){
                   newEl.addClass("hidden"); 
                 }else{
@@ -188,14 +189,17 @@
                                                 $scope.newMax = maxdate ;//+ 19800000;
                                                 $scope.newMin = mindate ;//+ 19800000;
                                                 $scope.showaccountdates = 1;
-                                                // console.log(response.data[0].start_date);
-                                                // console.log(d);
-                                                // d=d+19800000;
-                                              // $scope.disdate=response.data.dis;
-                                              // angular.forEach(response.data.ena, function(value) {
-                                              //         $scope.selectedDates.push(parseInt(value.start)-19800000);
-                                              // }); 
-                                                // $rootScope.$broadcast('refreshDatepickers');
+                                              });
+                                              UserService.getFilteredProjects(data).then(function (response){
+                                                $scope.prodata = response.data ;
+                                                if($scope.prodata.length){
+                                                   $scope.showprodate=1;
+                                                 }else{
+                                                   $scope.showprodate=0;
+                                                   $scope.promodel.id=0;
+                                                   $scope.promodel.project_code=$scope.sermodel.service_code;
+                                                 }
+                                                 // console.log(showprodate);
                                               });
                                             },
                      };
@@ -220,6 +224,7 @@
                                                             },
                                 };
         $scope.accountmodel = [];
+        $scope.promodel = [];
         $scope.sermodel = [];
         UserService.getAccounts().then(function (response) {
         $scope.accountdata = response.data;
@@ -232,6 +237,19 @@
           displayProp:'account_name',
           idProp:'id',
           externalIdProp:'id',
+          selectionLimit: 1,
+          showUncheckAll :false,
+          closeOnSelect:true
+            
+        };
+        $scope.prosettings = {
+          smartButtonMaxItems: 1,
+          scrollableHeight: '200px',
+          scrollable: true,
+          enableSearch: true,
+          displayProp:'project_code',
+          idProp:'id',
+          externalIdProp:'',
           selectionLimit: 1,
           showUncheckAll :false,
           closeOnSelect:true
@@ -332,9 +350,9 @@
                 $scope.calrangemodel = 1;
                 $rootScope.$broadcast('refreshDatepickers');
             }
-            $scope.remresdate = function (value,service_id) {
+            $scope.remresdate = function (resource_id,service_id,project_id) {
               for (var key in $scope.items) {
-                if(($scope.items[key].resource_id == value) && $scope.items[key].service_id == service_id){
+                if(($scope.items[key].resource_id == resource_id) && $scope.items[key].service_id == service_id && $scope.items[key].project_id == project_id){
                    $scope.items.splice(key, 1);
                 }
               }
@@ -356,6 +374,7 @@
                 myEl.removeClass('btn-primary');
                 myEl.addClass('btn-default');
               }
+              console.log($scope.promodel);
 
               $scope.tempitems=angular.copy($scope.items);
               angular.forEach($scope.resmodel, function(value) {
@@ -363,7 +382,7 @@
                 resids.push(value.id);
               }
               var deferred = $q.defer();
-               var filtered = $filter('filter')($scope.items, { resource_id: value.id, service_id: $scope.sermodel.id});
+               var filtered = $filter('filter')($scope.items, { resource_id: value.id, service_id: $scope.sermodel.id, project_id: $scope.promodel.id});
                var user = filtered.length ? filtered[0] : null;
                deferred.resolve(user);
               mydata.resource_id=value.id;
@@ -379,6 +398,8 @@
               mydata.name=value.employee_name;
               mydata.service_id=$scope.sermodel.id;
               mydata.service_code=$scope.sermodel.service_code;
+              mydata.project_id=$scope.promodel.id;
+              mydata.project_code=$scope.promodel.project_code;
               mydata.maxDate= Math.max.apply(Math, date);
               mydata.minDate= Math.min.apply(Math, date);
               mydata.Dates=newdate;
@@ -392,13 +413,15 @@
               }else{
                 flag=1;
                 for (var key in $scope.items) {
-                if(($scope.items[key].resource_id == value.id) && ($scope.items[key].service_id == $scope.sermodel.id) ){
+                if(($scope.items[key].resource_id == value.id) && ($scope.items[key].service_id == $scope.sermodel.id) && ($scope.items[key].project_id == $scope.promodel.id) ){
                   flag=0;
                   $scope.items[key].account_id=angular.copy($scope.accountmodel.id);
                   $scope.items[key].name=angular.copy(value.employee_name);
                   $scope.items[key].Dates=angular.copy(newdate);
                   $scope.items[key].service_id=angular.copy($scope.sermodel.id);
                   $scope.items[key].service_code=angular.copy($scope.sermodel.service_code);
+                  $scope.items[key].project_id=angular.copy($scope.promodel.id);
+                  $scope.items[key].project_code=angular.copy($scope.promodel.project_code);
                   $scope.items[key].percentage_loaded=angular.copy($scope.singleperSelect);
                   $scope.items[key].maxDate=angular.copy(Math.max.apply(Math, date));
                   $scope.items[key].minDate=angular.copy(Math.min.apply(Math, date));

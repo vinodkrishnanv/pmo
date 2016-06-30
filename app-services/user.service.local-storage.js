@@ -62,6 +62,10 @@
         service.deleteUnit = deleteUnit;
         service.deleteDependency=deleteDependency;
         service.getServiceDates=getServiceDates;
+        service.saveServiceProject=saveServiceProject;
+        service.getAllServiceProjects=getAllServiceProjects;
+        service.getProjects=getProjects;//get all projects 
+        service.getFilteredProjects=getFilteredProjects;//get all projects associated with a service
         return service;
 
         function handleSuccess(res) {
@@ -663,6 +667,44 @@
 
         function setUsers(users) {
             localStorage.users = JSON.stringify(users);
+        }
+        function saveServiceProject(data) {
+            var req = {
+                method: 'POST',
+                url: 'http://'+hostName+':3000/projects.json',
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
+                data:  {"project": data}
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        function getAllServiceProjects() {
+            var req = {
+                method: 'GET',
+                url: 'http://'+hostName+':3000/projects.json',
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        function getProjects(){
+            var req = {
+                method: 'GET',
+                url: 'http://'+hostName+':3000/projects.json',
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        function getFilteredProjects(data){
+            var req = {
+                method: 'POST',
+                url: 'http://'+hostName+':3000/filtered-projects.json',
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
+                data : data
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
         }
     }
 })();

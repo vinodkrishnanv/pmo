@@ -2,6 +2,8 @@
     <!-- <div ng-include="'pages/navigation.html'"></div> -->
   <div class="jumbotron text-center">
     <div  ui-view="modal"></div>
+    {{items}}
+    {{promodel}}
     <div class="row">
       <div class="col-md-3">
       <div class="col-md-6 text-left">
@@ -35,6 +37,17 @@
     </div>
       <div ng-show= 'accountmodel.id' class="col-md-3 text-right">
       <button ui-sref="project.calendar" class="btn btn-primary">View Current Allocation</button>
+      </div>
+    </div>
+    <div class="row" ng-show="showprodate">
+      <div class="col-md-3">
+      <div class="col-md-6 text-left">
+        <label for="username">Project name</label>
+      </div>
+      <div class="col-md-6 text-left">
+        <div ng-dropdown-multiselect="" events="proEvents" options="prodata" selected-model="promodel" extra-settings="prosettings"></div>
+       
+      </div>
       </div>
     </div>
     <div class="row" ng-show="showaccountdates">
@@ -112,10 +125,10 @@
             <div class="col-md-6">{{n.service_id}}</div>
         </div> -->
       <div class="one-col row">
-        <div class="col-md-9">{{n.name}}({{n.service_code}})</div>
+        <div class="col-md-9">{{n.name}}({{n.project_code}}||{{n.service_code}})</div>
         <div class="col-md-3">{{n.percentage_loaded}}%</div>
         </div>
-      <div class="two-col "><div class="col-md-11">{{n.minDate | date:'MMM d, y'}} -- {{n.maxDate | date:'MMM d, y'}}</div><i class="fa fa-times" ng-click="remresdate({{n.resource_id}},{{n.service_id}})" aria-hidden="true"></i>
+      <div class="two-col "><div class="col-md-11">{{n.minDate | date:'MMM d, y'}} -- {{n.maxDate | date:'MMM d, y'}}</div><i class="fa fa-times" ng-click="remresdate({{n.resource_id}},{{n.service_id}},{{n.project_id}})" aria-hidden="true"></i>
 <!-- <table>
         <div ng-repeat="task in n.Dates">
               {{task | date:'MMM d, y'}}
