@@ -64,8 +64,11 @@
         service.getServiceDates=getServiceDates;
         service.saveServiceProject=saveServiceProject;
         service.getAllServiceProjects=getAllServiceProjects;
-        service.getProjects=getProjects;//get all projects 
-        service.getFilteredProjects=getFilteredProjects;//get all projects associated with a service
+        service.getProjects=getProjects;
+        service.getProject=getProject;//get all projects 
+        service.getFilteredProjects=getFilteredProjects;
+        service.editServiceProject=editServiceProject;//get all projects associated with a service
+        service.checkAvailability=checkAvailability;
         return service;
 
         function handleSuccess(res) {
@@ -205,6 +208,17 @@
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
+        function editServiceProject(ser) {
+            var req = {
+                method: 'PUT',
+                url: 'http://'+hostName+':3000/projects/' + ser.id + '.json',
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
+                data:  ser
+                //{"id":unit.id,"unit_name":unit.unit_name}
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
         function editService(ser) {
             var req = {
                 method: 'PUT',
@@ -293,6 +307,15 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/services/'+id+'.json',
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        function getProject(id) {
+            var req = {
+                method: 'GET',
+                url: 'http://'+hostName+':3000/projects/'+id+'.json',
                 headers : { 'Content-Type': 'application/json',
                 "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }
@@ -706,5 +729,16 @@
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
+        function checkAvailability(check,aid) {
+            var req = {
+                method: 'POST',
+                url: 'http://'+hostName+':3000/check-availablity.json',
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
+                data:  {"check": check,"account_id":aid}
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        
     }
 })();

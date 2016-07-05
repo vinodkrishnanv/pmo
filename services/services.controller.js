@@ -29,34 +29,17 @@
             closeOnBlur:true,
               
           };
+          var availableOptions = "";
+          $rootScope.availableOptions =  [
+              {id: 'H', map_code: 'Hours'},
+              {id: 'P', map_code: 'Percentage'}
+            ];
+            $scope.value = {
+             availableOptions: $rootScope.availableOptions,
+             };
         UserService.getUnits().then(function (response) {
           $scope.serdata = response.data;
         });
-    //     $rootScope.availableSkillOptions = [
-    //   {id: 'Technical', skill_type: 'Technical'},
-    //   {id: 'Marketing', skill_type: 'Marketing'}
-    // ];
-
-        /*$scope.data = {
-                          repeatSelect: null,
-                          statusSelect: null,
-                          managerSelect: null,
-                          availableSkillOptions: $rootScope.availableSkillOptions,
-                         };*/
-        $timeout(function () {
-        UserService.getAllServices()
-                         .then(function (response) {
-                          $scope.data = {
-                          repeatSelect: null,
-                          statusSelect: null,
-                          managerSelect: null,
-                          availableServicesOptions: $rootScope.availableServicesOptions,
-                         };
-                         });
-                       },3000);
-    $scope.clickHandler = RowEditor.editRow;
-		$scope.eventDetails = eventDetails;
-    $scope.message = 'Look! I am a Service page.';
         
     $scope.ShowHide = function () {
                 //If DIV is visible it will be hidden and vice versa.
@@ -90,11 +73,6 @@
                 });
         }
 
-    function eventDetails(event){
-       $scope.selected = event;
-       $scope.query = event;
-      
-    }
 
     $scope.example13model = [];
 
@@ -111,6 +89,7 @@ vm.gridOptions = {
     { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/services/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a>&nbsp<a href="#/services/delete/{{row.entity.id}}"  ><button type="button" class="btn btn-xs danger-class"  ><i  class="fa fa-trash"></i></button></a></div>', width: 70 },
     { name: 'service_name' },
       { name: 'service_code' },
+      { name: 'mapping_format' },
     ]
 
   };
@@ -133,9 +112,6 @@ function ServicesEditController($scope,$log,$state,$http,UserService, $location,
                       if (response.data) {
                         vm.service = response.data;
                         $scope.sermodel.id=vm.service.organisational_unit_id;
-                       // vm.account.start_date=$scope.minEndDate;
-             // //vm.account.end_date=$scope.maxEndDate;
-             // vm.account.anticipated_value = vm.account.anticipated_value.concat(" ").concat(vm.account.anticipated_value_currency);
                       } 
                   });
 
