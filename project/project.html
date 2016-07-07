@@ -2,6 +2,9 @@
     <!-- <div ng-include="'pages/navigation.html'"></div> -->
   <div class="jumbotron text-center">
     <div  ui-view="modal"></div>
+    <!-- {{items}}
+    {{promodel}}
+    {{resmodel}} -->
     <div class="row">
       <div class="col-md-3">
       <div class="col-md-6 text-left">
@@ -37,6 +40,17 @@
       <button ui-sref="project.calendar" class="btn btn-primary">View Current Allocation</button>
       </div>
     </div>
+    <div class="row" ng-show="showprodate">
+      <div class="col-md-3">
+      <div class="col-md-6 text-left">
+        <label for="username">Project name</label>
+      </div>
+      <div class="col-md-6 text-left">
+        <div ng-dropdown-multiselect="" events="proEvents" options="prodata" selected-model="promodel" extra-settings="prosettings"></div>
+       
+      </div>
+      </div>
+    </div>
     <div class="row" ng-show="showaccountdates">
       <div class="col-md-2 text-left">
         <label for="username">Account Timeline</label>
@@ -66,6 +80,7 @@
          </div>
          <!-- {{resmodel}} -->
          <!-- {{items}} -->
+         <div ng-show='per=="P"'>
         <div class="col-md-3 text-right">
           <label for="username">Percentage Loaded</label>
         </div>
@@ -77,10 +92,21 @@
               <option value="100">100 %</option>
           </select>
          </div>
+       </div>
+       <div ng-show='per!="P"'>
+        <div class="col-md-3 text-right">
+          <label for="username">Service Loaded</label>
+        </div>
+        <div class="col-md-2">
+          <input id="singleserSelect" name="singleserSelect" placeholder="Input the hrs" class="form-control input-md col-md-12 " ng-model="singleserSelect" required type="text" size="10"><span>hrs</span>
+         </div>
+         
+       </div>
+
          </div> 
          <br><br><br><br>
          <div class="row">
-         <div class="col-md-5">
+         <div class="col-md-4">
             <div ng-show="resource" >
               <div style='display:inline-block; vertical-align:top'>
                 <div id='btn-group' class='btn-group hideoncalendar'>
@@ -102,20 +128,21 @@
             </div>
             <br>
             <div ng-show="resource">     
-          <button class="btn btn-primary" ng-disabled="!selectedDates.length || !resmodel.length || !sermodel.id" ng-click="add(resource,singleres,selectedDates)">Add</button>
+          <button class="btn btn-primary" ng-show='per=="P"' ng-disabled="!selectedDates.length || !resmodel.length || !sermodel.id" ng-click="add(resource,singleres,selectedDates)">Add</button>
+          <button class="btn btn-primary"  ng-show='per=="H"' ng-disabled="!selectedDates.length || !resmodel.length || !sermodel.id" ng-click="split(singleserSelect,selectedDates)">Split</button>
           </div>
          </div>
 
-         <div id="wrapper" class="wrapper col-md-7">
+         <div id="wrapper" class="wrapper col-md-8">
         <div id="inner-wrapper" class="inner-wrapper parent" ng-repeat="n in items |  orderBy:'resource_id' | orderBy : 'service_id' ">
           <!-- <div ng-show="showservice({{n.service_id}})">
             <div class="col-md-6">{{n.service_id}}</div>
         </div> -->
       <div class="one-col row">
-        <div class="col-md-9">{{n.name}}({{n.service_code}})</div>
-        <div class="col-md-3">{{n.percentage_loaded}}%</div>
+        <div class="col-md-7">{{n.name}} &nbsp; ({{n.project_code}} &nbsp;|| &nbsp;{{n.service_code}})</div>
+        <div class="col-md-5">{{n.percentage_loaded}}% &nbsp; ({{n.percentage_loaded/12.5}}h)</div>
         </div>
-      <div class="two-col "><div class="col-md-11">{{n.minDate | date:'MMM d, y'}} -- {{n.maxDate | date:'MMM d, y'}}</div><i class="fa fa-times" ng-click="remresdate({{n.resource_id}},{{n.service_id}})" aria-hidden="true"></i>
+      <div class="two-col "><div class="col-md-11">{{n.minDate | date:'MMM d, y'}} -- {{n.maxDate | date:'MMM d, y'}}</div><i class="fa fa-times" ng-click="remresdate({{n.resource_id}},{{n.service_id}},{{n.project_id}})" aria-hidden="true"></i>
 <!-- <table>
         <div ng-repeat="task in n.Dates">
               {{task | date:'MMM d, y'}}

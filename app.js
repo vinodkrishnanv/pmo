@@ -139,7 +139,7 @@
                 })
             
             .state('project', {
-                url: "/project",
+                url: "/mapping",
                 templateUrl : 'project/project.html',
                 controller  : 'ProjectController',
                 controllerAs: 'vm',
@@ -343,6 +343,50 @@
                     },
                 })
             .state('services.delete', {
+                url: '/delete/:id',
+                views:{
+                      "modal": {
+                        templateUrl: "services/services.delete.html",
+                        controller  : 'ServicesDeleteController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
+                })
+            .state('serviceproject', {
+                url: "/project",
+                templateUrl : 'serviceproject/service-project.html',
+                controller  : 'ServiceProjectController',
+                controllerAs: 'vm',
+                onEnter: ["$state", function($state) {
+                  $(document).on("click", ".btn-danger", function() {
+                    $state.go("serviceproject");
+                  });
+                  }],
+                        })
+            .state('serviceproject.add', {
+                url: '/add',
+                views:{
+                      "modal": {
+                        templateUrl: "serviceproject/service-project.add.html",
+                        controller  : 'ServiceProjectController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
+                })
+            .state('serviceproject.edit', {
+                url: '/edit/:id',
+                views:{
+                      "modal": {
+                        templateUrl: "serviceproject/service-project.add.html",
+                        controller  : 'ServiceProjectEditController',
+                        controllerAs: 'vm'
+
+                      }
+                    },
+                })
+            .state('serviceproject.delete', {
                 url: '/delete/:id',
                 views:{
                       "modal": {
