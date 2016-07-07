@@ -72,7 +72,7 @@
             vm.serpro.service_id=$scope.sermodel.id;
             UserService.saveServiceProject(vm.serpro)
                 .then(function (response) {
-                    if (response.data.success) {
+                    if (response.data.id) {
                         FlashService.Success('Save successful', true);
                         vm.dataLoading = false;
                         UserService.getAllServiceProjects()
@@ -81,14 +81,14 @@
                               vm.gridOptions.data = response.data;
                            });
                     } else {
-                      if(response.data.error.service_name){
-                        FlashService.Error('Project Name ' +response.data.error.service_name[0]);
+                      // if(response.data.error.service_name){
+                      //   FlashService.Error('Project Name ' +response.data.error.service_name[0]);
 
-                      }
-                      if(response.data.error.service_code){
-                        FlashService.Error('Project Code ' +response.data.error.service_code[0]);
+                      // }
+                      // if(response.data.error.service_code){
+                        FlashService.Error('Something happened . Please try again');
                         
-                      }
+                      // }
                         vm.dataLoading = false;
                     }
                 });
@@ -136,6 +136,17 @@ function ServiceProjectEditController($scope,$log,$state,$http,UserService, $loc
              // vm.account.anticipated_value = vm.account.anticipated_value.concat(" ").concat(vm.account.anticipated_value_currency);
                       } 
                   });
+                  vm.gridOptions = {
+
+                      columnDefs: [
+                      { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/project/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a>&nbsp<a href="#/services/delete/{{row.entity.id}}"  ><button type="button" class="btn btn-xs danger-class"  ><i  class="fa fa-trash"></i></button></a></div>', width: 70 },
+                      { name: 'project_name' },
+                      { name: 'project_code' },
+                      { name: 'start_date' },
+                      { name: 'end_date' },
+                      ]
+
+                    };
 
                   function saveserviceproject() {
             vm.dataLoading = true;
@@ -144,7 +155,7 @@ function ServiceProjectEditController($scope,$log,$state,$http,UserService, $loc
             vm.serpro.id = splits[splits.length - 1];
             UserService.editServiceProject(vm.serpro)
                 .then(function (response) {
-                    if (response.data.success) {
+                    if (response.data.id) {
                         FlashService.Success('Save successful', true);
                         vm.dataLoading = false;
                         UserService.getAllServiceProjects()
@@ -153,14 +164,14 @@ function ServiceProjectEditController($scope,$log,$state,$http,UserService, $loc
                               vm.gridOptions.data = response.data;
                            });
                     } else {
-                      if(response.data.error.service_name){
-                        FlashService.Error('Project Name ' +response.data.error.service_name[0]);
+                      // if(response.data.error.service_name){
+                      //   FlashService.Error('Project Name ' +response.data.error.service_name[0]);
 
-                      }
-                      if(response.data.error.service_code){
-                        FlashService.Error('Project Code ' +response.data.error.service_code[0]);
+                      // }
+                      // if(response.data.error.service_code){
+                         FlashService.Error('Something happened . Please try again');
                         
-                      }
+                      // }
                         vm.dataLoading = false;
                     }
                 });

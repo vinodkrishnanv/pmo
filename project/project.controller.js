@@ -182,7 +182,8 @@
                      $scope.serEvents = {
                              onItemSelect: function(item) {
                               $scope.per = item.mapping_format; 
-                              console.log($scope.per);
+                              $scope.promodel.id=0;
+
                               
                               // angular.forEach($scope.serdata, function(value) {
                               //   console.log(value);
@@ -202,10 +203,11 @@
                                               });
                                               UserService.getFilteredProjects(data).then(function (response){
                                                 $scope.prodata = response.data ;
-                                                if($scope.prodata.length){
-                                                   $scope.showprodate=1;
-                                                 }else{
-                                                   $scope.showprodate=0;
+                                                $scope.showprodate=1;
+                                                if(!$scope.prodata.length){
+                                                 //   $scope.showprodate=1;
+                                                 // }else{
+                                                 //   $scope.showprodate=1;
                                                    $scope.promodel.id=0;
                                                    $scope.promodel.project_code=$scope.sermodel.service_code;
                                                  }
@@ -378,7 +380,24 @@
             }
             var resids=[];
             $scope.split = function(hrs,date) {
+              var text= 'div.single ul li button' ;
+              var myEl = angular.element( document.querySelectorAll( text ) ); 
+              if(myEl.hasClass("btn-primary")){
+                myEl.removeClass('btn-primary');
+                myEl.addClass('btn-default');
+              }
+              $scope.tempitems=angular.copy($scope.items);
+              for (var i = $scope.items.length - 1; i >= 0; i--) {
+                                                                  if (($scope.items[i].flagged==1)) {
+                                                                      $scope.items.splice(i, 1);
+                                                                  }
+                                                              }
               var newdate=[];
+              angular.forEach($scope.resmodel, function(value) {
+                  if((resids.indexOf(value.id) == -1)){
+                    resids.push(value.id);
+                  }
+              });  
               angular.forEach(date, function(value) {
                 var d = new Date(value);
                 var day=d.getDay();
@@ -400,7 +419,7 @@
                   angular.forEach(newdate, function(value) {
                     var obj={};
                       angular.forEach($scope.resmodel, function(res) {
-                          obj[res.id]=Math.floor(h);
+                        obj[res.id]=Math.floor(h);
                         });                    
                       objarr[value]=obj;                    
                     });
@@ -460,32 +479,140 @@
                     var newDates=[];
                     angular.forEach(objarr, function(value,keys) {
                       angular.forEach(value, function(val,k) {
-                            var filtered = $filter('filter')($scope.items, { resource_id: k, service_id: $scope.sermodel.id, project_id: $scope.promodel.id});
+                        var perload = val*12.5;
+                            var filtered = $filter('filter')($scope.items, { resource_id: k, service_id: $scope.sermodel.id, project_id: $scope.promodel.id, percentage_loaded: perload});
+                            if(filtered.length==0){
+                              newDates.length=0;
+                             }
+                            console.log(filtered.length);
                              servdata.resource_id=k;
                              servdata.account_id=$scope.accountmodel.id;
-                             for (var key in $scope.resmodel) {
-                                if($scope.resmodel[key].id == k){
+                             angular.forEach($scope.resmodel, function(value) {
+                                if(value.id == k){
                                   servdata.name=value.employee_name;
                                 }
-                              }
+                             });
                              servdata.service_id=$scope.sermodel.id;
                              servdata.service_code=$scope.sermodel.service_code;
                              servdata.project_id=$scope.promodel.id;
                              servdata.project_code=$scope.promodel.project_code;
-                             servdata.maxDate= null;
-                             servdata.minDate= null;
+                             
                              servdata.flagged= 1;
-                             if(newDates.indexOf(keys) == -1){
-                                newDates.push(keys);
+                             var number= Number(keys);
+                             if(newDates.indexOf(number) == -1){
+                                newDates.push(number);
                              }
                              servdata.Dates  = newDates;
+                             servdata.minDate= Math.min.apply(Math, newDates);
+                             servdata.maxDate= Math.max.apply(Math, newDates);
                              servdata.percentage_loaded=val*12.5;
                              console.log(servdata);
+                             console.log(servdata.Dates);
+                             console.log($scope.items);
+                             var newflag;
+                             console.log(filtered.length);
                              if(filtered.length==0){
                               $scope.items.push(angular.copy(servdata));
+                              console.log($scope.items);
+                             }else{
+                              newflag=1;
+                              for (var key in $scope.items) {
+                                if(($scope.items[key].resource_id == k) && ($scope.items[key].service_id == $scope.sermodel.id) && ($scope.items[key].project_id == $scope.promodel.id) ){
+                                  newflag=0;
+                                  $scope.items[key].account_id=angular.copy($scope.accountmodel.id);
+                                  $scope.items[key].name=angular.copy(servdata.name);
+                                  $scope.items[key].Dates=angular.copy(newDates);
+                                  $scope.items[key].service_id=angular.copy($scope.sermodel.id);
+                                  $scope.items[key].service_code=angular.copy($scope.sermodel.service_code);
+                                  $scope.items[key].project_id=angular.copy($scope.promodel.id);
+                                  $scope.items[key].project_code=angular.copy($scope.promodel.project_code);
+                                  $scope.items[key].percentage_loaded=angular.copy(servdata.percentage_loaded);
+                                  $scope.items[key].maxDate= Math.max.apply(Math, newDates);
+                                  $scope.items[key].minDate=Math.min.apply(Math, newDates);
+                                }
+                              }
+                              console.log($scope.items);
+                              if(newflag){
+                                 $scope.items.push(angular.copy(servdata));
+                              }
+
                              }
                         });
                     });
+        ////asasasa
+        var finalres={};
+        var servces={};
+        console.log(resids);
+        angular.forEach(resids, function(value) {
+           var newtempres={};
+           var newser=[];
+          for (var key in $scope.items) {
+                if(($scope.items[key].resource_id == value)){
+                  newser.push($scope.items[key].service_id);
+                  // for (var newkey in $scope.items[key].Dates){
+                     angular.forEach($scope.items[key].Dates, function(val) {
+                    if(newtempres[val]){
+                      newtempres[val] = newtempres[val] + Number($scope.items[key].percentage_loaded);
+                    }else{
+                      newtempres[val] = Number($scope.items[key].percentage_loaded);  
+                    }
+                  });
+                  
+                }
+              }
+              var nkey= value;
+              finalres[nkey] = newtempres;
+              servces[nkey] = newser;
+        });
+        console.log($scope.items);
+        var data = {"resources":finalres,"account_id":$scope.accountmodel.id,"service_ids":servces}
+        $scope.resmodel.length = 0;
+              var res = {};
+               var newstr='';
+               
+
+              // UserService.validateNewResDetails($scope.items).then(function (response){
+                  UserService.validateNewResDetails(data).then(function (response){
+                                                            var errres=[];
+                                                            angular.forEach(response.data, function(value) {
+                                                              if(value.success==0){
+                                                                for (var key in $scope.items) {
+                                                                  // if (($scope.items[key].flagged==1)) {
+                                                                      // $scope.items.splice(key, 1);
+                                                                      var newflag=1;
+                                                                  // }else{
+                                                                    if($scope.tempitems[key]){
+                                                                      $scope.items[key] = $scope.tempitems[key];
+                                                                    }else{
+                                                                      if (($scope.items[key].flagged==1)) {
+                                                                      $scope.items.splice(key, 1);
+                                                                    }
+                                                                    }
+                                                                  // }
+                                                                  
+                                                                }
+                                                                var sumstr="";
+                                                                sumstr=(value.name + " is occupied on the following dates - ");
+                                                                
+                                                                 var datestring='';
+                                                                 value.dates.sort();
+                                                                angular.forEach(value.dates,function(nvalue) {
+                                                                  var d = new Date(Number(nvalue));
+                                                                datestring=datestring+((d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear())+ ",");
+                                                            });
+                                                                if(errres.indexOf(value.resource_id) == -1){
+                                                                newstr=newstr+(" "+sumstr+datestring)+"<br>";
+                                                                errres.push(value.resource_id);
+                                                                }
+                                                              }
+                                                            });
+                                                                  if(newstr){
+                                                                  FlashService.Error(newstr, true);  
+                                                                  }
+                                                                  
+                                                            var mydata={};
+              });
+        /////asasasa
 
                     // UserService.checkAvailability(objarr,$scope.accountmodel.id).then(function (response){
                                                               // FlashService.Success("People have been mapped to the project", true); 
@@ -623,6 +750,7 @@
         }
         var finalres={};
         var servces={};
+        console.log(resids);
         angular.forEach(resids, function(value) {
            var newtempres={};
            var newser=[];

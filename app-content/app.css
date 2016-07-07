@@ -250,10 +250,11 @@ ul.custom-nav li{
   padding: 0;
   position: relative;
   background: #ffffff;
-  padding: 3px; /* Delete this line to remove the blue colour on columns. */
+  padding: 3px;
+  border-radius: 4px;
 }
 .one-col {
-  width: 300px;
+  width: 390px;
   font-size: 16px;
 }
 
