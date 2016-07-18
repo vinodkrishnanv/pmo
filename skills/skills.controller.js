@@ -47,6 +47,13 @@
                 //If DIV is visible it will be hidden and vice versa.
                 $scope.IsVisible = $scope.IsVisible ? false : true;
             }
+    $scope.isDisabled = function (type) {
+                if((type == 'Technical') || (type == 'Soft Skill')){
+                  return false;
+                }
+                return true;
+            }
+            
 
      function saveskill() {
             vm.dataLoading = true;
@@ -96,7 +103,7 @@ $scope.example13settings = {
 vm.gridOptions = {
 
     columnDefs: [
-    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/skill/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a>&nbsp<a href="#/skill/delete/{{row.entity.id}}"  ><button type="button" class="btn btn-xs danger-class"  ><i  class="fa fa-trash"></i></button></a></div>', width: 70 },
+    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/skill/edit/{{row.entity.id}}" ng-hide = "grid.appScope.isDisabled(row.entity.skill_type)" ><button type="button"  class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a>&nbsp<a href="#/skill/delete/{{row.entity.id}}"  ><button type="button" class="btn btn-xs danger-class"  ><i  class="fa fa-trash"></i></button></a></div>', width: 70 },
     { name: 'skill_name' },
       { name: 'skill_type' },
       { name: 'skill_code' },
@@ -171,11 +178,11 @@ function SkillEditController($scope,$log,$state,$http,UserService, $location,Fla
   UserService.getSkill(splits[splits.length - 1])
                   .then(function (response) {
                       if (response.data) {
-                        vm.skill = response.data;
-                        //$scope.sermodel=vm.account.sermodel=
-                       // vm.account.start_date=$scope.minEndDate;
-             // //vm.account.end_date=$scope.maxEndDate;
-             // vm.account.anticipated_value = vm.account.anticipated_value.concat(" ").concat(vm.account.anticipated_value_currency);
+                        if((response.data.skill_type == "Technical") || (response.data.skill_type == "Soft Skill")){
+                          vm.skill = response.data;
+                        }else{
+                           $state.go("skill", {}, {reload: true});
+                        }
                       } 
                   });
 
