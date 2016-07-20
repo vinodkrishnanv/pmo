@@ -69,6 +69,7 @@
         service.getFilteredProjects=getFilteredProjects;
         service.editServiceProject=editServiceProject;//get all projects associated with a service
         service.checkAvailability=checkAvailability;
+		service.deleteProject=deleteProject;
         return service;
 
         function handleSuccess(res) {
@@ -167,6 +168,15 @@
             var req = {
                 method: 'DELETE',
                 url: 'http://'+hostName+':3000/roles/' + id + '.json',
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+		function deleteProject(id) {
+            var req = {
+                method: 'DELETE',
+                url: 'http://'+hostName+':3000/projects/' + id + '.json',
                 headers : { 'Content-Type': 'application/json',
                 "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }

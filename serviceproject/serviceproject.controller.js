@@ -100,7 +100,7 @@
 vm.gridOptions = {
 
     columnDefs: [
-    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/project/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a>&nbsp<a href="#/services/delete/{{row.entity.id}}"  ><button type="button" class="btn btn-xs danger-class"  ><i  class="fa fa-trash"></i></button></a></div>', width: 70 },
+    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/project/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a>&nbsp<a href="#/project/delete/{{row.entity.id}}"  ><button type="button" class="btn btn-xs danger-class"  ><i  class="fa fa-trash"></i></button></a></div>', width: 70 },
     { name: 'project_name' },
     { name: 'project_code' },
     { name: 'start_date' },
@@ -185,24 +185,18 @@ function ServiceProjectEditController($scope,$log,$state,$http,UserService, $loc
   ServiceProjectDeleteController.$inject = ['$rootScope','$scope','$state','$log','$http','UserService', '$location', 'FlashService', 'RowEditor', '$timeout','$routeParams'];
 function ServiceProjectDeleteController($rootScope,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor,$timeout,$routeParams) {
   var vm=this;
-   vm.deleteservice = deleteservice;
+   vm.deleteproject = deleteproject;
    
   var splits=$location.url().toString().split("/");
-  $scope.deltext="";
-  UserService.deleteDependency({"type":"service","data":splits[splits.length - 1]})
-                  .then(function (response) {
-                    if(response.data){
-                      $scope.deltext="The data you are trying to delete has a dependency and will be deleted if you proceed";
-                    }
-                  });                 
-  function deleteservice() {
+                  
+  function deleteproject() {
               vm.dataLoading = true;
-              UserService.deleteService(splits[splits.length - 1])
+              UserService.deleteProject(splits[splits.length - 1])
                   .then(function (response) {
                       if (response.status==204) {
                           FlashService.Success('Delete successful', true);
                           vm.dataLoading = false;
-                          $state.go("services", {}, {reload: true});
+                          $state.go("serviceproject", {}, {reload: true});
                       } else {
                           FlashService.Error(response.message);
                           vm.dataLoading = false;

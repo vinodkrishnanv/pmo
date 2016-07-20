@@ -390,8 +390,8 @@
                 url: '/delete/:id',
                 views:{
                       "modal": {
-                        templateUrl: "services/services.delete.html",
-                        controller  : 'ServicesDeleteController',
+                        templateUrl: "serviceproject/service-project.delete.html",
+                        controller  : 'ServiceProjectDeleteController',
                         controllerAs: 'vm'
 
                       }
