@@ -205,9 +205,9 @@ div.table-title {
 <tr>
 <td class="text-left">Organisational Unit</td>
 <td class="text-left">
-<select name="organisationalUnit" id="organisationalUnit" class="form-control" ng-model="vm.account.organisational_unit_id" required>
+<select name="organisationalUnit" ng-click="vm.getServices()" id="organisationalUnit" class="form-control" ng-model="vm.account.organisational_unit_id" required>
               <option value="">Please select</option>
-              <option ng-repeat="option in data.availableOptions" ng-click="vm.getServices()" value="{{option.id}}">{{option.unit_code}}</option>
+              <option ng-repeat="option in data.availableOptions"  value="{{option.id}}">{{option.unit_code}}</option>
     </select>
 </td>
 </tr>

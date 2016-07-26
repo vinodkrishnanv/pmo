@@ -7,15 +7,15 @@
    .controller('AccountEditController', AccountEditController)
    .controller('AccountDeleteController', AccountDeleteController)
 
-  .controller('RowAccountEditCtrl', RowAccountEditCtrl)
+  // .controller('RowAccountEditCtrl', RowAccountEditCtrl)
 
-  .service('RowAccountEditor', RowAccountEditor);
+  // .service('RowAccountEditor', RowAccountEditor);
   	AccountController.$inject = ['$rootScope','$cookieStore','$scope','$state','$log','$http','UserService', '$location', 'FlashService', 'RowEditor', '$timeout','$routeParams'];
   	function AccountController($rootScope,$cookieStore,$scope,$state,$log,$http,UserService, $location,FlashService,RowEditor,$timeout,$routeParams) {
   		var vm = this;
         $rootScope.shownav=true;
         $rootScope.rootAccess =  $cookieStore.get("rootAccess");
-          vm.clickHandlers = RowAccountEditor.editAccountRow;
+          // vm.clickHandlers = RowAccountEditor.editAccountRow;
           vm.saveaccount = saveaccount;
           vm.getaccount = getaccount;
           vm.getServices = getServices;
@@ -254,12 +254,15 @@ $scope.datepickerConfig = {
     selectionLimit: 1,
   };
       function getServices(){
-        UserService.getServices(vm.account.organisational_unit_id)
+        if(vm.account){
+          UserService.getServices(vm.account.organisational_unit_id)
                   .then(function (response) {
                       if (response.data.success) {
                         $scope.serdata = response.data.success;
                       } 
                   });
+        }
+        
       }
       // function saveaccount() {
       //         vm.dataLoading = true;
@@ -343,58 +346,58 @@ $scope.datepickerConfig = {
 
   }
 
-  RowAccountEditor.$inject = ['$rootScope', '$modal','UserService'];
+  // RowAccountEditor.$inject = ['$rootScope', '$modal','UserService'];
 
-  function RowAccountEditor($rootScope, $modal,UserService) {
-    var service = {};
+  // function RowAccountEditor($rootScope, $modal,UserService) {
+  //   var service = {};
 
-    service.editAccountRow = editAccountRow;
+  //   service.editAccountRow = editAccountRow;
 
     
 
-    function editAccountRow(grid, row) {
+  //   function editAccountRow(grid, row) {
       
-      console.log(row);
-      $modal.open({
+  //     console.log(row);
+  //     $modal.open({
 
-        templateUrl: 'accounts/edit-modal.html',
+  //       templateUrl: 'accounts/edit-modal.html',
 
-        controller: ['$modalInstance', '$rootScope','PersonSchema', 'grid', 'row','UserService', RowAccountEditCtrl],
+  //       controller: ['$modalInstance', '$rootScope','PersonSchema', 'grid', 'row','UserService', RowAccountEditCtrl],
 
-        controllerAs: 'vm',
+  //       controllerAs: 'vm',
 
-        resolve: {
+  //       resolve: {
 
-          grid: function () { return grid; },
+  //         grid: function () { return grid; },
 
-          row: function () { return row; }
+  //         row: function () { return row; }
 
-        }
+  //       }
 
-      });
+  //     });
 
-    }
+  //   }
 
     
 
-    return service;
+  //   return service;
 
-  }
-  function RowAccountEditCtrl($modalInstance, $rootScope,PersonSchema, grid, row ,UserService) {
+  // }
+  // function RowAccountEditCtrl($modalInstance, $rootScope,PersonSchema, grid, row ,UserService) {
 
-    var vm = this;
-    vm.schema = PersonSchema;
-    vm.entity = angular.copy(row.entity);
-    vm.items = $rootScope.availOrgan;
-    vm.statusitems = $rootScope.availableStatus;
-    vm.manitems = $rootScope.availableManagers;
-    vm.save = save;
-    function save() {
-      row.entity = angular.extend(row.entity, vm.entity);
-      $modalInstance.close(row.entity);
-      UserService.editAccount(row.entity);
-    }
-  }
+  //   var vm = this;
+  //   vm.schema = PersonSchema;
+  //   vm.entity = angular.copy(row.entity);
+  //   vm.items = $rootScope.availOrgan;
+  //   vm.statusitems = $rootScope.availableStatus;
+  //   vm.manitems = $rootScope.availableManagers;
+  //   vm.save = save;
+  //   function save() {
+  //     row.entity = angular.extend(row.entity, vm.entity);
+  //     $modalInstance.close(row.entity);
+  //     UserService.editAccount(row.entity);
+  //   }
+  // }
 
 
 
