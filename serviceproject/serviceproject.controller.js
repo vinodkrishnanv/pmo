@@ -101,10 +101,10 @@ vm.gridOptions = {
 
     columnDefs: [
     { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/project/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a>&nbsp<a href="#/services/delete/{{row.entity.id}}"  ><button type="button" class="btn btn-xs danger-class"  ><i  class="fa fa-trash"></i></button></a></div>', width: 70 },
-    { name: 'project_name' },
-    { name: 'project_code' },
-    { name: 'start_date' },
-    { name: 'end_date' },
+    { name: 'project_name',minWidth: 260 },
+    { name: 'project_code' ,minWidth: 130},
+    { name: 'start_date' ,minWidth: 260},
+    { name: 'end_date' ,minWidth: 260},
     ]
 
   };
