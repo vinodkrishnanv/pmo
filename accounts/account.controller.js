@@ -124,6 +124,7 @@ $scope.datepickerConfig = {
         {id: 'Client', name: 'Client'},
         {id: 'IBM', name: 'IBM'},
         {id: 'Oracle', name: 'Oracle'},
+        {id: 'Agency', name: 'Agency'},
       ];
       $rootScope.availableSowStatus =  [
         {id: 'Lead', name: 'Lead'},
