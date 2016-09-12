@@ -106,6 +106,14 @@
           closeOnSelect:true
         };
         $scope.account=[];
+        $scope.rowClass = function(item){
+          if(!item.saved){
+            console.log(item.name);
+            return item;            
+          }else{
+            return false;
+          }
+       };
         $scope.accountEvents = {
                              onItemSelect: function(item) {
                                   FlashService.clearMessage();
@@ -130,6 +138,7 @@
                                     });
                                   UserService.getMappedResource(item.id).then(function (response){
                                     $scope.items = response.data ;
+                                    $scope.existingItems = angular.copy(response.data);
                                   });
                                   });
                                   UserService.getAccount(item.id).then(function (response){
@@ -368,6 +377,11 @@
                    $scope.items.splice(key, 1);
                 }
               }
+              for (var key in $scope.existingItems) {
+                if(($scope.existingItems[key].resource_id == resource_id) && $scope.existingItems[key].service_id == service_id && $scope.existingItems[key].project_id == project_id){
+                   $scope.existingItems.splice(key, 1);
+                }
+              }
             }
             var ser = 0;
             $scope.showservice = function(value){
@@ -505,6 +519,7 @@
                              servdata.Dates  = newDates;
                              servdata.minDate= Math.min.apply(Math, newDates);
                              servdata.maxDate= Math.max.apply(Math, newDates);
+                             servdata.noOfDays= newDates.length;
                              servdata.percentage_loaded=val*12.5;
                              console.log(servdata);
                              console.log(servdata.Dates);
@@ -529,6 +544,7 @@
                                   $scope.items[key].percentage_loaded=angular.copy(servdata.percentage_loaded);
                                   $scope.items[key].maxDate= Math.max.apply(Math, newDates);
                                   $scope.items[key].minDate=Math.min.apply(Math, newDates);
+                                  $scope.items[key].noOfDays=newDates.length;
                                 }
                               }
                               console.log($scope.items);
@@ -621,6 +637,7 @@
               }else{
 
               }
+              $scope.resmodel.length=0;
               
             };
             $scope.add = function(resource,singleres,date) {
@@ -658,6 +675,7 @@
               mydata.project_code=$scope.promodel.project_code;
               mydata.maxDate= Math.max.apply(Math, date);
               mydata.minDate= Math.min.apply(Math, date);
+              mydata.noOfDays=newdate.length;
               mydata.Dates=newdate;
               mydata.percentage_loaded=$scope.singleperSelect;
               var index = $scope.mynewdata.indexOf(mydata);
@@ -665,7 +683,7 @@
               var flag;
               var key = $scope.sermodel.id;
               if(filtered.length==0){
-             $scope.items.push(angular.copy(mydata));
+                  $scope.items.push(angular.copy(mydata));
               }else{
                 flag=1;
                 for (var key in $scope.items) {
@@ -681,6 +699,13 @@
                   $scope.items[key].percentage_loaded=angular.copy($scope.singleperSelect);
                   $scope.items[key].maxDate=angular.copy(Math.max.apply(Math, date));
                   $scope.items[key].minDate=angular.copy(Math.min.apply(Math, date));
+                  $scope.items[key].noOfDays=newdate.length;
+                  $scope.items[key].saved=0;
+                }
+              }
+              for (var key in $scope.existingItems) {
+                if(($scope.existingItems[key].resource_id == value.id) && ($scope.existingItems[key].service_id == $scope.sermodel.id) && ($scope.existingItems[key].project_id == $scope.promodel.id) ){
+                  $scope.existingItems[key].conflict=1;
                 }
               }
               if(flag){
@@ -731,7 +756,12 @@
                                                                         $scope.items.splice(i, 0,$scope.myitem);
                                                                       }
                                                                   }
-                                                              }                                                
+                                                              }
+                                                              for (var key in $scope.existingItems) {
+                                                                  if(($scope.existingItems[key].resource_id == value.id) && ($scope.existingItems[key].service_id == $scope.sermodel.id) && ($scope.existingItems[key].project_id == $scope.promodel.id) ){
+                                                                    $scope.existingItems[key].conflict=0;
+                                                                  }
+                                                                }                                                
                                                             }
                                                             
                          // $scope.items.splice(key, 1);

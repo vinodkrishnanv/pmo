@@ -56,10 +56,32 @@
         };
         $scope.accountEvents = {
                              onItemSelect: function(item) {
+                              
                                   FlashService.clearMessage();
                                   $scope.sermodel= [];
                                   UserService.getAccountServices(item.id).then(function (response){
                                     $scope.serdata = response.data.service_id ;
+                                  });
+                                  UserService.getAllAccountProjects(item.id,$scope.sermodel.id).then(function (response){
+                                    console.log(response.data.length);
+                                    if(response.data.length){
+                                      $scope.accountprojects = response.data;                                      
+                                    }else{
+                                      $scope.accountprojects=[];
+                                    }
+                                    console.log($scope.accountprojects);
+                                  });
+                                  },
+                                };
+        $scope.serEvents = {
+                             onItemSelect: function(item) {
+                              $scope.accountprojects=[];
+                                  UserService.getAllAccountProjects($scope.accountmodel.id,item.id).then(function (response){
+                                    if(response.data.length){
+                                      $scope.accountprojects = response.data;                                      
+                                    }else{
+                                      $scope.accountprojects=[];
+                                    }
                                   });
                                   },
                                 };
@@ -70,6 +92,9 @@
             vm.dataLoading = true;
             vm.serpro.account_id=$scope.accountmodel.id;
             vm.serpro.service_id=$scope.sermodel.id;
+            vm.serpro.modifiedBy=$cookieStore.get('globals').currentUser.userId;
+            vm.serpro.createdBy=$cookieStore.get('globals').currentUser.userId;
+            console.log($cookieStore.get('globals').currentUser);
             UserService.saveServiceProject(vm.serpro)
                 .then(function (response) {
                     if (response.data.id) {
@@ -100,13 +125,14 @@
 vm.gridOptions = {
 
     columnDefs: [
-    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/project/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a>&nbsp<a href="#/services/delete/{{row.entity.id}}"  ><button type="button" class="btn btn-xs danger-class"  ><i  class="fa fa-trash"></i></button></a></div>', width: 70 },
-    { name: 'project_name',minWidth: 260 },
-    { name: 'project_code' ,minWidth: 130},
-    { name: 'start_date' ,minWidth: 260},
-    { name: 'end_date' ,minWidth: 260},
+    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/project/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a>&nbsp<a href="#/project/delete/{{row.entity.id}}"  ><button type="button" class="btn btn-xs danger-class"  ><i  class="fa fa-trash"></i></button></a></div>', width: 70 },
+    { name: 'project_name',width: 180 },
+    { name: 'project_code' ,width: 130},
+    // { name: 'start_date' ,minWidth: 260},
+    // { name: 'end_date' ,minWidth: 260},
 
-    ]
+    ],
+    enableCellEdit: false,
 
   };
   UserService.getAllServiceProjects()
@@ -117,12 +143,11 @@ vm.gridOptions = {
 
 
 
-ServiceProjectEditController.$inject = ['$scope','$log','$state','$http','UserService', '$location', 'FlashService','$timeout','$routeParams'];
-function ServiceProjectEditController($scope,$log,$state,$http,UserService, $location,FlashService,$timeout,$routeParams) {
+ServiceProjectEditController.$inject = ['$scope','$log','$cookieStore','$state','$http','UserService', '$location', 'FlashService','$timeout','$routeParams'];
+function ServiceProjectEditController($scope,$log,$cookieStore,$state,$http,UserService, $location,FlashService,$timeout,$routeParams) {
   var vm=this;
    vm.saveserviceproject = saveserviceproject;
   var splits=$location.url().toString().split("/");
-  console.log(splits);
   UserService.getProject(splits[splits.length - 1])
                   .then(function (response) {
                       if (response.data) {
@@ -145,7 +170,8 @@ function ServiceProjectEditController($scope,$log,$state,$http,UserService, $loc
                       { name: 'project_code' },
                       { name: 'start_date' },
                       { name: 'end_date' },
-                      ]
+                      ],
+                      enableCellEdit: false,
 
                     };
 
@@ -154,6 +180,7 @@ function ServiceProjectEditController($scope,$log,$state,$http,UserService, $loc
             vm.serpro.account_id=$scope.accountmodel.id;
             vm.serpro.service_id=$scope.sermodel.id;
             vm.serpro.id = splits[splits.length - 1];
+            vm.serpro.modifiedBy=$cookieStore.get('globals').currentUser.userId;
             UserService.editServiceProject(vm.serpro)
                 .then(function (response) {
                     if (response.data.id) {

@@ -8,6 +8,14 @@ body {
   font-weight: 400;
   text-rendering: optimizeLegibility;
 }
+.firstfill.container,.secondfill.container {
+    border: 5px solid #d9d9d9;
+    border-radius: 5px;
+    padding: 10px;
+}
+.firstfill.container button.btn-primary,.secondfill.container button.btn-primary {
+    margin-top: 10px;
+}
 
 div.table-title {
    display: block;
@@ -36,7 +44,6 @@ div.table-title {
   border-collapse: collapse;
   height: 320px;
   margin: auto 1px auto auto;
-  max-width: 600px;
   padding:5px;
   width: 100%;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
@@ -172,7 +179,7 @@ div.table-title {
   <meta name="viewport" content="initial-scale=1.0; maximum-scale=1.0; width=device-width;">
 </head>
 
-<body>
+<body ng-keyup="myFunct($event)">
   <div class="Modal-backdrop"></div>
  <div class="Modal-holder"  autoscroll="true">
   <div ng-class="{ 'alert text-left': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind-html="flash.message">
@@ -182,32 +189,30 @@ div.table-title {
 <h3>Data Table</h3>
 </div> -->
 <form name="myForm">
+<div class="firstfill container" ng-hide="nextv">
+<div class="row">
+<div class="col-md-6">
 <table class="table-fill">
-<!-- <thead>
-<tr>
-<th class="text-left">Month</th>
-<th class="text-left">Sales</th>
-</tr>
-</thead> -->
-<tbody class="table-hover">
+<tbody class="table-hover" >
 <tr>
 <td class="text-left">Account</td>
 <td class="text-left">
-  <input id="Account" name="Account" placeholder="placeholder" class="form-control input-md col-md-12 " ng-model="vm.account.account_name" required type="text" size="10">
+  <input id="Account" name="Account" placeholder="placeholder" class="form-control input-md col-md-12 " ng-model="vm.account.account_name" ng-required="true" required type="text" size="10">
 </td>
 </tr>
 <tr>
 <td class="text-left">Account Code</td>
 <td class="text-left">
-<input id="Account Code" name="Account Code" placeholder="placeholder" class="form-control input-md col-md-12" ng-model="vm.account.account_code" required="" type="text" size="10">
+<input id="Account Code" name="Account Code" ng-required="true" placeholder="placeholder" class="form-control input-md col-md-12" ng-model="vm.account.account_code" required="" type="text" size="10">
 </td>
 </tr>
 <tr>
 <td class="text-left">Organisational Unit</td>
 <td class="text-left">
-<select name="organisationalUnit" ng-click="vm.getServices()" id="organisationalUnit" class="form-control" ng-model="vm.account.organisational_unit_id" required>
-              <option value="">Please select</option>
-              <option ng-repeat="option in data.availableOptions"  value="{{option.id}}">{{option.unit_code}}</option>
+<select name="organisationalUnit"   ng-click="vm.getServices()" id="organisationalUnit" class="form-control" ng-model="vm.account.organisational_unit_id" ng-options="option.unit_code for option in data.availableOptions track by option.id"
+       required selected>
+              <!-- <option value="">Please select</option> -->
+              <!-- <option ng-repeat="option in data.availableOptions"  value="{{option.id}}">{{option.unit_code}}</option> -->
     </select>
 </td>
 </tr>
@@ -235,6 +240,12 @@ div.table-title {
     </select>
 </td>
 </tr>
+</tbody>
+</table>
+</div>
+<div class="col-md-6">
+<table class="table-fill">
+<tbody class="table-hover" >
 <tr>
 <td class="text-left">Location</td>
 <td class="text-left">
@@ -265,11 +276,11 @@ div.table-title {
 <input id="customerContact" name="customerContact" placeholder="placeholder" ng-model="vm.account.account_contact" class="form-control input-md col-md-12"  type="text" size="10">
 </td>
 </tr>
-<tr>
+<!-- <tr>
 <td class="text-left">Overall Health</td>
 <td class="text-left">
   <input id="customerContact" name="customerContact" placeholder="placeholder" ng-model="vm.account.overall_health" class="form-control input-md col-md-12"  type="text" size="10"></td>
-</tr>
+</tr> -->
 <tr>
 <td class="text-left">Account LoB</td>
 <td class="text-left">
@@ -298,15 +309,14 @@ div.table-title {
  
 </tbody>
 </table>
-
-
+</div>
+<button class="btn btn-primary" ng-click="next()" ng-disabled="!sermodel.length">Next</button>
+</div>
+</div>
+<div class="secondfill container" ng-show="nextv">
+<div class="row">
+<div class="col-md-6">
 <table class="table-fill">
-<!-- <thead>
-<tr>
-<th class="text-left">Month</th>
-<th class="text-left">Sales</th>
-</tr>
-</thead> -->
 <tbody class="table-hover">
 <tr>
 <td class="text-left">Select a service</td>
@@ -369,18 +379,24 @@ div.table-title {
 </td>
 </tr>
 <tr>
-<td class="text-left">Project Status</td>
+<td class="text-left">Service Status</td>
 <td class="text-left">
 <select name="status" id="status" ng-model="vm.service.project_status" class="form-control">
               <option ng-repeat="option in data.availableStatusOptions" value="{{option.id}}">{{option.name}}</option>
           </select>
 </td>
 </tr>
+</tbody>
+</table>
+</div>
+<div class="col-md-6">
+<table class="table-fill">
+<tbody class="table-hover" >
 <tr>
 <td class="text-left">Currency</td>
 <td class="text-left">
-<select name="anticipatedValueCurrency" id="anticipatedValueCurrency" ng-model="vm.service.anticipated_value_currency" class="form-control">
-              <option ng-repeat="option in data.availableAnticipatedValueCurrency" value="{{option.id}}">{{option.name}}</option>
+<select name="anticipatedValueCurrency" id="anticipatedValueCurrency" ng-model="vm.service.anticipated_value_currency" ng-click="currencycheck()" class="form-control">
+              <option ng-repeat="option in data.availableAnticipatedValueCurrency" value="{{option.id}}" selected="{{option.selected}}">{{option.name}}</option>
     </select>
 </td>
 </tr>
@@ -389,7 +405,7 @@ div.table-title {
 <td class="text-left">Start Date</td>
 <td class="text-left">
   <p class="input-group">
-          <input type="text" size="10" class="form-control" uib-datepicker-popup ng-model="vm.service.start_date" is-open="popup3.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+          <input type="text" size="10"  uib-datepicker-popup ng-model="vm.service.start_date" is-open="popup3.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
           <span class="input-group-btn">
             <button type="button" class="btn btn-default" ng-click="open3()"><i class="glyphicon glyphicon-calendar"></i></button>
           </span>
@@ -400,7 +416,7 @@ div.table-title {
 <td class="text-left">End Date</td>
 <td class="text-left">
   <p class="input-group">
-          <input type="text" size="10" class="form-control" uib-datepicker-popup ng-model="vm.service.end_date" is-open="popup4.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+          <input type="text" size="10"  uib-datepicker-popup ng-model="vm.service.end_date" is-open="popup4.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
           <span class="input-group-btn">
             <button type="button" class="btn btn-default" ng-click="open4()"><i class="glyphicon glyphicon-calendar"></i></button>
           </span>
@@ -408,48 +424,57 @@ div.table-title {
 </td>
 </tr>
 <tr>
-<td class="text-left">Health</td>
+<td class="text-left">Comments</td>
 <td class="text-left">
-  <input id="anticipatedValue" name="anticipatedValue" placeholder="placeholder" ng-model="vm.service.health" class="form-control input-md col-md-12"  type="text" size="10">
+  <input id="anticipatedValue" name="anticipatedValue" placeholder="placeholder" ng-model="vm.service.comments" class="form-control input-md col-md-12"  type="text" size="10">
 </td>
 </tr>
 <tr>
   
-<td class="text-left">Anticipated Value</td>
+<td class="text-left">Anticipated INR Value</td>
 <td class="text-left">
-<input id="anticipatedValue" name="anticipatedValue" placeholder="placeholder" ng-model="vm.service.anticipated_value" class="form-control input-md col-md-12"  type="text" size="10">
+<input id="anticipatedValue" name="anticipatedValue" placeholder="placeholder" ng-keyup="callCurrencyAPI()" ng-readonly="!USDcur" ng-model="vm.service.anticipated_value" class="form-control input-md col-md-12"  type="text" size="10">
 </td>
 </tr>
 <tr>
-<td class="text-left">Actual Value</td>
+<td class="text-left">Actual INR Value</td>
 <td class="text-left">
-  <input id="actualValue" name="actualValue" placeholder="placeholder" ng-model="vm.service.actual_value" class="form-control input-md col-md-12"  type="text" size="10">
+  <input id="actualValue" name="actualValue" placeholder="placeholder" ng-keyup="callCurrencyAPI()" ng-readonly="!USDcur" ng-model="vm.service.actual_value" class="form-control input-md col-md-12"  type="text" size="10">
 </td>
 </tr>
 <tr>
 <td class="text-left">Anticipated  USD Value</td>
 <td class="text-left">
-<input id="anticipatedValue" name="anticipatedValue" placeholder="placeholder" ng-model="vm.service.anticipated_usd_value" class="form-control input-md col-md-12"  type="text" size="10"></td>
+<input id="anticipatedValue" name="anticipatedValue" ng-readonly="USDcur" ng-keyup="callCurrencyAPI()"  placeholder="placeholder" ng-model="vm.service.anticipated_usd_value" class="form-control input-md col-md-12"  type="text" size="10"></td>
 </tr>
 <tr>
 <td class="text-left">Actual USD Value</td>
 <td class="text-left">
-<input id="anticipatedValue" name="anticipatedValue" placeholder="placeholder" ng-model="vm.service.actual_usd_value" class="form-control input-md col-md-12"  type="text" size="10">
+<input id="anticipatedValue" name="anticipatedValue" ng-readonly="USDcur" ng-keyup="callCurrencyAPI()" placeholder="placeholder" ng-model="vm.service.actual_usd_value" class="form-control input-md col-md-12"  type="text" size="10">
 </td>
 </tr>
-<tr>
+<!-- <tr>
 <td class="text-left"></td>
 <td class="text-left">
   <button class="btn btn-primary"  ng-click="add(vm.service,serIndModel)">Add</button>
 </td>
-</tr>
+</tr> -->
 
 </tbody>
 </table>
 </div>
+</div>
+
+
+<div class="row">
+<button class="btn btn-primary" ng-click="back()">Back</button>
+  
+</div>
+</div>
+</div>
 <br>
 <div class="row">
-  <button class="btn btn-primary" type="submit" ng-click="vm.saveaccount()">Submit</button>
+<button class="btn btn-primary" type="submit" ng-click="vm.saveaccount()">Submit</button>
   <button id="cancel" name="cancel" class="btn btn-danger">Cancel</button>
 </div>
 </form>

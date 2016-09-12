@@ -172,7 +172,7 @@ body {
     border: 2px solid #757575;
     border-radius: 9px;
     margin-top: 25px;
-    padding-bottom: 40px;
+    padding-bottom: 10px;
 }
 .section {
   clear: both;
@@ -200,11 +200,26 @@ body {
   background-color: steelblue !important;
   color: white;
 }
+.new-wrapper,.one-new-col,.two-new-col{
+  background-color: steelblue !important;
+  color: white;
+}
 .inner-wrapper {
   background: url(gridinator.png) repeat-y 0 0; /* The file gridinator.png is a grid background; delete this line to remove it. If you did not generate a background image, you can still do so by going to http://gridinator.com/ and entering the details found at the top of this CSS file. You will then be given a grid image to match your original grid.  */
   clear: both;
   display: inline;/* IE double margin fix. Feel free to move this to your IE specific stylesheets. */
   float: left;
+  padding: 0 10px 0 10px;
+  position: relative;
+  /*background: white;*/
+  border: 1px solid white;
+  border-radius:6px;
+}
+.new-wrapper {
+  background: url(gridinator.png) repeat-y 0 0; /* The file gridinator.png is a grid background; delete this line to remove it. If you did not generate a background image, you can still do so by going to http://gridinator.com/ and entering the details found at the top of this CSS file. You will then be given a grid image to match your original grid.  */
+  /*clear: both;*/
+  display: inline;/* IE double margin fix. Feel free to move this to your IE specific stylesheets. */
+  /*float: left;*/
   padding: 0 10px 0 10px;
   position: relative;
   /*background: white;*/
@@ -253,17 +268,54 @@ ul.custom-nav li{
   padding: 3px;
   border-radius: 4px;
 }
+.conflict div {
+    color: orangered;
+}
+.one-new-col, .two-new-col {
+  clear: none;
+  display: inline;/* IE double margin fix. Feel free to move this to your IE specific stylesheets. */
+  float: left;
+  margin: 0 7px 0 0;
+  padding: 0;
+  position: relative;
+  background: #ffffff;
+  padding: 3px;
+  border-radius: 4px;
+}
 .one-col {
-  width: 390px;
-  font-size: 16px;
+  width: 59%;
+  font-size: 14px;
+}
+.one-new-col {
+  width: 50%;
+  font-size: 13px;
 }
 
 .two-col {
     float: right;
     margin-right: 0;
-    width: 280px;
-    font-size: 16px;
+    width: 45%;
+    font-size: 14px;
     border-left: 2px solid white;
+}
+.two-new-col {
+    float: right;
+    margin-right: 0;
+    width: 50%;
+    font-size: 13px;
+    border-left: 2px solid white;
+}
+.wrapperouter {
+    margin: 0 auto;
+    text-align: left;
+    width: 100%;
+}
+.wrapperouter div.inner-wrapper{
+    width: 100%;
+}
+.newresouter{
+  width: 60%;
+  margin: 0 auto !important;
 }
 
 .prefix-one {
@@ -453,7 +505,9 @@ div#mycalendar{
 .select-locked > .ui-select-match-close{
     display:none;
 }
-
+.new-right {
+  float: right !important;
+}
 body > .select2-container.open {
   z-index: 9999; /* The z-index Select2 applies to the select2-drop */
 }
@@ -675,6 +729,9 @@ body > .ui-select-bootstrap.open {
 }
 .Modal-Inner h2.labelcustom{
  color:black; 
+}
+.single.pro ul,.proheader div.labelcustom {
+    border: 1px solid white;
 }
 
 /*Select 2 end*/

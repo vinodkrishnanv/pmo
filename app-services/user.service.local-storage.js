@@ -70,6 +70,8 @@
         service.editServiceProject=editServiceProject;//get all projects associated with a service
         service.checkAvailability=checkAvailability;
 		service.deleteProject=deleteProject;
+        service.callCurrencyAPI=callCurrencyAPI;
+        service.getAllAccountProjects=getAllAccountProjects;
         return service;
 
         function handleSuccess(res) {
@@ -85,7 +87,15 @@
                 return { success: false, message: error };
             };
         }
-
+        function callCurrencyAPI(base,symbol) {
+            
+            var req = {
+                method: 'GET',
+                url: 'http://api.fixer.io/latest?symbols='+symbol+'&base='+base,
+                headers : { 'Content-Type': 'application/json' } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
 
         function GetByUsername(username) {
             
@@ -335,6 +345,15 @@
             var req = {
                 method: 'GET',
                 url: 'http://'+hostName+':3000/accounts-services/'+id+'.json',
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        function getAllAccountProjects(id,sid) {
+            var req = {
+                method: 'GET',
+                url: 'http://'+hostName+':3000/accounts-projects/'+id+'/'+sid+'.json',
                 headers : { 'Content-Type': 'application/json',
                 "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
             }

@@ -20,7 +20,7 @@
             vm.dataLoading = true;
             AuthenticationService.Login(vm.username, vm.password, function (response) {
                 if (response.user.id) {
-                    AuthenticationService.SetCredentials(vm.username, vm.password,response.access_token);
+                    AuthenticationService.SetCredentials(response.user.id,vm.username, vm.password,response.access_token);
                     $location.path('/');
                     $rootScope.accesstoken=response.access_token;
                     if(response.user.role=="root"){
