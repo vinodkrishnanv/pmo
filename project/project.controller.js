@@ -117,6 +117,7 @@
         $scope.accountEvents = {
                              onItemSelect: function(item) {
                                   FlashService.clearMessage();
+                                  $scope.per = "P";
                                   $scope.sermodel= [];
                                   $scope.items.length=0;
                                   $scope.resmodel.length=0;
