@@ -121,7 +121,7 @@
                                   $scope.items.length=0;
                                   $scope.resmodel.length=0;
                                   $scope.resource=0;
-                                  $scope.IsVisible=$scope.calmodel=$scope.calrangemodel=item.id;
+                                  $scope.IsVisible=$scope.calmodel=$scope.showprodate=$scope.calrangemodel=item.id;
                                   UserService.getAccountServices(item.id).then(function (response){
                                     $scope.serdata = response.data.service_id ;
                                   });
