@@ -72,6 +72,7 @@
 		service.deleteProject=deleteProject;
         service.callCurrencyAPI=callCurrencyAPI;
         service.getAllAccountProjects=getAllAccountProjects;
+        service.deleteAccountMapping=deleteAccountMapping;
         return service;
 
         function handleSuccess(res) {
@@ -462,6 +463,17 @@
             }
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
+        function deleteAccountMapping(account) {
+            var req = {
+                method: 'POST',
+                url: 'http://'+hostName+':3000/delete-account-mapping.json',
+                headers : { 'Content-Type': 'application/json',
+                "accessToken" : $cookieStore.get('globals').currentUser.accesstoken  } ,
+                data:  account
+            }
+            return $http(req).then(function(response){return response;},function(response){return response;});
+        }
+        
         function validateResDetails(res) {
             var req = {
                 method: 'POST',

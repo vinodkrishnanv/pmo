@@ -25,6 +25,7 @@
                 $scope.class=="red";
                 $scope.end = new Date();
                 $scope.example13model = [];
+                $scope.hidesave=1;
                 $scope.resource ;
                 $scope.singleperSelect="100";
                 $scope.example13settings = {
@@ -118,6 +119,7 @@
                                   FlashService.clearMessage();
                                   $scope.per = "P";
                                   $scope.sermodel= [];
+                                  $scope.showsave = 1;
                                   $scope.items.length=0;
                                   $scope.resmodel.length=0;
                                   $scope.resource=0;
@@ -138,6 +140,11 @@
                                     });
                                   UserService.getMappedResource(item.id).then(function (response){
                                     $scope.items = response.data ;
+                                    if($scope.items.length){
+                                      $scope.hidesave=0;
+                                    }else{
+                                      $scope.hidesave=1;
+                                    }
                                     $scope.existingItems = angular.copy(response.data);
                                   });
                                   });
@@ -821,7 +828,7 @@
                                                              });
                }else{
                  UserService.deleteAccountMapping(account).then(function (response){
-                                                              FlashService.Success("People have been mapped to the project", true); 
+                                                              FlashService.Success("All the Mappings has been removed", true); 
                                                               $state.go("project", {}, {reload: true});
                                                              });
 

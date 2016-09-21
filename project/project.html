@@ -5,7 +5,7 @@
     <!--{{promodel}}
     {{resmodel}} -->
     <div class="row">
-      <div class="col-md-3">
+      <div class="col-md-4">
       <div class="col-md-6 text-left">
         <label for="username">Account name</label>
       </div>
@@ -15,7 +15,7 @@
       </div>
       </div>
 
-      <div class="col-md-3" ng-show= 'accountmodel.id'>
+      <div class="col-md-4" ng-show= 'accountmodel.id'>
         <div class="col-md-6 text-left">
           <label for="username">Service name</label>
         </div>
@@ -24,7 +24,7 @@
          
         </div>
       </div>
-      <div class="col-md-3" >
+      <div class="col-md-4" >
       <div class="row" ng-show="showaccountdates">
       <div class="col-md-6 text-left">
         <label for="username">Account Timeline</label>
@@ -40,12 +40,16 @@
       </div>
       </div>
       </div>
-      <div ng-show= 'accountmodel.id' class="col-md-3 text-right new-right">
-      <button ui-sref="project.calendar" class="btn btn-primary">View Current Allocation</button>
-      </div>
+      
     </div>
+    <div class="row">
+    <div ng-show= 'accountmodel.id' class="col-md-3 text-right new-right">
+      <button ui-sref="project.calendar" class="btn btn-primary">View Current Allocation</button>
+      </div>  
+    </div>
+    
     <div class="row" ng-show="showprodate">
-      <div class="col-md-3">
+      <div class="col-md-4">
       <div class="col-md-6 text-left">
         <label for="username">Project name</label>
       </div>
@@ -54,7 +58,7 @@
        
       </div>
       </div>
-      <div class="col-md-3" ng-show="calmodel">
+      <div class="col-md-4" ng-show="calmodel">
       <div class="col-md-6 text-left">
           <label for="username">Select People</label>
         </div>
@@ -65,7 +69,7 @@
 
     </div>
     </div>
-    <div class="row reshere newresouter" ng-show="showreshere" >
+    <div class="row reshere newresouter" ng-hide="hidesave"  > <!--ng-show="showreshere" >-->
      <div id="wrapper" class="wrapperouter" >
         <div id="inner-wrapper" class="inner-wrapper parent" ng-class="{'conflict': n.conflict == 1}" ng-repeat="n in existingItems |  orderBy:'resource_id' | orderBy : 'service_id' ">
           <!-- <div ng-show="showservice({{n.service_id}})">
@@ -82,10 +86,13 @@
         </div>
     </table> --></div>
       </div>
-      <div class="text-center">
-          <button class="btn btn-success"    ng-click="saveproject()">Save</button>
-          </div>
+      
     </div>
+    </div>
+    <div class="row">
+    <div class="text-center">
+          <button class="btn btn-success"    ng-show="showsave" ng-click="saveproject()">Save</button>
+          </div>
     </div>
     <!-- <div class="row" ng-show="showaccountdates">
     
@@ -135,7 +142,7 @@
 
          </div> 
          <br><br><br><br>
-         <div class="row">
+         <div class="row" >
          <div class="col-md-4">
             <div ng-show="resource" >
               <div style='display:inline-block; vertical-align:top'>

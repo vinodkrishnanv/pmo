@@ -271,6 +271,11 @@ ul.custom-nav li{
 .conflict div {
     color: orangered;
 }
+.text-left div div button{
+  width: 135px !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .one-new-col, .two-new-col {
   clear: none;
   display: inline;/* IE double margin fix. Feel free to move this to your IE specific stylesheets. */
@@ -475,6 +480,9 @@ div#mycalendar{
 /* Style when highlighting a search. */
 .ui-select-highlight {
   font-weight: bold;
+}
+#btn-group button.active {
+    background-color: limegreen !important;
 }
 
 .ui-select-offscreen {
