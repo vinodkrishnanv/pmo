@@ -108,7 +108,6 @@
         $scope.account=[];
         $scope.rowClass = function(item){
           if(!item.saved){
-            console.log(item.name);
             return item;            
           }else{
             return false;
@@ -193,35 +192,21 @@
                              onItemSelect: function(item) {
                               $scope.per = item.mapping_format; 
                               $scope.promodel.id=0;
-
-                              
-                              // angular.forEach($scope.serdata, function(value) {
-                              //   console.log(value);
-                              //   if(value.id == item.id){
-                              //     console.log(value);
-                              //     $scope.per = value.mapping_format;                                  
-                              //   }
-                              //                 }); 
-
                               var data = {"account_id":$scope.accountmodel.id,"service_id":item.id}
                                               UserService.getServiceDates(data).then(function (response){
                                                 var mindate = new Date(response.data[0].start_date).getTime();
                                                 var maxdate = new Date(response.data[0].end_date).getTime();
-                                                $scope.newMax = maxdate ;//+ 19800000;
-                                                $scope.newMin = mindate ;//+ 19800000;
+                                                $scope.newMax = maxdate ;
+                                                $scope.newMin = mindate ;
                                                 $scope.showaccountdates = 1;
                                               });
                                               UserService.getFilteredProjects(data).then(function (response){
                                                 $scope.prodata = response.data ;
                                                 $scope.showprodate=1;
                                                 if(!$scope.prodata.length){
-                                                 //   $scope.showprodate=1;
-                                                 // }else{
-                                                 //   $scope.showprodate=1;
                                                    $scope.promodel.id=0;
                                                    $scope.promodel.project_code=$scope.sermodel.service_code;
                                                  }
-                                                 // console.log(showprodate);
                                               });
                                             },
                      };
@@ -402,11 +387,11 @@
                 myEl.addClass('btn-default');
               }
               $scope.tempitems=angular.copy($scope.items);
-              for (var i = $scope.items.length - 1; i >= 0; i--) {
-                                                                  if (($scope.items[i].flagged==1)) {
-                                                                      $scope.items.splice(i, 1);
-                                                                  }
-                                                              }
+              // for (var i = $scope.items.length - 1; i >= 0; i--) {
+              //                                                     if (($scope.items[i].flagged==1)) {
+              //                                                         $scope.items.splice(i, 1);
+              //                                                     }
+              //                                                 }
               var newdate=[];
               angular.forEach($scope.resmodel, function(value) {
                   if((resids.indexOf(value.id) == -1)){
@@ -420,8 +405,6 @@
                  newdate.push(value+19800000);
                 }
               });
-              console.log(Number(hrs));
-              console.log((newdate.length * $scope.resmodel.length * 8));
               var flag=1;
               var array=[];
               var objarr={};
@@ -432,8 +415,6 @@
                   if((h-Math.floor(h))==0){
                     flag=0;
                   }
-                  console.log(h);
-                  console.log(mod);
                   angular.forEach(newdate, function(value) {
                     var obj={};
                       angular.forEach($scope.resmodel, function(res) {
@@ -441,14 +422,11 @@
                         });                    
                       objarr[value]=obj;
                     });
-                        console.log(nobjarr);     
-
                   if(flag){
                     if(mod !=0){
                       var keepGoing = true;
                       angular.forEach(objarr, function(value,keys) {
                         if(keepGoing){
-                        //console.log(value.key);
                       angular.forEach(value, function(val,key) {
                         if(keepGoing){
                           objarr[keys][key]=val + 1;
@@ -474,7 +452,6 @@
                     nobjarr[k] [vasl].push(Number(keyss));
                     });
                         }); 
-                  console.log(nobjarr);
                   var checkflag=0;
                   var perval=0;
                   angular.forEach(objarr, function(value,keys) {
@@ -490,13 +467,11 @@
                                 });
                                 if(found){
                                   perval=perval+ Number($scope.items[key].percentage_loaded);
-                                  console.log(perval);
                                  //chcks whether resource is loaded more than 100%
                                 }
                               }
                             }
                            perval=perval + val*12.5 ;
-                           console.log(perval);
                             if(perval>100){
                                   checkflag = 1;
                             }
@@ -506,30 +481,25 @@
                     FlashService.Error("One of the resource was loaded more than 100 %");
                   }else{
                     // var servdata ={};
-                    var newDates=[];
+                    
                     angular.forEach(nobjarr, function(value,keys) {
-                      var newfiltered = $filter('filter')($scope.items, { resource_id: keys, service_id: $scope.sermodel.id, project_id: $scope.promodel.id});
+                      var newfiltered = $filter('filter')($scope.items, { resource_id: Number(keys), service_id: $scope.sermodel.id, project_id: $scope.promodel.id});
                       if(newfiltered.length>1){
                               for (var key in $scope.items) {
                                 if(($scope.items[key].resource_id == keys) && ($scope.items[key].service_id == $scope.sermodel.id) && ($scope.items[key].project_id == $scope.promodel.id)){// && ($scope.items[key].percentage_loaded == perload) ){
-                                  $scope.items.splice(key,1);
+                                  delete($scope.items[key]);
                                 }
                               }
                       }
-                      console.log(keys);
                       angular.forEach(value, function(val,k) {
                         if(val.length){
                         var servdata ={};
-                        console.log(k);
-                        console.log(val);
                          var perload = k*12.5;
                               var filtered = $filter('filter')($scope.items, { resource_id: keys, service_id: $scope.sermodel.id, project_id: $scope.promodel.id, percentage_loaded: perload});
-                              
-                              servdata.resource_id=keys;
-                              console.log(newfiltered.length);
+                              servdata.resource_id=Number(keys);
                               servdata.account_id=$scope.accountmodel.id;
                               angular.forEach($scope.resmodel, function(value) {
-                                 if(value.id == keys){
+                                 if(value.id == Number(keys)){
                                    servdata.name=value.employee_name;
                                 }
                               });
@@ -543,18 +513,14 @@
                               servdata.maxDate= Math.max.apply(Math, val);
                               servdata.noOfDays= val.length;
                               servdata.percentage_loaded=perload;
-                              console.log(servdata);
-                        //      console.log(servdata.Dates);
-                        //      console.log($scope.items);
                               var newflag;
-                        //      console.log(filtered.length);
 
                              if(filtered.length==0){
                               $scope.items.push(angular.copy(servdata));
                              }else{
                               newflag=1;
                               for (var key in $scope.items) {
-                                if(($scope.items[key].resource_id == keys) && ($scope.items[key].service_id == $scope.sermodel.id) && ($scope.items[key].project_id == $scope.promodel.id)){// && ($scope.items[key].percentage_loaded == perload) ){
+                                if(($scope.items[key].resource_id == Number(keys)) && ($scope.items[key].service_id == $scope.sermodel.id) && ($scope.items[key].project_id == $scope.promodel.id)){// && ($scope.items[key].percentage_loaded == perload) ){
                                   newflag=0;
                                   $scope.items[key].account_id=angular.copy($scope.accountmodel.id);
                                   $scope.items[key].name=angular.copy(servdata.name);
@@ -570,23 +536,23 @@
                                   $scope.items[key].saved=0;
                                 }
                               }
-                              for (var keyss in $scope.existingItems) {
-                                if(($scope.existingItems[keyss].resource_id == keys) && ($scope.existingItems[keyss].service_id == $scope.sermodel.id) && ($scope.existingItems[keyss].project_id == $scope.promodel.id) ){
-                                  $scope.existingItems[keyss].conflict=1;
-                                }
-                              }
+                              
                               if(newflag){
                                  $scope.items.push(angular.copy(servdata));
                               }
 
                              }
+                             for (var keyss in $scope.existingItems) {
+                                if(($scope.existingItems[keyss].resource_id == Number(keys)) && ($scope.existingItems[keyss].service_id == $scope.sermodel.id) && ($scope.existingItems[keyss].project_id == $scope.promodel.id) ){
+                                  $scope.existingItems[keyss].conflict=1;
+                                }
+                              }
                            }
                         });
                     });
         ////asasasa
         var finalres={};
         var servces={};
-        console.log(resids);
         angular.forEach(resids, function(value) {
            var newtempres={};
            var newser=[];
@@ -608,47 +574,10 @@
               finalres[nkey] = newtempres;
               servces[nkey] = newser;
         });
-        console.log($scope.items);
         var data = {"resources":finalres,"account_id":$scope.accountmodel.id,"service_ids":servces}
         $scope.resmodel.length = 0;
               var res = {};
                var newstr='';
-               
-
-              //     UserService.validateNewResDetails(data).then(function (response){
-              //                                               var errres=[];
-              //                                               angular.forEach(response.data, function(value) {
-              //                                                 if(value.success==0){
-              //                                                   for (var key in $scope.items) {
-              //                                                         var newflag=1;
-              //                                                       if($scope.tempitems[key]){
-              //                                                         $scope.items[key] = $scope.tempitems[key];
-              //                                                       }else{
-              //                                                         if (($scope.items[key].flagged==1)) {
-              //                                                         $scope.items.splice(key, 1);
-              //                                                       }
-              //                                                       }
-              //                                                   }
-              //                                                   var sumstr="";
-              //                                                   sumstr=(value.name + " is occupied on the following dates - ");
-              //                                                    var datestring='';
-              //                                                    value.dates.sort();
-              //                                                   angular.forEach(value.dates,function(nvalue) {
-              //                                                     var d = new Date(Number(nvalue));
-              //                                                   datestring=datestring+((d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear())+ ",");
-              //                                               });
-              //                                                   if(errres.indexOf(value.resource_id) == -1){
-              //                                                   newstr=newstr+(" "+sumstr+datestring)+"<br>";
-              //                                                   errres.push(value.resource_id);
-              //                                                   }
-              //                                                 }
-              //                                               });
-              //                                                     if(newstr){
-              //                                                     FlashService.Error(newstr, true);  
-              //                                                     }
-                                                                  
-              //                                               var mydata={};
-              // });
                   }
               }else{
 
@@ -663,8 +592,6 @@
                 myEl.removeClass('btn-primary');
                 myEl.addClass('btn-default');
               }
-              console.log($scope.promodel);
-
               $scope.tempitems=angular.copy($scope.items);
               angular.forEach($scope.resmodel, function(value) {
               if((resids.indexOf(value.id) == -1)){
@@ -796,7 +723,6 @@
         }
         var finalres={};
         var servces={};
-        console.log(resids);
         angular.forEach(resids, function(value) {
            var newtempres={};
            var newser=[];
@@ -887,11 +813,19 @@
                 accountDetails.minEndDate = $scope.newMin;
                 accountDetails.maxEndDate = $scope.newMax;
                 //accountDetails.maxEndDate =Math.max.apply(Math, $scope.accountrangeDates)+19800000;
-                account = {"account" : accountDetails}
+                account = {"account" : accountDetails};
+                 if($scope.items.length){
                  UserService.saveAccountDetails(account).then(function (response){
                                                               FlashService.Success("People have been mapped to the project", true); 
                                                               $state.go("project", {}, {reload: true});
                                                              });
+               }else{
+                 UserService.deleteAccountMapping(account).then(function (response){
+                                                              FlashService.Success("People have been mapped to the project", true); 
+                                                              $state.go("project", {}, {reload: true});
+                                                             });
+
+               }
                 // set the location.hash to the id of
             // the element you wish to scroll to.
                   $location.hash('top');
