@@ -283,8 +283,17 @@ ul.custom-nav li{
   border-radius: 4px;
 }
 .one-col {
-  width: 59%;
   font-size: 14px;
+}
+.one-new-col div{
+  white-space: nowrap;
+    overflow:hidden !important;
+    text-overflow: ellipsis;
+}
+.two-new-col  div{
+  white-space: nowrap;
+    overflow:hidden !important;
+    text-overflow: ellipsis;
 }
 .one-new-col {
   width: 50%;
@@ -314,7 +323,7 @@ ul.custom-nav li{
     width: 100%;
 }
 .newresouter{
-  width: 60%;
+  width: 100%;
   margin: 0 auto !important;
 }
 

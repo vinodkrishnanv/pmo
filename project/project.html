@@ -71,11 +71,11 @@
           <!-- <div ng-show="showservice({{n.service_id}})">
             <div class="col-md-6">{{n.service_id}}</div>
         </div> -->
-      <div class="one-col row">
-        <div class="col-md-7">{{n.name}} &nbsp; ({{n.project_code}} &nbsp;|| &nbsp;{{n.service_code}})</div>
-        <div class="col-md-5">{{n.percentage_loaded}}% &nbsp; ({{n.percentage_loaded/12.5}}h)</div>
+      <div class="one-col col-md-6">
+        <div class="col-md-8" title="{{n.name}} &nbsp; ({{n.project_code}} &nbsp;|| &nbsp;{{n.service_code}})">{{n.name}} &nbsp; ({{n.project_code}} &nbsp;|| &nbsp;{{n.service_code}})</div>
+        <div class="col-md-4" title="{{n.percentage_loaded}}% &nbsp; ({{n.percentage_loaded/12.5}}h)">{{n.percentage_loaded}}% &nbsp; ({{n.percentage_loaded/12.5}}h)</div>
         </div>
-      <div class="two-col "><div class="col-md-11">{{n.minDate | date:'MMM d, y'}} -- {{n.maxDate | date:'MMM d, y'}}</div><i class="fa fa-times" ng-click="remresdate({{n.resource_id}},{{n.service_id}},{{n.project_id}})" aria-hidden="true"></i>
+      <div class="two-col "><div class="col-md-11" title="{{n.minDate | date:'MMM d, y'}} -- {{n.maxDate | date:'MMM d, y'}}  | {{n.noOfDays}} days">{{n.minDate | date:'MMM d, y'}} -- {{n.maxDate | date:'MMM d, y'}}  | {{n.noOfDays}} days</div><i class="fa fa-times" ng-click="remresdate({{n.resource_id}},{{n.service_id}},{{n.project_id}})" aria-hidden="true"></i>
 <!-- <table>
         <div ng-repeat="task in n.Dates">
               {{task | date:'MMM d, y'}}
@@ -168,10 +168,10 @@
             <div class="col-md-6">{{n.service_id}}</div>
         </div> -->
       <div class="one-new-col row">
-        <div class="col-md-7">{{n.name}} &nbsp; ({{n.project_code}} &nbsp;|| &nbsp;{{n.service_code}})</div>
-        <div class="col-md-5">{{n.percentage_loaded}}% &nbsp; ({{n.percentage_loaded/12.5}}h)</div>
+        <div class="col-md-7" title="{{n.name}} &nbsp; ({{n.project_code}} &nbsp;|| &nbsp;{{n.service_code}})">{{n.name}} &nbsp; ({{n.project_code}} &nbsp;|| &nbsp;{{n.service_code}})</div>
+        <div class="col-md-5" title="{{n.percentage_loaded}}% &nbsp; ({{n.percentage_loaded/12.5}}h)">{{n.percentage_loaded}}% &nbsp; ({{n.percentage_loaded/12.5}}h)</div>
         </div>
-      <div class="two-new-col "><div class="col-md-11">{{n.minDate | date:'MMM d, y'}} -- {{n.maxDate | date:'MMM d, y'}} -- {{n.noOfDays}} days</div><i class="fa fa-times" ng-click="remresdate({{n.resource_id}},{{n.service_id}},{{n.project_id}})" aria-hidden="true"></i>
+      <div class="two-new-col " title="{{n.minDate | date:'MMM d, y'}} -- {{n.maxDate | date:'MMM d, y'}} -- {{n.noOfDays}} days"><div class="col-md-11">{{n.minDate | date:'MMM d, y'}} -- {{n.maxDate | date:'MMM d, y'}} -- {{n.noOfDays}} days</div><i class="fa fa-times" ng-click="remresdate({{n.resource_id}},{{n.service_id}},{{n.project_id}})" aria-hidden="true"></i>
 <!-- <table>
         <div ng-repeat="task in n.Dates">
               {{task | date:'MMM d, y'}}
