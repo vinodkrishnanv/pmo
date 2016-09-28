@@ -465,7 +465,7 @@
                       angular.forEach(value, function(val,k) {
                         perval=0;
                             for (var key in $scope.items) {
-                              if($scope.items[key].resource_id == k){
+                              if(($scope.items[key].resource_id == k ) && (($scope.items[key].service_id != $scope.sermodel.id) || ($scope.items[key].project_id != $scope.promodel.id))){
                                 var found=0;
                                 angular.forEach($scope.items[key].Dates, function(v) {
                                 if(keys == v){
@@ -488,13 +488,15 @@
                     FlashService.Error("One of the resource was loaded more than 100 %");
                   }else{
                     // var servdata ={};
+
                     
                     angular.forEach(nobjarr, function(value,keys) {
                       var newfiltered = $filter('filter')($scope.items, { resource_id: Number(keys), service_id: $scope.sermodel.id, project_id: $scope.promodel.id});
                       if(newfiltered.length>=1){
                               for (var key in $scope.items) {
                                 if(($scope.items[key].resource_id == keys) && ($scope.items[key].service_id == $scope.sermodel.id) && ($scope.items[key].project_id == $scope.promodel.id)){// && ($scope.items[key].percentage_loaded == perload) ){
-                                  delete($scope.items[key]);
+                                  //delete($scope.items[key]);
+                                  $scope.items.splice(key,1);
                                 }
                               }
                       }
@@ -521,7 +523,6 @@
                               servdata.noOfDays= val.length;
                               servdata.percentage_loaded=perload;
                               var newflag;
-
                              if(filtered.length==0){
                               $scope.items.push(angular.copy(servdata));
                              }else{
