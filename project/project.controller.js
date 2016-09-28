@@ -588,7 +588,7 @@
                var newstr='';
                   }
               }else{
-
+                FlashService.Error("The number of hours given to add is more than the available number of hours for the number of days selected");
               }
               $scope.resmodel.length=0;
               
