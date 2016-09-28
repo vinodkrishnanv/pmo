@@ -491,7 +491,7 @@
                     
                     angular.forEach(nobjarr, function(value,keys) {
                       var newfiltered = $filter('filter')($scope.items, { resource_id: Number(keys), service_id: $scope.sermodel.id, project_id: $scope.promodel.id});
-                      if(newfiltered.length>1){
+                      if(newfiltered.length>=1){
                               for (var key in $scope.items) {
                                 if(($scope.items[key].resource_id == keys) && ($scope.items[key].service_id == $scope.sermodel.id) && ($scope.items[key].project_id == $scope.promodel.id)){// && ($scope.items[key].percentage_loaded == perload) ){
                                   delete($scope.items[key]);
