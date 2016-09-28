@@ -495,11 +495,26 @@
                       if(newfiltered.length>=1){
                               for (var key in $scope.items) {
                                 if(($scope.items[key].resource_id == keys) && ($scope.items[key].service_id == $scope.sermodel.id) && ($scope.items[key].project_id == $scope.promodel.id)){// && ($scope.items[key].percentage_loaded == perload) ){
-                                  //delete($scope.items[key]);
-                                  $scope.items.splice(key,1);
+                                  delete($scope.items[key]);
+                                  //$scope.items.splice(key,1);
                                 }
                               }
+                              var newArray = [];
+                              for (var i = 0; i < $scope.items.length; i++) {
+                                if ($scope.items[i] !== undefined && $scope.items[i] !== null && $scope.items[i] !== "") {
+                                  newArray.push($scope.items[i]);
+                                }
+                               }
+                               $scope.items.length=0;
+                               $scope.items=angular.copy(newArray);
                       }
+                      // for (var key in $scope.items) {
+                      //           if(($scope.items[key].resource_id == keys) && ($scope.items[key].service_id == $scope.sermodel.id) && ($scope.items[key].project_id == $scope.promodel.id)){// && ($scope.items[key].percentage_loaded == perload) ){
+                      //             delete($scope.items[key]);
+                      //             //$scope.items.splice(key,1);
+                      //           }
+                      //         }
+
                       angular.forEach(value, function(val,k) {
                         if(val.length){
                         var servdata ={};
