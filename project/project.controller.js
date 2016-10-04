@@ -597,10 +597,71 @@
               finalres[nkey] = newtempres;
               servces[nkey] = newser;
         });
-        var data = {"resources":finalres,"account_id":$scope.accountmodel.id,"service_ids":servces}
+        var data = {"resources":finalres,"account_id":$scope.accountmodel.id,"service_ids":servces};
         $scope.resmodel.length = 0;
               var res = {};
                var newstr='';
+               
+                               // console.log($scope.items);
+
+                  UserService.validateNewResDetails(data).then(function (response){
+                                                            var errres=[];
+                                                            angular.forEach(response.data, function(value) {
+                                                              if(value.success==0){
+                                                                for (var key in $scope.items) {
+                                                                  if(($scope.items[key].resource_id == value.resource_id) && ($scope.items[key].service_id == value.service_id)){
+                                                                    if($scope.tempitems[key]){
+                                                                      if($scope.tempitems[key].saved == 1){
+                                                                      var newflag=1;
+                                                                    }
+                                                                      
+                                                                  }
+                                                                    if($scope.items[key].saved != 1){
+                                                                     $scope.items[key].delete=1;
+                                                                    }
+                                                                    
+                                                                    $scope.newitem=angular.copy($scope.tempitems[key]);
+                                                                    //var newitem=$scope.items.splice(key, 1);
+                                                                    //$scope.items[key].delete=1;
+
+                                                                  //  if(newflag){
+                                                                      //    $scope.items.splice(key, 0,$scope.newitem);
+                                                                          //$scope.items[key]=angular.copy($scope.newitem);
+                                                                   // }
+                                                                  }
+                                                                }
+                                                                var sumstr="";
+                                                                sumstr=(value.name + " is occupied on the following dates - ");
+                                                                
+                                                                 var datestring='';
+                                                                 value.dates.sort();
+                                                                angular.forEach(value.dates,function(nvalue) {
+                                                                  var d = new Date(Number(nvalue));
+                                                                datestring=datestring+((d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear())+ ",");
+                                                            });
+                                                                if(errres.indexOf(value.resource_id) == -1){
+                                                                newstr=newstr+(" "+sumstr+datestring)+"<br>";
+                                                                errres.push(value.resource_id);
+                                                                }
+                                                              }
+                                                            });
+                                                                  if(newstr){
+                                                                  FlashService.Error(newstr, true);  
+                                                                  }
+                                                                  
+                                                            var mydata={};
+                                                            var newFinArray = [];
+                                                            for (var i = 0; i < $scope.items.length; i++) {
+                                                            //  if ($scope.items[i] !== undefined && $scope.items[i] !== null && $scope.items[i] !== "" && $scope.items[i].delete != 1) {
+                                                                // console.log($scope.items[i]);
+                                                                if ($scope.items[i].delete != 1) {
+                                                                newFinArray.push($scope.items[i]);
+                                                              }
+                                                             }
+                                                             $scope.items.length=0;
+                                                             $scope.items=angular.copy(newFinArray);
+              });
+                  
                   }
               }else{
                 FlashService.Error("The number of hours given to add is more than the available number of hours for the number of days selected");
