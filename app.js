@@ -2,9 +2,31 @@
     'use strict';
 
     angular
-        .module('app', ['ngRoute', 'ngCookies','ngGrid','ngSanitize', 'ngTouch', 'ui.grid',  'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.edit','ui.grid.resizeColumns','ui.bootstrap', 'schemaForm','angularjs-dropdown-multiselect','gm.datepickerMultiSelect','demo-calendar','ui.router','ui.calendar','ui.select2'])
+        .module('app', ['ngRoute', 'ngCookies','ngGrid','ngSanitize', 'ngTouch', 'ui.grid', 'ui.grid.autoResize', 'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.edit','ui.grid.resizeColumns','ui.bootstrap', 'schemaForm','angularjs-dropdown-multiselect','gm.datepickerMultiSelect','demo-calendar','ui.router','ui.calendar','ui.select2'])
         .config(config)
         .run(run)
+        .directive('loading',   ['$http' ,function ($http)
+    {
+        return {
+            restrict: 'A',
+            link: function (scope, elm, attrs)
+            {
+                scope.isLoading = function () {
+                    return $http.pendingRequests.length > 0;
+                };
+
+                scope.$watch(scope.isLoading, function (v)
+                {
+                    if(v){
+                        elm.show();
+                    }else{
+                        elm.hide();
+                    }
+                });
+            }
+        };
+
+    }])
         ;
 		//var scotchApp = angular.module('app', ['ngRoute', 'ngCookies']);
 
@@ -20,7 +42,7 @@
 
             })
             .state('home', {
-                    url: "/",
+                    url: "/home",
                     controller: 'HomeController',
                     templateUrl: 'home/home.view.html',
                     controllerAs: 'vm'
@@ -399,12 +421,16 @@
                 }); 
             $urlRouterProvider.otherwise('/login');
 
+
            
     }
 	
 
     run.$inject = ['$rootScope', '$location', '$cookieStore', '$http'];
     function run($rootScope, $location, $cookieStore, $http) {
+        $rootScope.getClass = function (path) {
+              return ($location.path().substr(0, path.length) === path) ? 'active' : '';
+            }
         // keep user logged in after page refresh
         $rootScope.globals = $cookieStore.get('globals') || {};
         if ($rootScope.globals.currentUser) {

@@ -17,11 +17,11 @@
           var y = date.getFullYear();
           $scope.type = "free";
           $scope.changeTo = 'Hungarian';
-          $scope.eventSource = {
-            url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
-              className: 'gcal-event',           // an option!
-              currentTimezone: 'America/Chicago' // an option!
-            };
+          // $scope.eventSource = {
+          //   url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
+          //     className: 'gcal-event',           // an option!
+          //     currentTimezone: 'America/Chicago' // an option!
+          //   };
 
             $scope.accountmodel = [];
             $scope.sermodel = [];
@@ -67,6 +67,7 @@
                               allDay: true,
                               description: object.description,
                               type: object.type,
+                              perc: object.perc,
                             });
                      });
                         angular.copy(newEvents, $scope.events);
@@ -211,9 +212,13 @@
           var s="background-color:#378006;border-color:#378006";
         }else{
           if (event.type=="free") {
-          var s="background-color:#378006;border-color:#378006";
+          if((event.perc === "100.0") || (event.perc === "100")){
+            var s="background-color:#378006;border-color:#378006";
+            }else{
+              var s="background-color:#e26a26;border-color:#e26a26";
+            }
           } else{
-          var s="background-color:#8B4513;border-color:#8B4513";
+              var s="background-color:#8B4513;border-color:#8B4513";
           };
         }
         element.attr({

@@ -34,14 +34,14 @@ $scope.data = {
                           
                          };
         var rowIndexTemp = 0;
-        $timeout(function () {
+        // $timeout(function () {
         UserService.getHeirarchies()
                          .then(function (response) {
                           $rootScope.availableHeirarchyOptions = response.data;
                          $scope.data.availableHeirarchyOptions= $rootScope.availableHeirarchyOptions;
                          });
-                       },3000);
-        $timeout(function () {
+                       // },3000);
+        // $timeout(function () {
         UserService.getSkills()
                          .then(function (response) {
                           $rootScope.availableSkillOptions = response.data;
@@ -53,7 +53,7 @@ $scope.data = {
                           }
                           $scope.resdata = response.data;
                          });
-                       },3000);
+                       // },3000);
     //$scope.clickResourceHandler = RowResourceEditor.editRow;
 		$scope.eventDetails = eventDetails;
         $scope.message = 'Look! I am a Resource page.';
@@ -109,7 +109,7 @@ vm.gridOptions = {
    enableColumnResizing: true,
    enableCellEdit: false,
     columnDefs: [
-    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/resources/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a>&nbsp<a href="#/resources/delete/{{row.entity.id}}"  ><button type="button" class="btn btn-xs danger-class"  ><i  class="fa fa-trash"></i></button></a></div>', width: 70 },
+    { field: 'id',name: 'E/D',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/resources/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a>&nbsp<a href="#/resources/delete/{{row.entity.id}}"  ><button type="button" class="btn btn-xs danger-class"  ><i  class="fa fa-trash"></i></button></a></div>', width: 70 },
     { name: 'employee_name', width: 260 },
       { name: 'employee_id' , width: 130},
       { name: 'role' , width: 180},

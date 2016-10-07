@@ -21,7 +21,7 @@
             AuthenticationService.Login(vm.username, vm.password, function (response) {
                 if (response.user.id) {
                     AuthenticationService.SetCredentials(response.user.id,vm.username, vm.password,response.access_token);
-                    $location.path('/');
+                    $location.path('/home');
                     $rootScope.accesstoken=response.access_token;
                     if(response.user.role=="root"){
                        $cookieStore.put("rootAccess",1) ;

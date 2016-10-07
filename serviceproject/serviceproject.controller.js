@@ -123,18 +123,28 @@
 
 
 vm.gridOptions = {
+   rowHeight: 30,
 
     columnDefs: [
-    { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/project/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a>&nbsp<a href="#/project/delete/{{row.entity.id}}"  ><button type="button" class="btn btn-xs danger-class"  ><i  class="fa fa-trash"></i></button></a></div>', width: 70 },
+    { field: 'id', name: 'E/D', cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/project/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a>&nbsp<a href="#/project/delete/{{row.entity.id}}"  ><button type="button" class="btn btn-xs danger-class"  ><i  class="fa fa-trash"></i></button></a></div>', width: 70 },
     { name: 'project_name',width: 180 },
-    { name: 'project_code' ,width: 130},
+    { name: 'project_code' ,width: 180},
     // { name: 'start_date' ,minWidth: 260},
     // { name: 'end_date' ,minWidth: 260},
 
     ],
     enableCellEdit: false,
+    enableHorizontalScrollbar: 0, 
+    enableVerticalScrollbar:2,
 
   };
+  $scope.getTableHeight = function() {
+       var rowHeight = 30; // your row height
+       var headerHeight = 50; // your header height
+       return {
+          height: (vm.gridOptions.data.length * rowHeight + headerHeight) + "px"
+       };
+    };
   UserService.getAllServiceProjects()
      .then(function (response) {
       vm.gridOptions.data = response.data;
@@ -162,18 +172,49 @@ function ServiceProjectEditController($scope,$log,$cookieStore,$state,$http,User
              // vm.account.anticipated_value = vm.account.anticipated_value.concat(" ").concat(vm.account.anticipated_value_currency);
                       } 
                   });
-                  vm.gridOptions = {
+                  $scope.accountEvents = {
+                             onItemSelect: function(item) {
+                              
+                                  FlashService.clearMessage();
+                                  $scope.sermodel= [];
+                                  UserService.getAccountServices(item.id).then(function (response){
+                                    $scope.serdata = response.data.service_id ;
+                                  });
+                                  UserService.getAllAccountProjects(item.id,$scope.sermodel.id).then(function (response){
+                                    console.log(response.data.length);
+                                    if(response.data.length){
+                                      $scope.accountprojects = response.data;                                      
+                                    }else{
+                                      $scope.accountprojects=[];
+                                    }
+                                    console.log($scope.accountprojects);
+                                  });
+                                  },
+                                };
+        $scope.serEvents = {
+                             onItemSelect: function(item) {
+                              $scope.accountprojects=[];
+                                  UserService.getAllAccountProjects($scope.accountmodel.id,item.id).then(function (response){
+                                    if(response.data.length){
+                                      $scope.accountprojects = response.data;                                      
+                                    }else{
+                                      $scope.accountprojects=[];
+                                    }
+                                  });
+                                  },
+                                };
+                  // vm.gridOptions = {
 
-                      columnDefs: [
-                      { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/project/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a>&nbsp<a href="#/services/delete/{{row.entity.id}}"  ><button type="button" class="btn btn-xs danger-class"  ><i  class="fa fa-trash"></i></button></a></div>', width: 70 },
-                      { name: 'project_name' },
-                      { name: 'project_code' },
-                      { name: 'start_date' },
-                      { name: 'end_date' },
-                      ],
-                      enableCellEdit: false,
+                  //     columnDefs: [
+                  //     { field: 'id',  cellTemplate:'<div class="ui-grid-cell-contents"><a href="#/project/edit/{{row.entity.id}}"><button type="button" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i></button></a>&nbsp<a href="#/services/delete/{{row.entity.id}}"  ><button type="button" class="btn btn-xs danger-class"  ><i  class="fa fa-trash"></i></button></a></div>', width: 70 },
+                  //     { name: 'project_name' },
+                  //     { name: 'project_code' },
+                  //     { name: 'start_date' },
+                  //     { name: 'end_date' },
+                  //     ],
+                  //     enableCellEdit: false,
 
-                    };
+                  //   };
 
                   function saveserviceproject() {
             vm.dataLoading = true;
