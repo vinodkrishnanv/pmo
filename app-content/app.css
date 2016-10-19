@@ -3,9 +3,16 @@
   padding: 32px; }
   .header-pad {
     padding-top: 8px;
+    width: 13%
   }
   #menuitem-4, #menuitem-5, #menuitem-6 {
     display: none;
+}
+.footer-left img{
+  width: 30% !important;
+}
+.text-left img{
+  width: 90%;
 }
 .col-md-3.bg-account {
     border: 1px solid #d4d4d4;
@@ -1091,8 +1098,8 @@ calendar {
     padding: 0 5%;
 }
 .mar-top {
-    margin-top: 8%;
-    padding-top: 2%;
+    /*margin-top: 8%;*/
+    padding-top: 8%;
 }
 .bod-bac{
 background-attachment: scroll;
@@ -1287,5 +1294,12 @@ padding-top: 0px !important;
   white-space: nowrap;
     overflow:hidden !important;
     text-overflow: ellipsis;
+}
+.inputVal input[type=number]::-webkit-inner-spin-button, 
+.inputVal input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
 }
 /*----*/

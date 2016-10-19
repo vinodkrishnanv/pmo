@@ -18,7 +18,7 @@
         // $scope.labels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
         // $scope.doughdata = [0, 0, 0];
         $scope.colors = [ '#fdb45c', '#00ADF9', '#f7464a', '#46BFBD', '#32cd32', '#28022f', '#feca9a'];
-        $scope.weeknames = ["fc-mon","fc-tue", "fc-wed", "fc-thu", "fc-fri", "fc-sat", "fc-sun"];
+        $scope.weeknames = [ ".fc-sun",".fc-mon",".fc-tue", ".fc-wed", ".fc-thu", ".fc-fri", ".fc-sat"];
         $('#timecalendar').fullCalendar('next');
         var currentDate,
           next,
@@ -150,7 +150,7 @@
       var wid=moment().format(weekYear);
       var wday = moment().day();
       var myEl = angular.element( document.querySelector( $scope.weeknames[wday] ) );
-        myEl.css('background-color','red');
+      myEl.css('background-color','#ffff00');
 
       
        
@@ -211,9 +211,6 @@
               if(cell.hasClass('fc-today')){
                 cell.css("background-color", "red");
               }
-              console.log(moment(date));
-              console.log(date);
-              
                var pres = moment();
                if(pres === moment(date)){
                 cell.css("background-color", "red");
@@ -242,7 +239,6 @@
             UserService.getResourceTimeCard(Data)
                  .then(function (response) {
                   var resData = response.data;
-                   console.log(resData);
                     for(var i=0;i<resData.length;i++){
                       if(resData[i].userid==uid){
                          $scope.exists=1;
@@ -297,16 +293,8 @@
               $scope.projects[j].temp.length = 0;
             }
       for(var j=0;j<$scope.projects.length;j++){
-        
-       
-        
-       
-
-
-        
          $scope.projects[j].InputValue.push($scope.temp_arr);
          $scope.projects[j].temp=$scope.projects[j].InputValue[count];
-         console.log(weekcount);
        if(weekcount>0){
                var arr = [];
           for (var key in $scope.userData) {
@@ -315,14 +303,11 @@
               $scope.projects[j].temp=[0,0,0,0,0,0,0];
             }
             if ($scope.userData.hasOwnProperty(key)) {
-              console.log(key);
-              console.log($scope.projects[j].project_id);
               if(key == $scope.projects[j].project_id){
                  arr.length=0;
                 for (var k in $scope.userData[key]) {
                   arr.push($scope.userData[key][k]);
                 }
-                console.log(arr);
                 $scope.projects[j].temp = angular.copy(arr);
 
               }
@@ -336,7 +321,6 @@
           $scope.projects[j].temp=[0,0,0,0,0,0,0];
         }         
      }
-     console.log($scope.projects);
      });
     }
 
