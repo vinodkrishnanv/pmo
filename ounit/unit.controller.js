@@ -34,6 +34,7 @@
 		var vm = this;
     $rootScope.shownav=true;
     $rootScope.rootAccess =  $cookieStore.get("rootAccess");
+    $rootScope.pmAccess =  $cookieStore.get("pmAccess");
         vm.editRow = RowEditor.editRow;
         vm.saveunit = saveunit;
         var rowIndexTemp = 0;

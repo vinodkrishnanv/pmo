@@ -12,6 +12,7 @@
         var vm = this;
         $rootScope.shownav=true;
         $rootScope.rootAccess =  $cookieStore.get("rootAccess");
+        $rootScope.pmAccess =  $cookieStore.get("pmAccess");
         var jsonstring="";
         vm.saveserviceproject = saveserviceproject;
         var rowIndexTemp = 0;
@@ -153,8 +154,8 @@ vm.gridOptions = {
 
 
 
-ServiceProjectEditController.$inject = ['$scope','$log','$cookieStore','$state','$http','UserService', '$location', 'FlashService','$timeout','$routeParams'];
-function ServiceProjectEditController($scope,$log,$cookieStore,$state,$http,UserService, $location,FlashService,$timeout,$routeParams) {
+ServiceProjectEditController.$inject = ['$scope','$rootScope','$log','$cookieStore','$state','$http','UserService', '$location', 'FlashService','$timeout','$routeParams'];
+function ServiceProjectEditController($scope,$rootScope,$log,$cookieStore,$state,$http,UserService, $location,FlashService,$timeout,$routeParams) {
   var vm=this;
    vm.saveserviceproject = saveserviceproject;
   var splits=$location.url().toString().split("/");
@@ -221,7 +222,7 @@ function ServiceProjectEditController($scope,$log,$cookieStore,$state,$http,User
             vm.serpro.account_id=$scope.accountmodel.id;
             vm.serpro.service_id=$scope.sermodel.id;
             vm.serpro.id = splits[splits.length - 1];
-            vm.serpro.modifiedBy=$cookieStore.get('globals').currentUser.userId;
+            vm.serpro.modifiedBy=$rootScope.globals.currentUser.userId;
             UserService.editServiceProject(vm.serpro)
                 .then(function (response) {
                     if (response.data.id) {

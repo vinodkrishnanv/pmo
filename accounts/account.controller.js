@@ -15,6 +15,7 @@
   		var vm = this;
         $rootScope.shownav=true;
         $rootScope.rootAccess =  $cookieStore.get("rootAccess");
+        $rootScope.pmAccess =  $cookieStore.get("pmAccess");
           // vm.clickHandlers = RowAccountEditor.editAccountRow;
           vm.saveaccount = saveaccount;
           vm.getaccount = getaccount;

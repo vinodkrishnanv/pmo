@@ -5,25 +5,26 @@
         .module('app')
         .factory('AuthenticationService', AuthenticationService);
 
-    AuthenticationService.$inject = ['$http', '$cookieStore', '$rootScope', '$timeout', 'UserService'];
-    function AuthenticationService($http, $cookieStore, $rootScope, $timeout, UserService) {
+    AuthenticationService.$inject = ['$http', '$cookieStore', '$rootScope', '$timeout', 'UserService','__env'];
+    function AuthenticationService($http, $cookieStore, $rootScope, $timeout, UserService,__env) {
         var service = {};
 
         service.Login = Login;
         service.SetCredentials = SetCredentials;
         service.ClearCredentials = ClearCredentials;
-        service.hostName='localhost';
+        service.hostName=__env.hostName;
+        service.port=__env.port;
         return service;
         
         function Login(username, password, callback) {
-            $http.post('http://'+service.hostName+':3000/user/search.json', { username: username, password: password })
+            $http.post('http://'+service.hostName+':'+service.port+'/user/search.json', { username: username, password: password })
                 .success(function (response) {
                   callback(response);
                 });
 
         }
 
-        function SetCredentials(uid,username, password,accesstoken) {
+        function SetCredentials(uid,username, password,accesstoken,rid,empid) {
             var authdata = Base64.encode(username + ':' + password);
 
             $rootScope.globals = {
@@ -31,7 +32,9 @@
                     userId:uid,
                     username: username,
                     authdata: authdata,
-                    accesstoken: accesstoken
+                    accesstoken: accesstoken,
+                    resource_id: rid,
+                    employee_id: empid
                 }
             };
 

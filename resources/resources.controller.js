@@ -14,6 +14,7 @@
         var vm = this;
         $rootScope.shownav=true;
         $rootScope.rootAccess =  $cookieStore.get("rootAccess");
+        $rootScope.pmAccess =  $cookieStore.get("pmAccess");
         var jsonstring="";
         vm.saveresource = saveresource;
         //vm.getSkilldata = getSkilldata;

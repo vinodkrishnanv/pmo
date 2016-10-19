@@ -21,6 +21,7 @@
             var rTEvents = [];
             $rootScope.shownav=true;
             $rootScope.rootAccess =  $cookieStore.get("rootAccess");
+            $rootScope.pmAccess =  $cookieStore.get("pmAccess");
             $scope.accountcustomTexts = {buttonDefaultText: 'Select Account'};
             $scope.servicecustomTexts = {buttonDefaultText: 'Select Service'};
             $scope.projectcustomTexts = {buttonDefaultText: 'Select Project'};

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="app">
 <head>
+    <script src="js/env.js"></script>
     <meta charset="utf-8" />
     <title>Lister - OMC | PMO</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
@@ -11,6 +12,7 @@
     <link data-require="ui-grid@3.0.0RC20" data-semver="3.0.0RC20" rel="stylesheet" href="http://cdn.rawgit.com/angular-ui/ui-grid.info/gh-pages/release/3.0.0-rc.20/ui-grid.css" />
 
     <link data-require="bootstrap@*" data-semver="3.3.2" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+    <!-- <link rel="stylesheet" src="css/bootstrap.min.css" /> -->
 
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" />
@@ -28,6 +30,7 @@
      <script data-require="select2@3.4.5" data-semver="3.4.5" src="//cdn.jsdelivr.net/select2/3.4.5/select2.min.js"></script>
     <script data-semver="0.0.5" src="js/uiselect2.js"></script>
     <script src="http://ui-grid.info/docs/grunt-scripts/csv.js"></script>
+
     <script src="http://ui-grid.info/docs/grunt-scripts/pdfmake.js"></script>
     <script src="http://ui-grid.info/docs/grunt-scripts/vfs_fonts.js"></script>
 
@@ -55,7 +58,16 @@
 
     <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/latest/css/bootstrap.css" />
- 
+
+<!-- Timesheet -->
+<link href="app-content/style.css" rel="stylesheet" />
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
+<script src="js/moment.js"></script>
+<script src="js/angular-clock.js"></script>
+<script src="js/Chart.min.js"></script>
+<script src="js/angular-chart.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/angular-clock.css" />
+ <!-- Timesheet -->
 <!-- Include Date Range Picker -->
 
 
@@ -77,12 +89,16 @@
                 </div>
                 </div>
                 </div>
-    <div class="jumbotron">
-        <div class="container">
+    <div class="jumbotron" ng-class="bgClass()">
+    <div class="">
+    <!-- <div ng-include="'pages/navigation.html'" class="navdiv"   set-class-when-at-top="fix-to-top" ng-show="shownav"></div> -->
+    <div ng-include="'pages/navigation.html'" class="navdiv fix-to-top"    ng-show="shownav"></div>
+    </div>
+        <div class="container mar-top">
             <div class="">
 
 
-                <div ng-include="'pages/navigation.html'" ng-show="shownav"></div>
+                
                 <div ng-class="{ 'alert text-left': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind-html="flash.message">
                 </div>
                 <!-- <i class="fa fa-times text-right" ng-if="flash" ng-click="MessageClear()" aria-hidden="true"></i> -->
@@ -98,11 +114,11 @@
     <script src="app-services/authentication.service.js"></script>
     <script src="app-services/flash.service.js"></script>
 
-    <!-- Real user service that uses an api -->
-    <!-- <script src="app-services/user.service.js"></script> -->
+    
+    <!-- <script src="app-services/misc.service.js"></script> -->
 
-    <!-- Fake user service for demo that uses local storage -->
-    <script src="app-services/user.service.local-storage.js"></script>
+    <!-- Real user service that uses an api -->
+    <script src="app-services/user.service.js"></script>
 
     <script src="home/home.controller.js"></script>
     <script src="login/login.controller.js"></script>
@@ -115,6 +131,7 @@
 	<script src="skills/skills.controller.js"></script>
     <script src="services/services.controller.js"></script>
     <script src="serviceproject/serviceproject.controller.js"></script>
+    <script src="timesheet/timesheet.controller.js"></script>
     <script src="//cdn.rawgit.com/angular-ui/bower-ui-grid/master/ui-grid.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/ng-grid/2.0.11/ng-grid.min.js"></script>
     <footer>

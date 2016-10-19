@@ -12,17 +12,12 @@
           var date = new Date();
           $rootScope.shownav=true;
           $rootScope.rootAccess =  $cookieStore.get("rootAccess");
+          $rootScope.pmAccess =  $cookieStore.get("pmAccess");
           var d = date.getDate();
           var m = date.getMonth();
           var y = date.getFullYear();
           $scope.type = "free";
           $scope.changeTo = 'Hungarian';
-          // $scope.eventSource = {
-          //   url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
-          //     className: 'gcal-event',           // an option!
-          //     currentTimezone: 'America/Chicago' // an option!
-          //   };
-
             $scope.accountmodel = [];
             $scope.sermodel = [];
             $scope.skillmodel = [];
@@ -79,6 +74,7 @@
                 var reqdate= {'startdate':startdate,'enddate':enddate};
                 var newFreeEvents=[];
                 UserService.getFreeResourceDates(reqdate).then(function (response) {
+                  console.log(response);
                           angular.forEach(response.data, function (object) {
                              newFreeEvents.push({
                               title: object.title,
@@ -343,133 +339,7 @@
           },
         };
 
-// $scope.resourceEvents = {
-//        onItemSelect: function(item) {
-//         $scope.type="filter";
-//         var newResEvents=[];
-//         var newEvents=[];
-//         if($scope.resourcemodel.length){
-//           $('#mycalendar').fullCalendar('refetchEvents') ;
-//         angular.forEach($scope.resourcemodel, function (obj) {
-//                        newEvents.push(obj.id);
-//                      });
-//         UserService.getResourceDates(newEvents.join()).then(function (response) {
-//           angular.forEach(response.data, function (object) {
-//                              newResEvents.push({
-//                               title: object.title,
-//                               start: new Date(Number(object.start)+19800),
-//                               allDay: true,
-//                             });
-//                      });
-//                         angular.copy(newResEvents, $scope.events);
-           
-//           });
 
-
-         
-//   $scope.eventSources=[fetchEvents];
-                                                          
-  
-//                                                       }
-//     },
-//     onItemDeselect: function(item) {
-//       $scope.type="filter";
-//         var newResEvents=[];
-//         var newEvents=[];
-//       if($scope.resourcemodel.length){
-//          $('#mycalendar').fullCalendar('refetchEvents') ;
-
-//         angular.forEach($scope.resourcemodel, function (obj) {
-//                        newEvents.push(obj.id);
-//                      });
-//         console.log(newEvents.join());
-//         UserService.getResourceDates(newEvents.join()).then(function (response) {
-//           angular.forEach(response.data, function (object) {
-//                              newResEvents.push({
-//                               title: object.title,
-//                               start: new Date(Number(object.start)+19800),
-//                               allDay: true,
-//                             });
-//                      });
-//                         angular.copy(newResEvents, $scope.events);
-           
-//           });
-
-
-         
-//   $scope.eventSources=[fetchEvents];
-                                                          
-  
-//                                                       }
-//                                                     },
-//                                                     };
-
-// $scope.skillEvents = {
-//        onItemSelect: function(item) {
-//         $scope.type="filter";
-//         // if($scope.skillmodel.length){
-//           var newSkiEvents=[];
-//         var newSEvents=[];
-//         if($scope.skillmodel.length){
-//          $('#mycalendar').fullCalendar('refetchEvents') ;
-
-//         angular.forEach($scope.skillmodel, function (obj) {
-//                        newSEvents.push(obj.id);
-//                      });
-//         UserService.getSkillDates(newSEvents.join()).then(function (response) {
-//           angular.forEach(response.data, function (object) {
-//                              newSkiEvents.push({
-//                               title: object.title,
-//                               start: new Date(Number(object.start)+19800),
-//                               allDay: true,
-//                             });
-//                      });
-//                         angular.copy(newSkiEvents, $scope.events);
-//                         $('#mycalendar').fullCalendar('refetchEvents') ;
-           
-//           });
-        
-
-
-         
-//   $scope.eventSources=[fetchEvents];
-                                                          
-  
-//                                                       }
-//                                                     },
-//  onItemDeselect: function(item) {
-//         $scope.type="filter";
-//         // if($scope.skillmodel.length){
-//           var newSkiEvents=[];
-//         var newSEvents=[];
-//         if($scope.skillmodel.length){
-//          $('#mycalendar').fullCalendar('refetchEvents') ;
-
-//         angular.forEach($scope.skillmodel, function (obj) {
-//                        newSEvents.push(obj.id);
-//                      });
-//         UserService.getSkillDates(newSEvents.join()).then(function (response) {
-//           angular.forEach(response.data, function (object) {
-//                              newSkiEvents.push({
-//                               title: object.title,
-//                               start: new Date(Number(object.start)+19800),
-//                               allDay: true,
-//                             });
-//                      });
-//                         angular.copy(newSkiEvents, $scope.events);
-//                         $('#mycalendar').fullCalendar('refetchEvents') ;
-           
-//           });
-        
-
-
-         
-//   $scope.eventSources=[fetchEvents];
-                                                          
-  
-//                                                       }
-//                                                     },
-//                                                     };
       
           var vm = this;
           

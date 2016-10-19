@@ -1,34 +1,70 @@
 ﻿(function () {
     'use strict';
 
+        var env = {};
+
+    // Import variables if present (from env.js)
+        if(window){  
+          Object.assign(env, window.__env);
+        }
+
     angular
-        .module('app', ['ngRoute', 'ngCookies','ngGrid','ngSanitize', 'ngTouch', 'ui.grid', 'ui.grid.autoResize', 'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.edit','ui.grid.resizeColumns','ui.bootstrap', 'schemaForm','angularjs-dropdown-multiselect','gm.datepickerMultiSelect','demo-calendar','ui.router','ui.calendar','ui.select2'])
+        .module('app', ['ngRoute', 'ngCookies','ngGrid','ngSanitize', 'ngTouch', 'ui.grid', 'ui.grid.autoResize', 'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.edit','ui.grid.resizeColumns','ui.bootstrap', 'schemaForm','angularjs-dropdown-multiselect','gm.datepickerMultiSelect','demo-calendar','ui.router','ui.calendar','ui.select2','ds.clock','chart.js'])
         .config(config)
         .run(run)
-        .directive('loading',   ['$http' ,function ($http)
-    {
-        return {
-            restrict: 'A',
-            link: function (scope, elm, attrs)
-            {
-                scope.isLoading = function () {
-                    return $http.pendingRequests.length > 0;
-                };
+        .directive('loading', loading)
+        .directive('setClassWhenAtTop', setClassWhenAtTop)
+        .constant('__env', env);
 
-                scope.$watch(scope.isLoading, function (v)
+
+
+
+
+
+        loading.$inject = ['$http'];
+        function loading($http) {
+            return {
+                restrict: 'A',
+                link: function (scope, elm, attrs)
                 {
-                    if(v){
-                        elm.show();
-                    }else{
-                        elm.hide();
-                    }
-                });
-            }
-        };
+                    scope.isLoading = function () {
+                        return $http.pendingRequests.length > 0;
+                    };
 
-    }])
-        ;
-		//var scotchApp = angular.module('app', ['ngRoute', 'ngCookies']);
+                    scope.$watch(scope.isLoading, function (v)
+                    {
+                        if(v){
+                            elm.show();
+                        }else{
+                            elm.hide();
+                        }
+                    });
+                }
+            };
+        }
+
+
+        setClassWhenAtTop.$inject = ['$window'];
+        function setClassWhenAtTop($window) {
+            var $win = angular.element($window); // wrap window object as jQuery object
+
+              return {
+                restrict: 'A',
+                link: function (scope, element, attrs) {
+                  var topClass = attrs.setClassWhenAtTop, // get CSS class from directive's attribute value
+                      offsetTop = element.offset().top; // get element's offset top relative to document
+
+                  $win.on('scroll', function (e) {
+                    if ($win.scrollTop() >= offsetTop) {
+                      element.addClass(topClass);
+                    } else {
+                      element.removeClass(topClass);
+                    }
+                  });
+                }
+              };
+        }
+
 
     config.$inject = ['$urlRouterProvider', '$locationProvider', '$stateProvider'];
     
@@ -54,8 +90,15 @@
                 templateUrl: 'register/register.view.html',
                 controllerAs: 'vm'
             })
+            
+            .state('timesheet', {
+                    url: "/timesheet",
+                    controller: 'TimeSheetController',
+                    templateUrl: 'timesheet/timesheet.html',
+                    controllerAs: 'vm'
+                })
 
-            // route for the about page
+            // route for the account page
             .state('account', {
                 url: "/account",
                 templateUrl : 'accounts/account.html',
