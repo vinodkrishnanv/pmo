@@ -737,7 +737,7 @@
                       $state.go("project", {}, {reload: true});
                     });
                }
-               $location.hash('top');
+               $location.hash('topwindow');
                 $anchorScroll();
                     }
 

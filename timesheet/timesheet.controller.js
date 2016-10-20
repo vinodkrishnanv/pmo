@@ -9,17 +9,12 @@
     function TimeSheetController($filter,$rootScope,$cookieStore,$scope,$state,$http,UserService,$location) {
         var vm = this;
         var initital = 0;
-        var weekFullStart = moment().clone().startOf('week');
-        $scope.week_full=[weekFullStart.day(0).format(fullWeekFormat),weekFullStart.day(1).format(fullWeekFormat),weekFullStart.day(2).format(fullWeekFormat),weekFullStart.day(3).format(fullWeekFormat),weekFullStart.day(4).format(fullWeekFormat),weekFullStart.day(5).format(fullWeekFormat),weekFullStart.day(6).format(fullWeekFormat)];
+        var apiflag=0;
         vm.savetimesheet = savetimesheet;
         vm.getpiedata = getpiedata;
         $scope.userData=[];
-        
-        // $scope.labels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
-        // $scope.doughdata = [0, 0, 0];
         $scope.colors = [ '#fdb45c', '#00ADF9', '#f7464a', '#46BFBD', '#32cd32', '#28022f', '#feca9a'];
         $scope.weeknames = [ ".fc-sun",".fc-mon",".fc-tue", ".fc-wed", ".fc-thu", ".fc-fri", ".fc-sat"];
-        $('#timecalendar').fullCalendar('next');
         var currentDate,
           next,
           count,
@@ -34,24 +29,17 @@
           $scope.dateArray=[];
           $scope.projectHours={};
           $scope.master = [{}];
+          var weekFullStart = moment().clone().startOf('week');
+          $scope.week_full=[weekFullStart.day(0).format(fullWeekFormat),weekFullStart.day(1).format(fullWeekFormat),weekFullStart.day(2).format(fullWeekFormat),weekFullStart.day(3).format(fullWeekFormat),weekFullStart.day(4).format(fullWeekFormat),weekFullStart.day(5).format(fullWeekFormat),weekFullStart.day(6).format(fullWeekFormat)];
           
-          var cur='now';
           $scope.fromDB=[{}];
           $scope.exists=0;
           $scope.userinDB=0;
           $scope.days=[0,1,2,3,4,5,6];
-          $scope.test="test.....";
          $scope.options = [{id: 1, name: 'Opened','disabled': false}, {id: 2, name: 'In progress','disabled': false}, {id: 3, name: 'Completed','disabled': false}, {id: 4, name: 'Closed','disabled': true}];
          $scope.projects =[]; 
          currentDate  = moment();
     var c_time=0;
-      $('.fc-button-prev').click(function(){
-         alert('prev is clicked, do something');
-      });
-
-      $('.fc-button-next').click(function(){
-         alert('nextis clicked, do something');
-      });
       $rootScope.bgClass = function() {
         var splits=$location.url().toString().split("/");
         var urllast=splits[splits.length - 1];
@@ -61,50 +49,60 @@
         return 'oth-bac';  
         }
       };
+      $scope.getTotal = function(index){
+            var total = 0;
+            for(var i = 0; i < $scope.projects.length; i++){
+                var tem = $scope.projects[i].temp[index];
+                total += tem;
+            }
+            return total;
+        }
       $scope.eventRender = function( event, element, view ) {
         $compile(element)($scope);
       };
       $scope.buttonEvent = function( event) {
         $('#timecalendar').fullCalendar(event);
-        savetimesheet();
+         savetimesheet('event');
+         getpiedata("today");
       };
       
-   var name = $rootScope.globals.currentUser.username;
-   var uid = $rootScope.globals.currentUser.userId;
-   var resource_id = $rootScope.globals.currentUser.resource_id;
-   $rootScope.currentUser={
-   "Name":name,
-    "user_id":uid,
-     "resource_id":resource_id 
-   };
+       var name = $rootScope.globals.currentUser.username;
+       var uid = $rootScope.globals.currentUser.userId;
+       var resource_id = $rootScope.globals.currentUser.resource_id;
+       $rootScope.currentUser={
+       "Name":name,
+        "user_id":uid,
+         "resource_id":resource_id 
+       };
    $rootScope.shownav=true;
-	$rootScope.rootAccess =  $cookieStore.get("rootAccess");
-  $rootScope.pmAccess =  $cookieStore.get("pmAccess");
-  var prevstart = '';
-  UserService.getAllResourceProjects(resource_id)
-     .then(function (response) {
-      var data = response.data;
-            $scope.projects = data;
-            weekStart = currentDate.clone().startOf('week'),
-            weekEnd = currentDate.clone().endOf('week');
-            for(var j=0;j<$scope.projects.length;j++){
-            for(var i=0;i<$scope.days.length;i++){
-                  $scope.temp_arr=[];
-                 if(weekStart.day(i).format('ddd')=='Sun' || weekStart.day(i).format('ddd')=='Sat'){
-                   $scope.projects[j].bool[i]=true;
-                   $scope.temp_arr[i]='';
-                 }
-                 else{
-                   $scope.projects[j].bool[i]=false;
-                   $scope.temp_arr[i]='';
-                 }
-            }
-          }
-          
-          setCurrentDate(currentDate,0,currentDate.format(weekYear),"");
-          getpiedata("week");
-            
-         });
+	 $rootScope.rootAccess =  $cookieStore.get("rootAccess");
+    $rootScope.pmAccess =  $cookieStore.get("pmAccess");
+    var prevstart = '';
+      UserService.getAllResourceProjects(resource_id)
+         .then(function (response) {
+                var data = response.data;
+                $scope.projects = data;
+                weekStart = currentDate.clone().startOf('week'),
+                weekEnd =   currentDate.clone().endOf('week');
+                for(var j=0;j<$scope.projects.length;j++){
+                for(var i=0;i<$scope.days.length;i++){
+                      $scope.temp_arr=[];
+                     if(weekStart.day(i).format('ddd')=='Sun' || weekStart.day(i).format('ddd')=='Sat'){
+                       $scope.projects[j].bool[i]=true;
+                       $scope.temp_arr[i]='';
+                     }
+                     else{
+                       $scope.projects[j].bool[i]=false;
+                       $scope.temp_arr[i]='';
+                     }
+                }
+              }
+              
+              setCurrentDate(currentDate,0,currentDate.format(weekYear),"");
+              apiflag=1;
+             getpiedata("today");
+                
+             });
 
      function getpiedata(filter) {
       var text= '#btn-pie-group button' ;
@@ -150,35 +148,29 @@
       var wid=moment().format(weekYear);
       var wday = moment().day();
       var myEl = angular.element( document.querySelector( $scope.weeknames[wday] ) );
-      myEl.css('background-color','#ffff00');
-
-      
-       
-      if(wkid == wid){
-
-          // count=count;
-          setCurrentDate(currentDate,0,wkid,newnum);
-          // alert("sd");
-      }else{
-        // savetimesheet();
-        if(prevstart > startdate){
-          countPrev=0;
-          count=count-1;
-          cur='prev';
-          $scope.PrevInd.push(count);
-          setCurrentDate(currentDate.subtract(7,'days'),count,wkid,newnum);
-        }else{
-          count=count+1;
-          cur='next';
-          setCurrentDate(currentDate.add(7,'days'),count,wkid,newnum);
-        }
-
-        // savetimesheet();
+      if(myEl.data("date")==moment().format(fullWeekFormat)){
+        myEl.css('background-color','#ffff00');
       }
+         if(apiflag){
+            if(wkid == wid){
+                setCurrentDate(currentDate,0,wkid,newnum);
+            }else{
+              if(prevstart > startdate){
+                countPrev=0;
+                count=count-1;
+                $scope.PrevInd.push(count);
+                setCurrentDate(currentDate.subtract(7,'days'),count,wkid,newnum);
+              }else{
+                count=count+1;
+                setCurrentDate(currentDate.add(7,'days'),count,wkid,newnum);
+              }
+              // savetimesheet();
+            }
+        }
       initital++;
 
       prevstart = startdate;
-     getpiedata("week");
+     //getpiedata("week");
 
     }
    // $('#timecalendar').fullCalendar.formatDate(calEvent.start, 'dd/MM/yyyy HH:mm');
@@ -260,8 +252,8 @@
       $scope.weekYear=wkid;
       $scope.today=[weekStart.day(0).format(shortWeekFormat),weekStart.day(1).format(shortWeekFormat),weekStart.day(2).format(shortWeekFormat),weekStart.day(3).format(shortWeekFormat),weekStart.day(4).format(shortWeekFormat),weekStart.day(5).format(shortWeekFormat),weekStart.day(6).format(shortWeekFormat)];
       $scope.today_full=[weekStart.day(0).format(fullWeekFormat),weekStart.day(1).format(fullWeekFormat),weekStart.day(2).format(fullWeekFormat),weekStart.day(3).format(fullWeekFormat),weekStart.day(4).format(fullWeekFormat),weekStart.day(5).format(fullWeekFormat),weekStart.day(6).format(fullWeekFormat)];
-      var weekFullStart = moment().clone().startOf('week');
-      $scope.week_full=[weekFullStart.day(0).format(fullWeekFormat),weekFullStart.day(1).format(fullWeekFormat),weekFullStart.day(2).format(fullWeekFormat),weekFullStart.day(3).format(fullWeekFormat),weekFullStart.day(4).format(fullWeekFormat),weekFullStart.day(5).format(fullWeekFormat),weekFullStart.day(6).format(fullWeekFormat)];
+      // var weekFullStart = moment().clone().startOf('week');
+      // $scope.week_full=[weekFullStart.day(0).format(fullWeekFormat),weekFullStart.day(1).format(fullWeekFormat),weekFullStart.day(2).format(fullWeekFormat),weekFullStart.day(3).format(fullWeekFormat),weekFullStart.day(4).format(fullWeekFormat),weekFullStart.day(5).format(fullWeekFormat),weekFullStart.day(6).format(fullWeekFormat)];
       $scope.temp_arr=[];
       $scope.month_full=[];
       if(num){
@@ -294,54 +286,41 @@
             }
       for(var j=0;j<$scope.projects.length;j++){
          $scope.projects[j].InputValue.push($scope.temp_arr);
-         $scope.projects[j].temp=$scope.projects[j].InputValue[count];
+         //$scope.projects[j].temp=$scope.projects[j].InputValue[count];
+         $scope.projects[j].temp = [0,0,0,0,0,0,0];
        if(weekcount>0){
+
                var arr = [];
           for (var key in $scope.userData) {
-            var rs=$filter('filter')($scope.projects, {project_id: key});
-            if(!rs.length){
-              $scope.projects[j].temp=[0,0,0,0,0,0,0];
-            }
             if ($scope.userData.hasOwnProperty(key)) {
-              if(key == $scope.projects[j].project_id){
-                 arr.length=0;
-                for (var k in $scope.userData[key]) {
-                  arr.push($scope.userData[key][k]);
-                }
-                $scope.projects[j].temp = angular.copy(arr);
-
+              if(key == $scope.projects[j].account_id){
+                  for (var k in $scope.userData[key]) {
+                      if(k == $scope.projects[j].service_id){
+                          for (var l in $scope.userData[key][k]) {
+                            if(l == $scope.projects[j].project_id){
+                              arr.length=0;
+                              for (var m in $scope.userData[key][k][l]) {
+                                  arr.push($scope.userData[key][k][l][m]);
+                              }
+                               $scope.projects[j].temp.length = 0
+                               $scope.projects[j].temp = angular.copy(arr);
+                            }
+                          }
+                      }
+                  }
               }
-               
-              
               arr.length=0;
             }
           }
         }
-        else{
-          $scope.projects[j].temp=[0,0,0,0,0,0,0];
-        }         
+               
      }
      });
     }
 
-    $scope.nextWeek = function(){
-    count=count+1;
-    cur='next';
-    setCurrentDate(currentDate.add(7,'days'),count);
-    };
+    
 
-  
-
-    $scope.prevWeek = function(){
-      countPrev=0;
-      count=count-1;
-      cur='prev';
-
-      $scope.PrevInd.push(count);
-      setCurrentDate(currentDate.subtract(7,'days'),count);
-    };
-
-       function savetimesheet() {
+       function savetimesheet(val) {
          $scope.master=angular.copy($scope.projects);
          for(var j=0;j<$scope.projects.length;j++){
           for(var i=0;i<$scope.projects[j].temp.length;i++){
@@ -351,14 +330,18 @@
           }
             
           $scope.projects[j].dayHours.length = 0;
-         $scope.projects[j].dayHours.push({'day':$scope.curr_date,'Hours':$scope.projects[j].temp});
+          $scope.projects[j].dayHours.push({'day':$scope.curr_date,'Hours':$scope.projects[j].temp});
           }
+
 
         
           var postData = { "Exists":$scope.exists,"WeekID":$scope.weekYear,"user":$rootScope.currentUser,"projects":$scope.projects,'Dates':$scope.curr_date};
          // var postData = { };
           UserService.saveTimeCard(postData)
            .then(function (response) {
+            if(val=="save"){
+              $('#timecalendar').fullCalendar("today");
+            }
             // console.log(response);
               // $state.go("timesheet", {}, {reload: true});
            });

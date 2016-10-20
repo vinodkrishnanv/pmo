@@ -5,8 +5,8 @@
         .module('app')
         .factory('FlashService', FlashService);
 
-    FlashService.$inject = ['$rootScope'];
-    function FlashService($rootScope) {
+    FlashService.$inject = ['$rootScope','$anchorScroll','$location'];
+    function FlashService($rootScope,$anchorScroll,$location) {
         var service = {};
 
         service.Success = Success;
@@ -46,6 +46,8 @@
                 type: 'success', 
                 keepAfterLocationChange: keepAfterLocationChange
             };
+            $location.hash('topwindow');
+            $anchorScroll();
         }
 
         function Error(message, keepAfterLocationChange) {
@@ -54,6 +56,8 @@
                 type: 'error',
                 keepAfterLocationChange: keepAfterLocationChange
             };
+            $location.hash('topwindow');
+            $anchorScroll();
         }
     }
 

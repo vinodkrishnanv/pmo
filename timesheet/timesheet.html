@@ -2,7 +2,7 @@
 <!-- <form name="Demo" method="get" action="/" ng-submit="submit()"> -->
 <div> 
 <!-- {{month_full}} -->
-<!-- {{doughdata}} -->
+<!-- {{projects}} -->
 <div class="row">
   <div class="widclock col-md-2 col-md-offset-1">
   <div class="col-md-12"><ds-widget-clock  theme="light" show-digital show-analog></ds-widget-clock>
@@ -47,7 +47,7 @@
       <div class="row mar-cust-top" >
       <div class="col-md-8">
         <div class="row firstRow" >
-            <div class="col-md-2 cusPro text-left">
+            <div class="col-md-3 cusPro text-left">
               <button class="btn btn-success btn-sm btn-customcolor new-right" ng-click="buttonEvent('prev')"><</button>
             </div>
            <!--  <div class="col-md-3">
@@ -80,8 +80,11 @@
                       
            </div>
            
-            <div class="col-md-3">
-              <div class="row"><button class="btn btn-success btn-sm btn-customcolor" ng-click="buttonEvent('today')">Today</button></div>
+            <div class="col-md-2">
+              <div class="row">
+                <div class="col-md-8">
+              <button class="btn btn-success btn-sm btn-customcolor" ng-click="buttonEvent('today')">Today</button></div>
+              </div>
            <div class=""><button class="btn btn-success btn-sm btn-customcolor new-left" ng-click="buttonEvent('next')">></button></div>
               <div class="row cusPro">
                         Project Totals
@@ -90,7 +93,7 @@
          </div>
          <div class="row padTop customBack" ng-repeat="project in projects">
 
-      <div class="col-md-2 text-left cushead">
+      <div class="col-md-3 text-left cushead">
                  {{project.name}} 
       </div>
       <div ng-repeat="i in project.bool track by $index" class="col-md-1" id="myTab">
@@ -101,14 +104,15 @@
     </div>
     </div>
     <div class="row padDtop customBack cusDPro">
-      <div class="col-md-2">
+      <div class="col-md-3">
                  Daily Totals
       </div>
       <div ng-repeat="i in days track by $index" class="col-md-1" id="myTab">
-                        <input type="" min="0" max="24" class="textField customText" disabled readonly ng-value="projects[0].temp[$index]+projects[1].temp[$index]+projects[2].temp[$index]+projects[3].temp[$index]+projects[4].temp[$index]" step="any"/>
+                       <!--  <input type="" min="0" max="24" class="textField customText" disabled readonly ng-value="projects[0].temp[$index]+projects[1].temp[$index]+projects[2].temp[$index]+projects[3].temp[$index]+projects[4].temp[$index]" step="any"/> -->
+                        <input type="" min="0" max="24" class="textField customText" disabled readonly ng-value="getTotal($index)" step="any"/>
       </div>
-      <div class="col-md-1 col-md-offset-1" >
-                        <button class="btn btn-primary"  ng-click="vm.savetimesheet()">Save</button>
+      <div class="col-md-1" >
+                        <button class="btn btn-primary"  ng-click="vm.savetimesheet('save')">Save</button>
     </div>
     </div>
 

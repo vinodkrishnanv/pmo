@@ -121,7 +121,6 @@ vm.gridOptions = {
 
   };
   $scope.removeaccount = function(id) {
-        console.log(id);
       }; 
   //vm.gridOptions.columnDefs[6].visible = false;
   UserService.getResources()

@@ -109,8 +109,6 @@ function RowEditor($rootScope, $modal,UserService) {
   
 
   function editRow(grid, row) {
-    console.log(grid);
-    console.log(row);
     $modal.open({
 
       templateUrl: 'heirarchy/edit-heirarchy-modal.html',
@@ -141,7 +139,6 @@ function RowEditCtrl($modalInstance, $rootScope,PersonSchema, grid, row ,UserSer
   var vm = this;
   vm.schema = PersonSchema;
   vm.entity = angular.copy(row.entity);
-  console.log(vm.entity);
   vm.save = save;
   function save() {
     row.entity = angular.extend(row.entity, vm.entity);
@@ -217,7 +214,6 @@ function HeirarchyDeleteController($rootScope,$scope,$state,$log,$http,UserServi
               vm.dataLoading = true;
               UserService.deleteRole(splits[splits.length - 1])
                   .then(function (response) {
-                    console.log(response.status);
                       if (response.status==204) {
                           FlashService.Success('Delete successful', true);
                           vm.dataLoading = false;

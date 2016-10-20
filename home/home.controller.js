@@ -74,7 +74,6 @@
                 var reqdate= {'startdate':startdate,'enddate':enddate};
                 var newFreeEvents=[];
                 UserService.getFreeResourceDates(reqdate).then(function (response) {
-                  console.log(response);
                           angular.forEach(response.data, function (object) {
                              newFreeEvents.push({
                               title: object.title,
@@ -123,10 +122,7 @@
        };
        $scope.addRemoveEventSource = function(sources,source) {
         var canAdd = 0;
-        console.log(sources);
-        console.log(source);
         angular.forEach(sources,function(value, key){
-          console.log(sources[key]);
           if(sources[key] === source){
             sources.splice(key,1);
             canAdd = 1;
@@ -135,7 +131,6 @@
         if(canAdd === 0){
           sources.push(source);
         }
-        console.log(canAdd);
       };
 
 

@@ -7,7 +7,6 @@
 
     UserService.$inject = ['$cookieStore','$http','$timeout', '$filter', '$q','__env'];
     function UserService($cookieStore,$http,$timeout, $filter, $q,__env) {
-        console.log(__env);
         var service = {};
         var hostName=__env.hostName;
         var port=__env.port;
@@ -110,14 +109,12 @@
             return $http(req).then(function(response){return response;},function(response){return response;});
         }
         function handleSuccess(res) {
-            console.log(res);
             return function () {
                 return { success: true ,message: res};
             };
         }
 
         function handleError(error) {
-            console.log(error);
             return function () {
                 return { success: false, message: error };
             };

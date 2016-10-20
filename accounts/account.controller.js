@@ -56,7 +56,6 @@
   }
 $scope.myFunct = function(keyEvent) {
   // if (keyEvent.which === 13)
-    console.log(keyEvent);
 }
 $scope.open = function() {
     $scope.opened = true;
@@ -84,9 +83,7 @@ $scope.open = function() {
                             onItemDeselect: function(item) {
                               if(vm.ser[item.id]){
                                 if(confirm("Are you sure you want to remove the mapping")){
-                                            console.log(vm.ser[item.id]);
                                             delete vm.ser[item.id];
-                                            console.log(vm.ser[item.id]);
                                 }else{
                                   $scope.sermodel.push(item);
                                 }
@@ -465,11 +462,8 @@ function AccountEditController($rootScope,$scope,$state,$log,$http,UserService, 
                                       $scope.sermodel=response.data.service_id;
                                       vm.ser = {};
                                       angular.forEach(response.data.services, function (obj) {
-                                        console.log(obj[0].service_id);
-                                        console.log(obj[0]);
                                         vm.ser[obj[0].service_id]=obj[0];
                                      });
-                                      console.log(typeof(vm.ser));
                                       // console.log(vm.ser.keys().length);
 
                                     });
@@ -585,9 +579,6 @@ UserService.callCurrencyAPI(base,symbol)
    var count = 0;
   var i;
   var keys = Object.keys(a);
-  console.log(keys);
-  console.log(keys[keys.length-1]);
-  console.log(vm.ser[keys[keys.length-1]]);
   vm.service=angular.copy(vm.ser[keys[0]]);
   }
   

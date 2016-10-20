@@ -270,7 +270,6 @@ angular.module('ui.calendar', [])
         scope.initCalendar = function () {
                     if (!calendar) {
                         calendar = $(elm);
-                        console.log(calendar);
                     }
                     calendar.fullCalendar(options);
                     if (attrs.calendar) {
