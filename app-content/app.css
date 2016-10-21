@@ -1139,6 +1139,12 @@ padding-top: 0px !important;
     color: white;
     padding: 9px;
 }
+.widclock{
+  z-index: 0
+  }
+  #timecalendar div.fc-basicWeek-view{
+    z-index: 0
+  }
 /*.widclock
 {
     display:inline-block;
@@ -1221,7 +1227,7 @@ padding-top: 0px !important;
   width: 100%;
 }
 .navdiv{
-  z-index: 2;
+  z-index: 1;
 }
 .padTop{
   padding: 1%;
