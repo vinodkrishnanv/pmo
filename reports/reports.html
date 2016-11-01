@@ -1,0 +1,14 @@
+<div class="jumbotron text-center">
+        <br />
+        <br />
+        <!-- <ng-knob value="knobvalue" options="knoboptions"></ng-knob> -->
+        <div  ui-view="modal"></div>
+<div  ui-grid="gridOptions" class="report-grid" ui-grid-edit></div>
+<div  ng-show="popoverIsVisible">
+<!-- <div class="Modal-report-background"></div> -->
+<div class="Modal-report-holder" ><button class="btn btn-danger" ng-click="mousedleave()">Close</button>
+  <nvd3 options="pieoptions" data="piedata"></nvd3>
+</div>
+
+</div>
+</div>

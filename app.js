@@ -9,7 +9,8 @@
         }
 
     angular
-        .module('app', ['ngRoute', 'ngCookies','ngGrid','ngSanitize', 'ngTouch', 'ui.grid', 'ui.grid.autoResize', 'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.edit','ui.grid.resizeColumns','ui.bootstrap', 'schemaForm','angularjs-dropdown-multiselect','gm.datepickerMultiSelect','demo-calendar','ui.router','ui.calendar','ui.select2','ds.clock','chart.js'])
+        .module('app', ['ngRoute', 'ngCookies','ngGrid','ngSanitize', 'ngTouch', 'ui.grid', 'ui.grid.autoResize', 'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.edit','ui.grid.resizeColumns','ui.bootstrap', 'schemaForm','angularjs-dropdown-multiselect','gm.datepickerMultiSelect','demo-calendar','ui.router','ui.calendar','ui.select2','ds.clock','chart.js','nvd3','ui.grid.autoResize',
+    'ui.grid.resizeColumns','ui.knob'])
         .config(config)
         .run(run)
         .directive('loading', loading)
@@ -461,7 +462,20 @@
 
                       }
                     },
-                }); 
+                })
+            .state('reports', {
+                url: "/reports",
+                templateUrl : 'reports/reports.html',
+                controller  : 'ReportsController',
+                controllerAs: 'vm',
+                onEnter: ["$state", function($state) {
+                  $(document).on("click", ".btn-danger", function() {
+                    $state.go("reports");
+                  });
+
+                  
+                }],
+            }); 
             $urlRouterProvider.otherwise('/login');
 
 
